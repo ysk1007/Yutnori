@@ -67,9 +67,13 @@ public class Unit_Manager : MonoBehaviour
 
         float tSDis = 999999;
 
+        /*int num = 0;
+        if (unit._attackType == Unit.AttackType.Assassin)
+            num = 1;*/
+
         for (int i = 0; i < tList.Count; i++)
         {
-            float tDis = ((Vector2)tList[0].transform.localPosition - (Vector2)unit.transform.localPosition).sqrMagnitude; // sqrMagnitude 루트 처리가 되지 않은 거리를 찾는것은 연산이 가볍다
+            float tDis = ((Vector2)tList[i].transform.localPosition - (Vector2)unit.transform.localPosition).sqrMagnitude; // sqrMagnitude 루트 처리가 되지 않은 거리를 찾는것은 연산이 가볍다
             if (tDis <= unit._unitFR * unit._unitFR) // 유닛의 서칭 범위를 제곱하여
             {
                 if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가

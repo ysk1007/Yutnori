@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Unit_SubSet : MonoBehaviour
+{
+    public List<TextMeshProUGUI> TextList;
+    public List<Animator> AnimatorList;
+    public Slider HpSlider;
+    public int TextNum;
+
+    Unit unit;
+    float _unitMaxHp;
+    // Start is called before the first frame update
+    void Start()
+    {
+        unit = this.gameObject.GetComponentInParent<Unit>();
+        _unitMaxHp = unit._unitHp;
+        TextNum = 0;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        HpSlider.value = unit._unitHp / _unitMaxHp;
+    }
+
+    public void ShowDamageText(float value)
+    {
+        TextList[TextNum].text = value.ToString();
+        AnimatorList[TextNum].SetTrigger("Show");
+        if (TextNum == TextList.Count - 1)
+        {
+            TextNum = 0;
+        }
+        else
+        {
+            TextNum++;
+        }
+    }
+}

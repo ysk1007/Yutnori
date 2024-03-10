@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 public class Unit : MonoBehaviour
 {
     public SPUM_Prefabs _spumPref;
+    public Unit_SubSet _unit_SubSet;
 
     // 유닛 상태
     public enum UnitState 
@@ -18,7 +19,16 @@ public class Unit : MonoBehaviour
         death,
     }
 
+    public enum AttackType
+    {
+        sword,
+        bow,
+        magic,
+        Assassin
+    }
+
     public UnitState _unitState = UnitState.idle;
+    public AttackType _attackType = AttackType.sword;
 
     public Unit _target;
 
@@ -39,11 +49,17 @@ public class Unit : MonoBehaviour
 
     public float _findTimer;
     public float _attackTimer;
+    public float _skillTimer;
     // Start is called before the first frame update
     void Start()
     {
         _spumPref = this.gameObject.GetComponent<SPUM_Prefabs>();
+        _unit_SubSet = this.gameObject.GetComponentInChildren<Unit_SubSet>();
+        if (_attackType == AttackType.Assassin)
+            Invoke("Dash",0.3f);
     }
+
+
 
     // Update is called once per frame
     void Update()
@@ -93,7 +109,7 @@ public class Unit : MonoBehaviour
                 _spumPref.PlayAnimation(1);
                 break;
             case UnitState.attack:
-                _spumPref.PlayAnimation(4);
+                _spumPref.PlayAnimation(0);
                 break;
             case UnitState.stun:
                 _spumPref.PlayAnimation(3);
@@ -110,7 +126,7 @@ public class Unit : MonoBehaviour
     void FindTarget()
     {
         _findTimer += Time.deltaTime;
-        if (_findTimer > SoonsoonData.Instance.Unit_Manager._findTimer)
+        if (_target == null)
         {
             _target = SoonsoonData.Instance.Unit_Manager.GetTraget(this);
             if (_target != null) SetState(UnitState.run);
@@ -149,7 +165,11 @@ public class Unit : MonoBehaviour
 
     void CheckAttack()
     {
-        if (!CheckTarget()) return; // 타겟이 없으면 반환
+        if (!CheckTarget())
+        {
+            FindTarget();
+            return; // 타겟이 없으면 반환
+        }
         if (!CheckDistance()) return; // 공격 사거리 아니라면 반환
 
         _attackTimer += Time.deltaTime;
@@ -160,9 +180,131 @@ public class Unit : MonoBehaviour
         }
     }
 
+    void CheckSkill()
+    {
+        if (!CheckTarget()) return; // 타겟이 없으면 반환
+        if (!CheckDistance()) return; // 공격 사거리 아니라면 반환
+
+        _skillTimer += Time.deltaTime;
+        if (_skillTimer > _unitCT)
+        {
+            DoSkill();
+            _skillTimer = 0;
+        }
+    }
+
     void DoAttack()
     {
-        _spumPref.PlayAnimation("2");
+        _dirVec = (Vector2)(_target.transform.position - transform.position).normalized;
+        SetDirection();
+        switch (_attackType)
+        {
+            case AttackType.sword:
+            case AttackType.Assassin:
+                _spumPref.PlayAnimation(4);
+                break;
+            case AttackType.bow:
+                _spumPref.PlayAnimation(5);
+                break;
+            case AttackType.magic:
+                _spumPref.PlayAnimation(6);
+                break;
+        }
+    }
+
+    void DoSkill()
+    {
+        _dirVec = (Vector2)(_target.transform.position - transform.position).normalized;
+        SetDirection();
+        switch (_attackType)
+        {
+            case AttackType.sword:
+                _spumPref.PlayAnimation(7);
+                break;
+            case AttackType.bow:
+                _spumPref.PlayAnimation(8);
+                break;
+            case AttackType.magic:
+                _spumPref.PlayAnimation(9);
+                break;
+        }
+    }
+
+    public void SetAttack(Unit target = null)
+    {
+        float dmg = _unitAT;
+        if (target == null)
+        {
+            _target.SetDamage(this, dmg);
+        }
+        else
+        {
+            target.SetDamage(this, dmg);
+        }
+    }
+
+    public void AttackMissile()
+    {
+        switch (_attackType)
+        {
+            case AttackType.bow:
+                SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.Arrow, this, _target);
+                break;
+            case AttackType.magic:
+                SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.FireBall, this, _target);
+                break;
+        }
+    }
+
+    public void AttackSkill()
+    {
+        switch (_attackType)
+        {
+            case AttackType.bow:
+                SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.Arrow, this, _target);
+                break;
+            case AttackType.magic:
+                SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.FireBall, this, _target);
+                break;
+        }
+    }
+
+    public void SetDamage(Unit target, float dmg)
+    {
+        float newDmg = dmg - _unitDF * 70/100;
+
+        if (newDmg < 0)
+            newDmg = 0;
+        Debug.Log(newDmg);
+        _unitHp -= newDmg;
+
+        // 데미지 텍스트
+        _unit_SubSet.ShowDamageText(newDmg);
+
+        if (_unitHp <= 0)
+        {
+            SetDeath();
+        }
+    }
+
+    public void SetDeath()
+    {
+        switch (gameObject.tag)
+        {
+            case "P1":
+                SoonsoonData.Instance.Unit_Manager._p1UnitList.Remove(this);
+                break;
+
+            case "P2":
+                SoonsoonData.Instance.Unit_Manager._p1UnitList.Remove(this);
+                break;
+        }
+        SetState(UnitState.death);
+    }
+
+    public void SetDeathDone()
+    {
+        gameObject.SetActive(false);
     }
 
     void SetDirection()
@@ -183,20 +325,55 @@ public class Unit : MonoBehaviour
         if (_target == null) // 타겟이 없음
         {
             value = false;
+            _target = null;
+            return false;
+        }
+        if (_target.gameObject == null) // 타겟 오브젝트가 없을 때
+        {
+            value = false;
+            _target = null;
+            return false;
         }
         if (_target._unitState == UnitState.death) // 타겟이 죽음
         {
             value = false;
+            _target = null;
+            return false;
         }
         if (!_target.gameObject.activeInHierarchy) // 타겟 오브젝트 활동 상태가 false
         {
             value = false;
+            _target = null;
+            return false;
         }
 
         if (!value)
         {
             SetState(UnitState.idle);
+            _target = null;
         }
         return value;
+    }
+    void Dash()
+    {
+        string temp = gameObject.tag;
+        Vector3 tPos;
+        switch (gameObject.tag)
+        {
+            case "P1":
+                gameObject.tag = "Ghost";
+                tPos = new Vector3(6, transform.position.y, transform.position.z);
+                transform.localPosition = tPos;
+                break;
+
+            case "P2":
+                gameObject.tag = "Ghost";
+                tPos = new Vector3(-6, transform.position.y, transform.position.z);
+                transform.localPosition = tPos;
+                break;
+        }
+        _target = null;
+        FindTarget();
+        gameObject.tag = temp;
     }
 }
