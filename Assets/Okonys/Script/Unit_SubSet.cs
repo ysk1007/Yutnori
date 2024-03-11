@@ -9,15 +9,18 @@ public class Unit_SubSet : MonoBehaviour
     public List<TextMeshProUGUI> TextList;
     public List<Animator> AnimatorList;
     public Slider HpSlider;
+    public Slider CTSlider;
     public int TextNum;
 
     Unit unit;
     float _unitMaxHp;
+    float _unitSkillCT;
     // Start is called before the first frame update
     void Start()
     {
         unit = this.gameObject.GetComponentInParent<Unit>();
         _unitMaxHp = unit._unitHp;
+        _unitSkillCT = unit._unitCT;
         TextNum = 0;
     }
 
@@ -25,6 +28,7 @@ public class Unit_SubSet : MonoBehaviour
     void Update()
     {
         HpSlider.value = unit._unitHp / _unitMaxHp;
+        CTSlider.value = unit._skillTimer / _unitSkillCT;
     }
 
     public void ShowDamageText(float value)

@@ -35,21 +35,27 @@ public class Unit_AnimationAction : MonoBehaviour
         switch (unit._attackType)
         {
             case Unit.AttackType.sword:
+            //case Unit.AttackType.Assassin:
                 unit.AttackSkill();
                 break;
-            case Unit.AttackType.bow:
+/*            case Unit.AttackType.bow:
                 unit.AttackSkill();
                 break;
             case Unit.AttackType.magic:
                 unit.AttackSkill();
                 break;
             default:
-                break;
+                break;*/
         }
     }
 
     public void DeathDone()
     {
         unit.SetDeathDone();
+    }
+
+    public void SkillEnd()
+    {
+        unit.SetState(Unit.UnitState.run);
     }
 }

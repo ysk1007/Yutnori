@@ -65,6 +65,7 @@ public class Unit : MonoBehaviour
     void Update()
     {
         CheckState();
+        _skillTimer += Time.deltaTime;
     }
 
     // Z축 정렬
@@ -91,13 +92,14 @@ public class Unit : MonoBehaviour
             case UnitState.stun:
                 break;
             case UnitState.skill:
+                CheckSkill();
                 break;
             case UnitState.death:
                 break;
         }
     }
 
-    void SetState(UnitState state)
+    public void SetState(UnitState state)
     {
         _unitState = state;
         switch (_unitState)
@@ -172,6 +174,8 @@ public class Unit : MonoBehaviour
         }
         if (!CheckDistance()) return; // 공격 사거리 아니라면 반환
 
+        if (CheckSkill()) return;
+
         _attackTimer += Time.deltaTime;
         if (_attackTimer > _unitAS)
         {
@@ -180,17 +184,17 @@ public class Unit : MonoBehaviour
         }
     }
 
-    void CheckSkill()
+    bool CheckSkill()
     {
-        if (!CheckTarget()) return; // 타겟이 없으면 반환
-        if (!CheckDistance()) return; // 공격 사거리 아니라면 반환
-
-        _skillTimer += Time.deltaTime;
         if (_skillTimer > _unitCT)
         {
+            SetState(UnitState.skill);
             DoSkill();
             _skillTimer = 0;
+            return true;
         }
+        else
+            return false;
     }
 
     void DoAttack()
@@ -219,6 +223,7 @@ public class Unit : MonoBehaviour
         switch (_attackType)
         {
             case AttackType.sword:
+            case AttackType.Assassin:
                 _spumPref.PlayAnimation(7);
                 break;
             case AttackType.bow:
@@ -260,17 +265,25 @@ public class Unit : MonoBehaviour
     {
         switch (_attackType)
         {
-            case AttackType.bow:
-                SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.Arrow, this, _target);
-                break;
-            case AttackType.magic:
-                SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.FireBall, this, _target);
+            case AttackType.sword:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.ShortDis, this, _target);
                 break;
         }
     }
 
     public void SetDamage(Unit target, float dmg)
     {
+        switch (target._attackType)
+        {
+            case AttackType.sword:
+            case AttackType.Assassin:
+            case AttackType.bow:
+                SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Hit, null, this.transform.position, false, 0.5f);
+                break;
+            case AttackType.magic:
+                SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Explosion, null, this.transform.position, false, 1f);
+                break;
+        }
         float newDmg = dmg - _unitDF * 70/100;
 
         if (newDmg < 0)
@@ -307,7 +320,7 @@ public class Unit : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void SetDirection()
+    public void SetDirection()
     {
         if (_dirVec.x >= 0)
         {

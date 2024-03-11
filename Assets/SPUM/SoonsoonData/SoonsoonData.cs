@@ -37,6 +37,8 @@ public class SoonsoonData
 
     public Unit_Manager Unit_Manager;
     public MissileManager Missile_Manager;
+    public EffectManager Effect_Manager;
+    public SkillManager Skill_Manager;
 
     public SPUM_Manager _spumManager;
     public bool _gifAlphaTrigger; // for using gif trigger at Soonsoon Exporter.
