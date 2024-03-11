@@ -43,6 +43,8 @@ public class Unit : MonoBehaviour
     public float _unitCT; // ÄðÅ¸ÀÓ
     public float _unitFR; // À¯´Ö ¼­Äª ¹üÀ§
 
+    public SkillData _unitSkill;
+
     // Move
     public Vector2 _dirVec;
     public Vector2 _tempDis;
@@ -263,10 +265,16 @@ public class Unit : MonoBehaviour
 
     public void AttackSkill()
     {
-        switch (_attackType)
+        switch (_unitSkill.skillType)
         {
-            case AttackType.sword:
-                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.ShortDis, this, _target);
+            case SkillData.SkillType.ShortRange:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.ShortRange, this, _target, _unitSkill.Duration, _unitSkill);
+                break;
+            case SkillData.SkillType.LongRange:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LongRange, this, _target, _unitSkill.Duration, _unitSkill);
+                break;
+            case SkillData.SkillType.Buff:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.Buff, this, _target, _unitSkill.Duration, _unitSkill);
                 break;
         }
     }
