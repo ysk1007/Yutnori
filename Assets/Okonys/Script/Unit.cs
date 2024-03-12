@@ -14,8 +14,10 @@ public class Unit : MonoBehaviour
         idle,
         run,
         attack,
+        attacking,
         stun,
         skill,
+        skilling,
         death,
     }
 
@@ -24,7 +26,8 @@ public class Unit : MonoBehaviour
         sword,
         bow,
         magic,
-        Assassin
+        Assassin,
+        healer
     }
 
     public UnitState _unitState = UnitState.idle;
@@ -33,6 +36,7 @@ public class Unit : MonoBehaviour
     public Unit _target;
 
     public float _unitRate; // 등급
+    public float _unitMaxHp; // 최대 체력
     public float _unitHp; // 체력
     public float _unitAT; // 공격력
     public float _unitAR; // 사정거리
@@ -67,7 +71,8 @@ public class Unit : MonoBehaviour
     void Update()
     {
         CheckState();
-        _skillTimer += Time.deltaTime;
+        if (_unitState != UnitState.skill)
+            _skillTimer += Time.deltaTime;
     }
 
     // Z축 정렬
@@ -188,7 +193,7 @@ public class Unit : MonoBehaviour
 
     bool CheckSkill()
     {
-        if (_skillTimer > _unitCT)
+        if (_skillTimer > _unitCT && _unitState != UnitState.attacking)
         {
             SetState(UnitState.skill);
             DoSkill();
@@ -203,6 +208,7 @@ public class Unit : MonoBehaviour
     {
         _dirVec = (Vector2)(_target.transform.position - transform.position).normalized;
         SetDirection();
+        SetState(UnitState.attacking);
         switch (_attackType)
         {
             case AttackType.sword:
@@ -213,6 +219,7 @@ public class Unit : MonoBehaviour
                 _spumPref.PlayAnimation(5);
                 break;
             case AttackType.magic:
+            case AttackType.healer:
                 _spumPref.PlayAnimation(6);
                 break;
         }
@@ -222,6 +229,7 @@ public class Unit : MonoBehaviour
     {
         _dirVec = (Vector2)(_target.transform.position - transform.position).normalized;
         SetDirection();
+        SetState(UnitState.skilling);
         switch (_attackType)
         {
             case AttackType.sword:
@@ -232,6 +240,7 @@ public class Unit : MonoBehaviour
                 _spumPref.PlayAnimation(8);
                 break;
             case AttackType.magic:
+            case AttackType.healer:
                 _spumPref.PlayAnimation(9);
                 break;
         }
@@ -250,6 +259,19 @@ public class Unit : MonoBehaviour
         }
     }
 
+    public void SetAttack(float Count, Unit target = null)
+    {
+        float dmg = _unitAT * Count;
+        if (target == null)
+        {
+            _target.SetDamage(this, dmg);
+        }
+        else
+        {
+            target.SetDamage(this, dmg);
+        }
+    }
+
     public void AttackMissile()
     {
         switch (_attackType)
@@ -258,6 +280,7 @@ public class Unit : MonoBehaviour
                 SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.Arrow, this, _target);
                 break;
             case AttackType.magic:
+            case AttackType.healer:
                 SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.FireBall, this, _target);
                 break;
         }
@@ -273,8 +296,8 @@ public class Unit : MonoBehaviour
             case SkillData.SkillType.LongRange:
                 SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LongRange, this, _target, _unitSkill.Duration, _unitSkill);
                 break;
-            case SkillData.SkillType.Buff:
-                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.Buff, this, _target, _unitSkill.Duration, _unitSkill);
+            case SkillData.SkillType.LeastHeal:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LeastHeal, this, SoonsoonData.Instance.Unit_Manager.GetLeastTeam(this), _unitSkill.Duration, _unitSkill) ;
                 break;
         }
     }
@@ -286,10 +309,9 @@ public class Unit : MonoBehaviour
             case AttackType.sword:
             case AttackType.Assassin:
             case AttackType.bow:
-                SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Hit, null, this.transform.position, false, 0.5f);
-                break;
             case AttackType.magic:
-                SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Explosion, null, this.transform.position, false, 1f);
+            case AttackType.healer:
+                SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Hit, null, this.transform.position, false, 0.5f);
                 break;
         }
         float newDmg = dmg - _unitDF * 70/100;
@@ -308,7 +330,21 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void SetDeath()
+    public void SetHeal(Unit target, float dmg)
+    {
+        float newDmg = dmg * target._unitAT;
+        SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Heal, null, this.transform.position, false, 0.5f);
+        _unitHp += newDmg;
+        if (_unitHp > _unitMaxHp)
+        {
+            _unitHp = _unitMaxHp;
+        }
+
+        // 회복 텍스트
+        _unit_SubSet.ShowHealText(newDmg);
+    }
+
+        public void SetDeath()
     {
         switch (gameObject.tag)
         {

@@ -10,7 +10,8 @@ public class EffectObj : MonoBehaviour
     {
         Hit  = 0,
         CriticalHit = 1,
-        Explosion = 2,
+        Heal = 2,
+        Explosion = 3,
     }
 
     public EffectType _effectType = EffectType.Hit;

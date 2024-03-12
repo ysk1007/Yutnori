@@ -8,6 +8,7 @@ public class Unit_SubSet : MonoBehaviour
 {
     public List<TextMeshProUGUI> TextList;
     public List<Animator> AnimatorList;
+    public Color[] TextColorList;
     public Slider HpSlider;
     public Slider CTSlider;
     public int TextNum;
@@ -34,6 +35,22 @@ public class Unit_SubSet : MonoBehaviour
     public void ShowDamageText(float value)
     {
         TextList[TextNum].text = value.ToString();
+        TextList[TextNum].color = TextColorList[0];
+        AnimatorList[TextNum].SetTrigger("Show");
+        if (TextNum == TextList.Count - 1)
+        {
+            TextNum = 0;
+        }
+        else
+        {
+            TextNum++;
+        }
+    }
+
+    public void ShowHealText(float value)
+    {
+        TextList[TextNum].text = value.ToString();
+        TextList[TextNum].color = TextColorList[1];
         AnimatorList[TextNum].SetTrigger("Show");
         if (TextNum == TextList.Count - 1)
         {

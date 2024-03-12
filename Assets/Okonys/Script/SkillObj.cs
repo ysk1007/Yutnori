@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static EffectObj;
 using static Unit;
 
 public class SkillObj : MonoBehaviour
@@ -9,7 +10,11 @@ public class SkillObj : MonoBehaviour
     {
         ShortRange,
         LongRange,
-        Buff
+        SoloBuff,
+        TargetBuff,
+        SquadBuff,
+        LeastHeal,
+        SquadHeal
     }
 
     public SkillType _skillType = SkillType.ShortRange;
@@ -17,6 +22,7 @@ public class SkillObj : MonoBehaviour
     public List<GameObject> _skillList = new List<GameObject>();
 
     public int _skillID;
+    public float _damage;
     public float _speed;
     public float _rangeX;
     public float _rangeY;
@@ -25,6 +31,7 @@ public class SkillObj : MonoBehaviour
     public bool _homing;
     public float _timer;
     public float _timerForLim;
+    public float _interval; // АЃАн
     public string _Tag;
 
     public Unit _owner;
@@ -42,9 +49,15 @@ public class SkillObj : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        DoProcess();
+        if (_interval > 0)
+        {
+            _interval--;
+            if (_skillType == SkillType.LeastHeal || _skillType == SkillType.SquadHeal)
+                return;
+            DoProcess();
+        }
     }
 
     public void SetInit()
@@ -84,11 +97,13 @@ public class SkillObj : MonoBehaviour
     {
         transform.position = owner.transform.position + new Vector3(0, 0, 0);
 
+        _damage = skillData.Damage;
         _skillID = skillData.SkillID;
         _skillType = type;
         _owner = owner;
         _target = target;
         _Tag = _target.tag;
+        _interval = skillData.DamageInterval;
 
         _rangeX = skillData.xRange;
         _rangeY = skillData.yRange;
@@ -150,10 +165,18 @@ public class SkillObj : MonoBehaviour
                 }
                 else
                 {
+                    DoProcess();
                     SkillDone();
                 }
                 break;
-            case SkillType.Buff:
+            case SkillType.LeastHeal:
+                if (_timer >= _timerForLim || _interval < 0)
+                    SkillDone();
+                else
+                {
+                    _interval--;
+                    HealProcess();
+                }
                 break;
             default:
                 break;
@@ -192,13 +215,17 @@ public class SkillObj : MonoBehaviour
         {
             if (collider.gameObject.CompareTag(_Tag))
             {
-                _owner.SetAttack(collider.gameObject.GetComponent<Unit>());
-            }
-            else
-            {
-                if (TargetCheck()) _owner.SetAttack();
+                _owner.SetAttack(_damage, collider.gameObject.GetComponent<Unit>());
+                int val = _skillID + 3;
+                EffectType num = (EffectType)val;
+                SoonsoonData.Instance.Effect_Manager.SetEffect(num, null, _target.transform.position, false, 0.5f);
             }
         }
+    }
+
+    void HealProcess()
+    {
+        _target.SetHeal(_target,_damage);
     }
 
     public void SkillDone()
@@ -206,7 +233,7 @@ public class SkillObj : MonoBehaviour
         SoonsoonData.Instance.Skill_Manager._poolListUse.Remove(this);
         gameObject.SetActive(false);
         _owner._attackTimer = 0;
-        _owner.SetState(UnitState.attack);
+        _owner.SetState(UnitState.run);
     }
 
     public bool TargetCheck()

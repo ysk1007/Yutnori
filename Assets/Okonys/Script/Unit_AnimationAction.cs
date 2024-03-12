@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unit;
 
 public class Unit_AnimationAction : MonoBehaviour
 {
@@ -13,16 +14,18 @@ public class Unit_AnimationAction : MonoBehaviour
 
     public void AttackDone()
     {
+        unit.SetState(Unit.UnitState.run);
         switch (unit._attackType)
         {
             case Unit.AttackType.sword:
             case Unit.AttackType.Assassin:
-                unit.SetAttack();
+                unit.SetAttack();    
                 break;
             case Unit.AttackType.bow:
                 unit.AttackMissile();
                 break;
             case Unit.AttackType.magic:
+            case AttackType.healer:
                 unit.AttackMissile();
                 break;
             default:
@@ -38,14 +41,15 @@ public class Unit_AnimationAction : MonoBehaviour
             //case Unit.AttackType.Assassin:
                 unit.AttackSkill();
                 break;
-/*            case Unit.AttackType.bow:
+            case Unit.AttackType.bow:
                 unit.AttackSkill();
                 break;
             case Unit.AttackType.magic:
+            case AttackType.healer:
                 unit.AttackSkill();
                 break;
             default:
-                break;*/
+                break;
         }
     }
 

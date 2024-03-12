@@ -91,4 +91,37 @@ public class Unit_Manager : MonoBehaviour
         }
         return tUnit;
     }
+
+    // 체력이 가장 적은 아군 찾기
+    public Unit GetLeastTeam(Unit unit)
+    {
+        Unit tUnit = null;
+
+        List<Unit> tList = new List<Unit>();
+        switch (unit.tag) // 유닛의 태그에 따라
+        {
+            case "P1": tList = _p1UnitList; break; // 타겟 리스트 같은 태그의 리스트로 할당
+            case "P2": tList = _p2UnitList; break;
+        }
+
+        float LeastHp = 999999;
+
+        for (int i = 0; i < tList.Count; i++)
+        {
+            if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+            {
+                if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                {
+                    float curHp = tList[i].GetComponent<Unit>()._unitHp / tList[i].GetComponent<Unit>()._unitMaxHp;
+                    if (curHp < LeastHp) // 범위 안에 들어온 오브젝트들 중에서 가장 가까운 거리의 오브젝트를 타겟으로 설정
+                    {
+                        tUnit = tList[i];
+                        LeastHp = curHp;
+                    }
+                }
+            }
+            
+        }
+        return tUnit;
+    }
 }
