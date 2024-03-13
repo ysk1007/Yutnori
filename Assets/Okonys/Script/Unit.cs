@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class Unit : MonoBehaviour
 {
@@ -35,7 +36,8 @@ public class Unit : MonoBehaviour
 
     public Unit _target;
 
-    public float _unitRate; // 등급
+    public UnitData _unitData;
+    public UnitData.RateType _unitRate; // 등급
     public float _unitMaxHp; // 최대 체력
     public float _unitHp; // 체력
     public float _unitAT; // 공격력
@@ -47,6 +49,13 @@ public class Unit : MonoBehaviour
     public float _unitCT; // 쿨타임
     public float _unitFR; // 유닛 서칭 범위
 
+    public float _buffAT = 1; // 공격력 버프
+    public float _buffAS = 1; // 공격 속도 버프
+    public float _buffDF = 1; // 방어력 버프
+
+    public Transform _buffPool;
+    public List<UnitBuff> BuffList = new List<UnitBuff>();
+
     public SkillData _unitSkill;
 
     // Move
@@ -56,6 +65,14 @@ public class Unit : MonoBehaviour
     public float _findTimer;
     public float _attackTimer;
     public float _skillTimer;
+
+    void Awake()
+    {
+        if (_unitData)
+            init();
+        GetBuffList();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -75,11 +92,38 @@ public class Unit : MonoBehaviour
             _skillTimer += Time.deltaTime;
     }
 
+    void init()
+    {
+        _unitRate = _unitData._unitRate;
+        _unitMaxHp = _unitData._unitMaxHp[_unitRate.GetHashCode()];
+        _unitHp = _unitMaxHp;
+        _unitAT = _unitData._unitAT[_unitRate.GetHashCode()];
+        _unitAR = _unitData._unitAR[_unitRate.GetHashCode()];
+        _unitAS = _unitData._unitAS[_unitRate.GetHashCode()];
+        _unitMS = _unitData._unitMS[_unitRate.GetHashCode()];
+        _unitDF = _unitData._unitDF[_unitRate.GetHashCode()];
+        _unitCC = _unitData._unitCC[_unitRate.GetHashCode()];
+        _unitCT = _unitData._unitCT[_unitRate.GetHashCode()];
+        _unitFR = _unitData._unitFR[_unitRate.GetHashCode()];
+        _unitSkill = _unitData._unitSkill;
+    }
+
     // Z축 정렬
     void SetZpos()
     {
         Vector3 tPos = new Vector3(transform.position.x, transform.position.y, transform.position.y * 0.1f);
         transform.localPosition = tPos;
+    }
+
+    public void GetBuffList()
+    {
+        BuffList.Clear();
+
+        for (int i = 0; i < _buffPool.childCount; i++)
+        {
+            UnitBuff buff = _buffPool.GetChild(i).GetComponent<UnitBuff>();
+            BuffList.Add(buff);
+        }
     }
 
     void CheckState()
@@ -147,6 +191,7 @@ public class Unit : MonoBehaviour
     void Move()
     {
         if(!CheckTarget()) return;
+        if (CheckSkill()) return; // 이동중 스킬 쓸지 말지
         CheckDistance();
         _dirVec = _tempDis.normalized;
         SetDirection();
@@ -179,12 +224,13 @@ public class Unit : MonoBehaviour
             FindTarget();
             return; // 타겟이 없으면 반환
         }
+
         if (!CheckDistance()) return; // 공격 사거리 아니라면 반환
 
         if (CheckSkill()) return;
 
         _attackTimer += Time.deltaTime;
-        if (_attackTimer > _unitAS)
+        if (_attackTimer > 3 - (_unitAS * _buffAS))
         {
             DoAttack();
             _attackTimer = 0;
@@ -248,7 +294,7 @@ public class Unit : MonoBehaviour
 
     public void SetAttack(Unit target = null)
     {
-        float dmg = _unitAT;
+        float dmg = _unitAT * _buffAT;
         if (target == null)
         {
             _target.SetDamage(this, dmg);
@@ -261,7 +307,7 @@ public class Unit : MonoBehaviour
 
     public void SetAttack(float Count, Unit target = null)
     {
-        float dmg = _unitAT * Count;
+        float dmg = _unitAT * _buffAT * Count;
         if (target == null)
         {
             _target.SetDamage(this, dmg);
@@ -288,16 +334,28 @@ public class Unit : MonoBehaviour
 
     public void AttackSkill()
     {
+        List<Unit> targets = new List<Unit>();
         switch (_unitSkill.skillType)
         {
             case SkillData.SkillType.ShortRange:
-                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.ShortRange, this, _target, _unitSkill.Duration, _unitSkill);
+                targets.Add(_target);
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.ShortRange, this, targets, _unitSkill.Duration, _unitSkill);
                 break;
             case SkillData.SkillType.LongRange:
-                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LongRange, this, _target, _unitSkill.Duration, _unitSkill);
+                targets.Add(_target);
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LongRange, this, targets, _unitSkill.Duration, _unitSkill);
                 break;
             case SkillData.SkillType.LeastHeal:
-                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LeastHeal, this, SoonsoonData.Instance.Unit_Manager.GetLeastTeam(this), _unitSkill.Duration, _unitSkill) ;
+                targets.Add(SoonsoonData.Instance.Unit_Manager.GetLeastTeam(this));
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LeastHeal, this, targets, _unitSkill.Duration, _unitSkill) ;
+                break;
+            case SkillData.SkillType.SquadHeal:
+                targets = SoonsoonData.Instance.Unit_Manager.GetSquadTeam(this);
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.SquadHeal, this, targets, _unitSkill.Duration, _unitSkill);
+                break;
+            case SkillData.SkillType.SoloBuff:
+                targets.Add(this);
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.SoloBuff, this, targets, _unitSkill.Duration, _unitSkill);
                 break;
         }
     }
@@ -311,14 +369,22 @@ public class Unit : MonoBehaviour
             case AttackType.bow:
             case AttackType.magic:
             case AttackType.healer:
-                SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Hit, null, this.transform.position, false, 0.5f);
+                SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Hit, null, this.transform.position, false, 1f);
                 break;
         }
-        float newDmg = dmg - _unitDF * 70/100;
+
+
+        float L = 0.8f; // 최대 피해감소 값
+        float k = 0.05f; // 경사도
+        float x0 = 50f; // 중심점
+
+        // x 값이 0에 가까워질수록 y가 0에 수렴하고, x 값이 100에 가까워질수록 y가 0.8에 수렴하는 시그모이드 함수
+        float DecreaseDamage = L / (1 + Mathf.Exp(-k * (_unitDF * _buffDF - x0)));
+
+        float newDmg = dmg - (dmg * DecreaseDamage);
 
         if (newDmg < 0)
             newDmg = 0;
-        Debug.Log(newDmg);
         _unitHp -= newDmg;
 
         // 데미지 텍스트
@@ -330,21 +396,39 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void SetHeal(Unit target, float dmg)
+    public void SetHeal(Unit target, float value)
     {
-        float newDmg = dmg * target._unitAT;
-        SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Heal, null, this.transform.position, false, 0.5f);
-        _unitHp += newDmg;
+        SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Heal, null, this.transform.position, false, 1f);
+        _unitHp += value;
         if (_unitHp > _unitMaxHp)
         {
             _unitHp = _unitMaxHp;
         }
 
         // 회복 텍스트
-        _unit_SubSet.ShowHealText(newDmg);
+        _unit_SubSet.ShowHealText(value);
     }
 
-        public void SetDeath()
+    public void UnitBuff(float AT, float AS, float DF, float Duration)
+    {
+        UnitBuff newBuff = null;
+
+        foreach (var obj in BuffList)
+        {
+            if (!obj.gameObject.activeInHierarchy)
+            {
+                newBuff = obj;
+                break;
+            }
+        }
+
+        if (newBuff != null)
+        {
+            newBuff.Init(AT, AS, DF, Duration);
+        }
+    }
+
+    public void SetDeath()
     {
         switch (gameObject.tag)
         {

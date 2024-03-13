@@ -7,13 +7,13 @@ public class SkillData : ScriptableObject
 {
     public enum SkillType
     {
-        ShortRange,
-        LongRange,
-        SoloBuff,
-        TargetBuff,
-        SquadBuff,
-        LeastHeal,
-        SquadHeal
+        ShortRange, // 근접 스킬
+        LongRange, // 원거리 투사체 스킬
+        SoloBuff, // 1인 버프
+        TargetBuff, // 지정 버프
+        SquadBuff, // 아군 전체 버프
+        LeastHeal, // 체력이 가장 적은 아군 회복
+        SquadHeal // 아군 전체 회복
     }
 
     [Header(" # Main Info")]

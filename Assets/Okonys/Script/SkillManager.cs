@@ -60,7 +60,7 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    public void RunSkill(SkillObj.SkillType type, Unit owner, Unit target, float timer, SkillData skillData)
+    public void RunSkill(SkillObj.SkillType type, Unit owner, List<Unit> target, float timer, SkillData skillData)
     {
         SkillObj skill = null;
 
@@ -80,9 +80,9 @@ public class SkillManager : MonoBehaviour
                 owner.SetDirection();
                 Vector2 newPos;
                 if (owner.transform.localScale.x > 0)
-                    newPos = new Vector2(target.transform.position.x - 1, target.transform.position.y);
+                    newPos = new Vector2(target[0].transform.position.x - 1, target[0].transform.position.y);
                 else
-                    newPos = new Vector2(target.transform.position.x + 1, target.transform.position.y);
+                    newPos = new Vector2(target[0].transform.position.x + 1, target[0].transform.position.y);
                 owner.transform.position = newPos;
             }
             skill.SetSkill(type, owner, target, timer, skillData);

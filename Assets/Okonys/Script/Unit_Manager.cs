@@ -124,4 +124,29 @@ public class Unit_Manager : MonoBehaviour
         }
         return tUnit;
     }
+
+    // 모든 아군 찾기
+    public List<Unit> GetSquadTeam(Unit unit)
+    {
+        List<Unit> returnList = new List<Unit>();
+        List<Unit> tList = new List<Unit>();
+        switch (unit.tag) // 유닛의 태그에 따라
+        {
+            case "P1": tList = _p1UnitList; break; // 타겟 리스트 같은 태그의 리스트로 할당
+            case "P2": tList = _p2UnitList; break;
+        }      
+
+        for (int i = 0; i < tList.Count; i++)
+        {
+            if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+            {
+                if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                {
+                    returnList.Add(tList[i]);
+                }
+            }
+
+        }
+        return returnList;
+    }
 }

@@ -6,10 +6,17 @@ using static Unit;
 public class Unit_AnimationAction : MonoBehaviour
 {
     public Unit unit;
+    public Animator unit_animator;
 
     private void Awake()
     {
         unit = this.gameObject.GetComponentInParent<Unit>();
+        unit_animator = this.gameObject.GetComponent<Animator>();
+    }
+
+    public void Update()
+    {
+        unit_animator.SetFloat("AttackSpeed",unit._unitAS * unit._buffAS);
     }
 
     public void AttackDone()

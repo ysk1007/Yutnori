@@ -8,13 +8,13 @@ public class SkillObj : MonoBehaviour
 {
     public enum SkillType
     {
-        ShortRange,
-        LongRange,
-        SoloBuff,
-        TargetBuff,
-        SquadBuff,
-        LeastHeal,
-        SquadHeal
+        ShortRange, // 근접 스킬
+        LongRange, // 원거리 투사체 스킬
+        SoloBuff, // 1인 버프
+        TargetBuff, // 지정 버프
+        SquadBuff, // 아군 전체 버프
+        LeastHeal, // 체력이 가장 적은 아군 회복
+        SquadHeal // 아군 전체 회복
     }
 
     public SkillType _skillType = SkillType.ShortRange;
@@ -35,7 +35,7 @@ public class SkillObj : MonoBehaviour
     public string _Tag;
 
     public Unit _owner;
-    public Unit _target;
+    public List<Unit> _target = new List<Unit>();
 
     public Vector2 _startPos;
     public Vector2 _endPos;
@@ -54,9 +54,8 @@ public class SkillObj : MonoBehaviour
         if (_interval > 0)
         {
             _interval--;
-            if (_skillType == SkillType.LeastHeal || _skillType == SkillType.SquadHeal)
-                return;
-            DoProcess();
+            if (_skillType == SkillType.ShortRange || _skillType == SkillType.LongRange)
+                DoProcess();
         }
     }
 
@@ -77,13 +76,11 @@ public class SkillObj : MonoBehaviour
         switch (_skillType)
         {
             case SkillType.ShortRange:
-                _speed = 5f;
                 _homing = false;
-                _yPos = 5f;
+                _yPos = 0;
                 _yPosSave = _yPos;
                 break;
             case SkillType.LongRange:
-                _speed = 12f;
                 _homing = true;
                 _yPos = -1f;
                 _yPosSave = _yPos;
@@ -93,16 +90,18 @@ public class SkillObj : MonoBehaviour
         }
     }
 
-    public void SetSkill(SkillType type, Unit owner, Unit target, float timer, SkillData skillData)
+    public void SetSkill(SkillType type, Unit owner, List<Unit> target, float timer, SkillData skillData)
     {
         transform.position = owner.transform.position + new Vector3(0, 0, 0);
 
         _damage = skillData.Damage;
+        _speed = skillData.Speed;
         _skillID = skillData.SkillID;
         _skillType = type;
         _owner = owner;
+        _target.Clear();
         _target = target;
-        _Tag = _target.tag;
+        _Tag = _target[0].tag;
         _interval = skillData.DamageInterval;
 
         _rangeX = skillData.xRange;
@@ -114,7 +113,7 @@ public class SkillObj : MonoBehaviour
         _startPos = transform.position;
 
         if (type == SkillType.LongRange)
-            _endPos = (Vector2)_target.transform.position + new Vector2(0, 0);
+            _endPos = (Vector2)_target[0].transform.position + new Vector2(0, 0);
         else
             _endPos = _startPos;
 
@@ -131,10 +130,10 @@ public class SkillObj : MonoBehaviour
         {
             if (TargetCheck())
             {
-                _endPos = (Vector2)_target.transform.position + new Vector2(0, 0.25f);
+                _endPos = (Vector2)_target[0].transform.position + new Vector2(0, 0.25f);
             }
         }
-
+        transform.localRotation = Quaternion.identity;
         switch (_skillType)
         {
             case SkillType.ShortRange:
@@ -170,15 +169,23 @@ public class SkillObj : MonoBehaviour
                 }
                 break;
             case SkillType.LeastHeal:
-                if (_timer >= _timerForLim || _interval < 0)
+            case SkillType.SquadHeal:
+                if (_timer >= _timerForLim || _interval <= 0)
                     SkillDone();
                 else
                 {
-                    _interval--;
                     HealProcess();
                 }
                 break;
-            default:
+            case SkillType.SoloBuff:
+                if (_timer >= _timerForLim)
+                    SkillDone();
+                else
+                {
+                    if (_interval <= 0)
+                        return;
+                    BuffProcess();
+                }
                 break;
         }
 
@@ -216,16 +223,30 @@ public class SkillObj : MonoBehaviour
             if (collider.gameObject.CompareTag(_Tag))
             {
                 _owner.SetAttack(_damage, collider.gameObject.GetComponent<Unit>());
-                int val = _skillID + 3;
+                int val = _skillID + 4;
                 EffectType num = (EffectType)val;
-                SoonsoonData.Instance.Effect_Manager.SetEffect(num, null, _target.transform.position, false, 0.5f);
+                SoonsoonData.Instance.Effect_Manager.SetEffect(num, null, _target[0].transform.position, false, 2f);
             }
         }
     }
 
     void HealProcess()
     {
-        _target.SetHeal(_target,_damage);
+        float value = _owner._unitAT * _damage;
+        foreach (var unit in _target)
+        {
+            unit.SetHeal(unit, value);
+        }
+    }
+
+    void BuffProcess()
+    {
+        Debug.Log("버프");
+        foreach (var unit in _target)
+        {
+            SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Buff, unit, unit.transform.position, false, _timerForLim);
+            unit.UnitBuff(_damage, _speed, _speed, _timerForLim);
+        }
     }
 
     public void SkillDone()
@@ -243,15 +264,15 @@ public class SkillObj : MonoBehaviour
         {
             value = false;
         }
-        if (_target.gameObject == null) // 타겟 오브젝트가 없을 때
+        if (_target[0].gameObject == null) // 타겟 오브젝트가 없을 때
         {
             value = false;
         }
-        if (_target._unitState == UnitState.death) // 타겟이 죽음
+        if (_target[0]._unitState == UnitState.death) // 타겟이 죽음
         {
             value = false;
         }
-        if (!_target.gameObject.activeInHierarchy) // 타겟 오브젝트 활동 상태가 false
+        if (!_target[0].gameObject.activeInHierarchy) // 타겟 오브젝트 활동 상태가 false
         {
             value = false;
         }
