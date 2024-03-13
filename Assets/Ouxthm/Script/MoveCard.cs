@@ -6,6 +6,10 @@ using UnityEngine.EventSystems;
 public class MoveCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Transform root;
+    public void Start()
+    {
+        root = transform.root;
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         root.BroadcastMessage("BeginDrag", transform, SendMessageOptions.DontRequireReceiver);

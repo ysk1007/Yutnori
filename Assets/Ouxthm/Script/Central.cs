@@ -10,13 +10,11 @@ public class Central : MonoBehaviour
     public static Central instance;
 
     public Transform invisibleCard; // 보이지 않는 카드의 위치
-    public TextMeshProUGUI countTxt;    // 카드를 옮길 수 있는 카운트 텍스트
     List<Arranger> arrangers;
 
     Arranger workingArranger;
     public static int oriIndex;
     public static int lastIndex;
-    public int count = 3;        // 카드를 옮길 수 있는 횟수
 
     private void Awake()
     {
