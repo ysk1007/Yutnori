@@ -381,7 +381,7 @@ public class Unit : MonoBehaviour
         // x 값이 0에 가까워질수록 y가 0에 수렴하고, x 값이 100에 가까워질수록 y가 0.8에 수렴하는 시그모이드 함수
         float DecreaseDamage = L / (1 + Mathf.Exp(-k * (_unitDF * _buffDF - x0)));
 
-        float newDmg = dmg - (dmg * DecreaseDamage);
+        float newDmg = Mathf.Floor((dmg - (dmg * DecreaseDamage)));
 
         if (newDmg < 0)
             newDmg = 0;
