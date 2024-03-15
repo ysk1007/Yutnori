@@ -40,6 +40,7 @@ public class Unit : MonoBehaviour
     public UnitData.RateType _unitRate; // 등급
     public float _unitMaxHp; // 최대 체력
     public float _unitHp; // 체력
+    public float _unitSD; // 보호막
     public float _unitAT; // 공격력
     public float _unitAR; // 사정거리
     public float _unitAS; // 공격 속도
@@ -52,6 +53,7 @@ public class Unit : MonoBehaviour
     public float _buffAT = 1; // 공격력 버프
     public float _buffAS = 1; // 공격 속도 버프
     public float _buffDF = 1; // 방어력 버프
+    public float _buffSD = 0; // 보호막 버프
 
     public Transform _buffPool;
     public List<UnitBuff> BuffList = new List<UnitBuff>();
@@ -335,27 +337,52 @@ public class Unit : MonoBehaviour
     public void AttackSkill()
     {
         List<Unit> targets = new List<Unit>();
+
+        switch (_unitSkill.targetType)
+        {
+            case SkillData.TargetType.None:
+                targets.Add(_target);
+                break;
+            case SkillData.TargetType.Solo:
+                targets.Add(this);
+                break;
+            case SkillData.TargetType.CurrentTarget:
+                targets.Add(_target);
+                break;
+            case SkillData.TargetType.LeastHp:
+                targets.Add(SoonsoonData.Instance.Unit_Manager.GetLeastTeam(this));
+                break;
+            case SkillData.TargetType.LeastHpEnemy:
+                break;
+            case SkillData.TargetType.MostHp:
+                break;
+            case SkillData.TargetType.MostHpEnemy:
+                break;
+            case SkillData.TargetType.MySquad:
+                targets = SoonsoonData.Instance.Unit_Manager.GetSquadTeam(this);
+                break;
+            case SkillData.TargetType.EnemySquad:
+                break;
+            case SkillData.TargetType.FarAwayEnemy:
+                break;
+            default:
+                targets.Add(_target);
+                break;
+        }
+
         switch (_unitSkill.skillType)
         {
             case SkillData.SkillType.ShortRange:
-                targets.Add(_target);
                 SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.ShortRange, this, targets, _unitSkill.Duration, _unitSkill);
                 break;
             case SkillData.SkillType.LongRange:
-                targets.Add(_target);
                 SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LongRange, this, targets, _unitSkill.Duration, _unitSkill);
                 break;
-            case SkillData.SkillType.LeastHeal:
-                targets.Add(SoonsoonData.Instance.Unit_Manager.GetLeastTeam(this));
-                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LeastHeal, this, targets, _unitSkill.Duration, _unitSkill) ;
+            case SkillData.SkillType.Heal:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.Heal, this, targets, _unitSkill.Duration, _unitSkill) ;
                 break;
-            case SkillData.SkillType.SquadHeal:
-                targets = SoonsoonData.Instance.Unit_Manager.GetSquadTeam(this);
-                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.SquadHeal, this, targets, _unitSkill.Duration, _unitSkill);
-                break;
-            case SkillData.SkillType.SoloBuff:
-                targets.Add(this);
-                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.SoloBuff, this, targets, _unitSkill.Duration, _unitSkill);
+            case SkillData.SkillType.Buff:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.Buff, this, targets, _unitSkill.Duration, _unitSkill);
                 break;
         }
     }
@@ -385,7 +412,20 @@ public class Unit : MonoBehaviour
 
         if (newDmg < 0)
             newDmg = 0;
-        _unitHp -= newDmg;
+
+        if (_buffSD > 0)
+        {
+            _buffSD -= newDmg;
+            if (_buffSD < 0)
+            {
+                _unitHp -= _buffSD;
+                _buffSD = 0;
+            }
+        }
+        else
+        {
+            _unitHp -= newDmg;
+        }
 
         // 데미지 텍스트
         _unit_SubSet.ShowDamageText(newDmg);
@@ -409,7 +449,7 @@ public class Unit : MonoBehaviour
         _unit_SubSet.ShowHealText(value);
     }
 
-    public void UnitBuff(float AT, float AS, float DF, float Duration)
+    public void UnitBuff(float RC, float AT, float AS, float DF,float SD, float Duration)
     {
         UnitBuff newBuff = null;
 
@@ -424,7 +464,7 @@ public class Unit : MonoBehaviour
 
         if (newBuff != null)
         {
-            newBuff.Init(AT, AS, DF, Duration);
+            newBuff.Init(RC, AT, AS, DF, SD, Duration);
         }
     }
 

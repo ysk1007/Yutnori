@@ -79,10 +79,10 @@ public class SkillManager : MonoBehaviour
             {
                 owner.SetDirection();
                 Vector2 newPos;
-                if (owner.transform.localScale.x > 0)
-                    newPos = new Vector2(target[0].transform.position.x - 1, target[0].transform.position.y);
-                else
+                if (owner.transform.position.x > target[0].transform.position.x)
                     newPos = new Vector2(target[0].transform.position.x + 1, target[0].transform.position.y);
+                else
+                    newPos = new Vector2(target[0].transform.position.x - 1, target[0].transform.position.y);
                 owner.transform.position = newPos;
             }
             skill.SetSkill(type, owner, target, timer, skillData);

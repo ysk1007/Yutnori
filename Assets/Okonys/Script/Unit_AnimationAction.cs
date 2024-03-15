@@ -45,7 +45,7 @@ public class Unit_AnimationAction : MonoBehaviour
         switch (unit._attackType)
         {
             case Unit.AttackType.sword:
-            //case Unit.AttackType.Assassin:
+            case Unit.AttackType.Assassin:
                 unit.AttackSkill();
                 break;
             case Unit.AttackType.bow:

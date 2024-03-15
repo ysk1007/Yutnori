@@ -10,11 +10,8 @@ public class SkillObj : MonoBehaviour
     {
         ShortRange, // 근접 스킬
         LongRange, // 원거리 투사체 스킬
-        SoloBuff, // 1인 버프
-        TargetBuff, // 지정 버프
-        SquadBuff, // 아군 전체 버프
-        LeastHeal, // 체력이 가장 적은 아군 회복
-        SquadHeal // 아군 전체 회복
+        Buff, // 버프
+        Heal, // 회복
     }
 
     public SkillType _skillType = SkillType.ShortRange;
@@ -23,7 +20,10 @@ public class SkillObj : MonoBehaviour
 
     public int _skillID;
     public float _damage;
+    public float _recovery;
     public float _speed;
+    public float _defense;
+    public float _shield;
     public float _rangeX;
     public float _rangeY;
     public float _yPos;
@@ -72,17 +72,17 @@ public class SkillObj : MonoBehaviour
         }
 
         _collider.size = new Vector3(_rangeX, _rangeY,3f);
-
         switch (_skillType)
         {
             case SkillType.ShortRange:
                 _homing = false;
                 _yPos = 0;
                 _yPosSave = _yPos;
+                if (_owner.transform.position.x > _target[0].transform.position.x) this.transform.localScale = new Vector3(-1, 1, 1);
                 break;
             case SkillType.LongRange:
                 _homing = true;
-                _yPos = -1f;
+                _yPos = 1f;
                 _yPosSave = _yPos;
                 break;
             default:
@@ -95,7 +95,10 @@ public class SkillObj : MonoBehaviour
         transform.position = owner.transform.position + new Vector3(0, 0, 0);
 
         _damage = skillData.Damage;
+        _recovery = owner._unitAT * skillData.Recovery;
         _speed = skillData.Speed;
+        _defense = skillData.Defense;
+        _shield = skillData.Shield;
         _skillID = skillData.SkillID;
         _skillType = type;
         _owner = owner;
@@ -117,7 +120,7 @@ public class SkillObj : MonoBehaviour
         else
             _endPos = _startPos;
 
-
+        this.transform.localScale = new Vector3(1, 1, 1);
         SoonsoonData.Instance.Skill_Manager._poolListUse.Add(this);
         SetInit();
 
@@ -168,8 +171,7 @@ public class SkillObj : MonoBehaviour
                     SkillDone();
                 }
                 break;
-            case SkillType.LeastHeal:
-            case SkillType.SquadHeal:
+            case SkillType.Heal:
                 if (_timer >= _timerForLim || _interval <= 0)
                     SkillDone();
                 else
@@ -177,7 +179,7 @@ public class SkillObj : MonoBehaviour
                     HealProcess();
                 }
                 break;
-            case SkillType.SoloBuff:
+            case SkillType.Buff:
                 if (_timer >= _timerForLim)
                     SkillDone();
                 else
@@ -244,8 +246,8 @@ public class SkillObj : MonoBehaviour
         Debug.Log("버프");
         foreach (var unit in _target)
         {
-            SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Buff, unit, unit.transform.position, false, _timerForLim);
-            unit.UnitBuff(_damage, _speed, _speed, _timerForLim);
+            SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Buff, unit, unit.transform.position, true, _timerForLim);
+            unit.UnitBuff(_recovery, _damage, _speed, _defense, _shield, _timerForLim);
         }
     }
 
