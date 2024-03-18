@@ -53,7 +53,13 @@ public class Unit : MonoBehaviour
     public float _buffAT = 1; // 공격력 버프
     public float _buffAS = 1; // 공격 속도 버프
     public float _buffDF = 1; // 방어력 버프
+    public float _buffCC = 0; // 치명타 확률 버프
     public float _buffSD = 0; // 보호막 버프
+
+    public float _deBuffAT = 0; // 공격력 디버프
+    public float _deBuffAS = 0; // 공격 속도 디버프
+    public float _deBuffDF = 0; // 방어력 디버프
+    public float _deBuffCC = 0; // 치명타 확률 디버프
 
     public Transform _buffPool;
     public List<UnitBuff> BuffList = new List<UnitBuff>();
@@ -232,7 +238,7 @@ public class Unit : MonoBehaviour
         if (CheckSkill()) return;
 
         _attackTimer += Time.deltaTime;
-        if (_attackTimer > 3 - (_unitAS * _buffAS))
+        if (_attackTimer > 3 - (_unitAS * (_buffAS - _deBuffAS)))
         {
             DoAttack();
             _attackTimer = 0;
@@ -296,7 +302,7 @@ public class Unit : MonoBehaviour
 
     public void SetAttack(Unit target = null)
     {
-        float dmg = _unitAT * _buffAT;
+        float dmg = _unitAT * (_buffAT - _deBuffAT);
         if (target == null)
         {
             _target.SetDamage(this, dmg);
@@ -309,7 +315,7 @@ public class Unit : MonoBehaviour
 
     public void SetAttack(float Count, Unit target = null)
     {
-        float dmg = _unitAT * _buffAT * Count;
+        float dmg = _unitAT * (_buffAT - _deBuffAT) * Count;
         if (target == null)
         {
             _target.SetDamage(this, dmg);
@@ -384,6 +390,9 @@ public class Unit : MonoBehaviour
             case SkillData.SkillType.Buff:
                 SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.Buff, this, targets, _unitSkill.Duration, _unitSkill);
                 break;
+            case SkillData.SkillType.Debuff:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.Debuff, this, targets, _unitSkill.Duration, _unitSkill);
+                break;
         }
     }
 
@@ -406,7 +415,7 @@ public class Unit : MonoBehaviour
         float x0 = 50f; // 중심점
 
         // x 값이 0에 가까워질수록 y가 0에 수렴하고, x 값이 100에 가까워질수록 y가 0.8에 수렴하는 시그모이드 함수
-        float DecreaseDamage = L / (1 + Mathf.Exp(-k * (_unitDF * _buffDF - x0)));
+        float DecreaseDamage = L / (1 + Mathf.Exp(-k * (_unitDF * (_buffDF - _deBuffDF) - x0)));
 
         float newDmg = Mathf.Floor((dmg - (dmg * DecreaseDamage)));
 
@@ -449,7 +458,7 @@ public class Unit : MonoBehaviour
         _unit_SubSet.ShowHealText(value);
     }
 
-    public void UnitBuff(float RC, float AT, float AS, float DF,float SD, float Duration)
+    public void UnitBuff(float RC, float AT, float AS, float DF, float CC, float SD, float Duration, bool Debuff)
     {
         UnitBuff newBuff = null;
 
@@ -464,7 +473,7 @@ public class Unit : MonoBehaviour
 
         if (newBuff != null)
         {
-            newBuff.Init(RC, AT, AS, DF, SD, Duration);
+            newBuff.Init(RC, AT, AS, DF, CC, SD, Duration, Debuff);
         }
     }
 

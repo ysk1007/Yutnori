@@ -56,7 +56,12 @@ public class Unit_SubSet : MonoBehaviour
         Buff_AT_icon.SetActive(unit._buffAT > 1 ? true : false);
         Buff_AS_icon.SetActive(unit._buffAS > 1 ? true : false);
         Buff_DF_icon.SetActive(unit._buffDF > 1 ? true : false);
-        //Buff_CC_icon.SetActive(unit._buffCC > 1 ? true : false);
+        Buff_CC_icon.SetActive(unit._buffCC > 1 ? true : false);
+
+        Debuff_AT_icon.SetActive(unit._deBuffAT > 0 ? true : false);
+        Debuff_AS_icon.SetActive(unit._deBuffAS > 0 ? true : false);
+        Debuff_DF_icon.SetActive(unit._deBuffDF > 0 ? true : false);
+        Debuff_CC_icon.SetActive(unit._deBuffCC > 0 ? true : false);
     }
 
     public void ShowDamageText(float value)

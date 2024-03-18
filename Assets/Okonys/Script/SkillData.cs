@@ -10,6 +10,7 @@ public class SkillData : ScriptableObject
         ShortRange, // 근접 스킬
         LongRange, // 원거리 투사체 스킬
         Buff, // 버프
+        Debuff, // 디버프
         Heal, // 회복
     }
 
@@ -33,11 +34,12 @@ public class SkillData : ScriptableObject
     public SkillType skillType;
     public TargetType targetType = TargetType.None;
 
-    [Header(" # Status Info")]
+    [Header(" # Buff Info")]
     public float Damage; // 피해량
     public float Recovery; // 회복량
     public float Speed; // 속도
     public float Defense; // 방어
+    public float Critical; // 크리티컬
     public float Shield; // 보호막
     public float xRange; // x축 사거리
     public float yRange; // y축 사거리

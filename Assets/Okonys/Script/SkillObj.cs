@@ -11,6 +11,7 @@ public class SkillObj : MonoBehaviour
         ShortRange, // 근접 스킬
         LongRange, // 원거리 투사체 스킬
         Buff, // 버프
+        Debuff, // 디버프
         Heal, // 회복
     }
 
@@ -23,6 +24,7 @@ public class SkillObj : MonoBehaviour
     public float _recovery;
     public float _speed;
     public float _defense;
+    public float _critical;
     public float _shield;
     public float _rangeX;
     public float _rangeY;
@@ -98,6 +100,7 @@ public class SkillObj : MonoBehaviour
         _recovery = owner._unitAT * skillData.Recovery;
         _speed = skillData.Speed;
         _defense = skillData.Defense;
+        _critical = skillData.Critical;
         _shield = skillData.Shield;
         _skillID = skillData.SkillID;
         _skillType = type;
@@ -180,6 +183,7 @@ public class SkillObj : MonoBehaviour
                 }
                 break;
             case SkillType.Buff:
+            case SkillType.Debuff:
                 if (_timer >= _timerForLim)
                     SkillDone();
                 else
@@ -244,10 +248,23 @@ public class SkillObj : MonoBehaviour
     void BuffProcess()
     {
         Debug.Log("버프");
-        foreach (var unit in _target)
+        bool BuffType = (_skillType == SkillType.Debuff) ? true : false;
+        switch (BuffType)
         {
-            SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Buff, unit, unit.transform.position, true, _timerForLim);
-            unit.UnitBuff(_recovery, _damage, _speed, _defense, _shield, _timerForLim);
+            case true:
+                foreach (var unit in _target)
+                {
+                    SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Debuff, unit, unit.transform.position, true, _timerForLim);
+                    unit.UnitBuff(_recovery, _damage, _speed, _defense, _critical, _shield, _timerForLim, BuffType);
+                }
+                break;
+            case false:
+                foreach (var unit in _target)
+                {
+                    SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Buff, unit, unit.transform.position, true, _timerForLim);
+                    unit.UnitBuff(_recovery, _damage, _speed, _defense, _critical, _shield, _timerForLim, BuffType);
+                }
+                break;
         }
     }
 

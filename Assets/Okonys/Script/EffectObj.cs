@@ -12,7 +12,8 @@ public class EffectObj : MonoBehaviour
         CriticalHit = 1,
         Heal = 2,
         Buff = 3,
-        Explosion = 4,
+        Debuff = 4,
+        Explosion = 5,
     }
 
     public EffectType _effectType = EffectType.Hit;
