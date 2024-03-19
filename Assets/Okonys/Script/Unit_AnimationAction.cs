@@ -24,15 +24,15 @@ public class Unit_AnimationAction : MonoBehaviour
         unit.SetState(Unit.UnitState.run);
         switch (unit._attackType)
         {
-            case Unit.AttackType.sword:
+            case Unit.AttackType.Warrior:
             case Unit.AttackType.Assassin:
                 unit.SetAttack();    
                 break;
-            case Unit.AttackType.bow:
+            case Unit.AttackType.Archer:
                 unit.AttackMissile();
                 break;
-            case Unit.AttackType.magic:
-            case AttackType.healer:
+            case Unit.AttackType.Wizard:
+            case AttackType.Healer:
                 unit.AttackMissile();
                 break;
             default:
@@ -44,15 +44,15 @@ public class Unit_AnimationAction : MonoBehaviour
     {
         switch (unit._attackType)
         {
-            case Unit.AttackType.sword:
+            case Unit.AttackType.Warrior:
             case Unit.AttackType.Assassin:
                 unit.AttackSkill();
                 break;
-            case Unit.AttackType.bow:
+            case Unit.AttackType.Archer:
                 unit.AttackSkill();
                 break;
-            case Unit.AttackType.magic:
-            case AttackType.healer:
+            case Unit.AttackType.Wizard:
+            case AttackType.Healer:
                 unit.AttackSkill();
                 break;
             default:

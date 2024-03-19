@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Unit_SubSet : MonoBehaviour
 {
+    public Transform TextPool;
     public List<TextMeshProUGUI> TextList;
     public List<Animator> AnimatorList;
     public Color[] TextColorList;
@@ -27,6 +28,12 @@ public class Unit_SubSet : MonoBehaviour
     Unit unit;
     float _unitMaxHp;
     float _unitSkillCT;
+
+    void Awake()
+    {
+        GetList();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,10 +71,10 @@ public class Unit_SubSet : MonoBehaviour
         Debuff_CC_icon.SetActive(unit._deBuffCC > 0 ? true : false);
     }
 
-    public void ShowDamageText(float value)
+    public void ShowDamageText(float value, bool critical)
     {
         TextList[TextNum].text = value.ToString();
-        TextList[TextNum].color = TextColorList[0];
+        TextList[TextNum].color = critical ? TextColorList[1] : TextColorList[0];
         AnimatorList[TextNum].SetTrigger("Show");
         if (TextNum == TextList.Count - 1)
         {
@@ -82,7 +89,7 @@ public class Unit_SubSet : MonoBehaviour
     public void ShowHealText(float value)
     {
         TextList[TextNum].text = value.ToString();
-        TextList[TextNum].color = TextColorList[1];
+        TextList[TextNum].color = TextColorList[2];
         AnimatorList[TextNum].SetTrigger("Show");
         if (TextNum == TextList.Count - 1)
         {
@@ -91,6 +98,18 @@ public class Unit_SubSet : MonoBehaviour
         else
         {
             TextNum++;
+        }
+    }
+
+    void GetList()
+    {
+        for (int i = 0; i < TextPool.childCount; i++)
+        {
+            TextMeshProUGUI Text = TextPool.GetChild(i).GetComponent<TextMeshProUGUI>();
+            TextList.Add(Text);
+
+            Animator Animator = TextPool.GetChild(i).GetComponent<Animator>();
+            AnimatorList.Add(Animator);
         }
     }
 }

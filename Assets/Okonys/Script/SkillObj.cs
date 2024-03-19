@@ -229,7 +229,7 @@ public class SkillObj : MonoBehaviour
             if (collider.gameObject.CompareTag(_Tag))
             {
                 _owner.SetAttack(_damage, collider.gameObject.GetComponent<Unit>());
-                int val = _skillID + 4;
+                int val = _skillID + 5;
                 EffectType num = (EffectType)val;
                 SoonsoonData.Instance.Effect_Manager.SetEffect(num, null, _target[0].transform.position, false, 2f);
             }

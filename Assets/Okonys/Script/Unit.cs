@@ -24,15 +24,25 @@ public class Unit : MonoBehaviour
 
     public enum AttackType
     {
-        sword,
-        bow,
-        magic,
-        Assassin,
-        healer
+        Warrior = 0,
+        Archer = 1,
+        Wizard = 2,
+        Assassin = 3,
+        Healer = 4,
+        Merchant = 5
+    }
+
+    public enum UnitType
+    {
+        Human = 0,
+        Monster = 1,
+        Great = 2,
+        Devil = 3,
     }
 
     public UnitState _unitState = UnitState.idle;
-    public AttackType _attackType = AttackType.sword;
+    public AttackType _attackType = AttackType.Warrior;
+    public UnitType _unitType = UnitType.Human;
 
     public Unit _target;
 
@@ -95,6 +105,8 @@ public class Unit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (SoonsoonData.Instance.Unit_Manager._gamePause) return;
+
         CheckState();
         if (_unitState != UnitState.skill)
             _skillTimer += Time.deltaTime;
@@ -265,15 +277,15 @@ public class Unit : MonoBehaviour
         SetState(UnitState.attacking);
         switch (_attackType)
         {
-            case AttackType.sword:
+            case AttackType.Warrior:
             case AttackType.Assassin:
                 _spumPref.PlayAnimation(4);
                 break;
-            case AttackType.bow:
+            case AttackType.Archer:
                 _spumPref.PlayAnimation(5);
                 break;
-            case AttackType.magic:
-            case AttackType.healer:
+            case AttackType.Wizard:
+            case AttackType.Healer:
                 _spumPref.PlayAnimation(6);
                 break;
         }
@@ -286,15 +298,15 @@ public class Unit : MonoBehaviour
         SetState(UnitState.skilling);
         switch (_attackType)
         {
-            case AttackType.sword:
+            case AttackType.Warrior:
             case AttackType.Assassin:
                 _spumPref.PlayAnimation(7);
                 break;
-            case AttackType.bow:
+            case AttackType.Archer:
                 _spumPref.PlayAnimation(8);
                 break;
-            case AttackType.magic:
-            case AttackType.healer:
+            case AttackType.Wizard:
+            case AttackType.Healer:
                 _spumPref.PlayAnimation(9);
                 break;
         }
@@ -303,26 +315,30 @@ public class Unit : MonoBehaviour
     public void SetAttack(Unit target = null)
     {
         float dmg = _unitAT * (_buffAT - _deBuffAT);
+        bool critical = GetRandomBool();
+        dmg *= critical == true ? 2 : 1;
         if (target == null)
         {
-            _target.SetDamage(this, dmg);
+            _target.SetDamage(this, dmg, critical);
         }
         else
         {
-            target.SetDamage(this, dmg);
+            target.SetDamage(this, dmg, critical);
         }
     }
 
     public void SetAttack(float Count, Unit target = null)
     {
         float dmg = _unitAT * (_buffAT - _deBuffAT) * Count;
+        bool critical = GetRandomBool();
+        dmg *= critical == true ? 2 : 1;
         if (target == null)
         {
-            _target.SetDamage(this, dmg);
+            _target.SetDamage(this, dmg, critical);
         }
         else
         {
-            target.SetDamage(this, dmg);
+            target.SetDamage(this, dmg, critical);
         }
     }
 
@@ -330,11 +346,11 @@ public class Unit : MonoBehaviour
     {
         switch (_attackType)
         {
-            case AttackType.bow:
+            case AttackType.Archer:
                 SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.Arrow, this, _target);
                 break;
-            case AttackType.magic:
-            case AttackType.healer:
+            case AttackType.Wizard:
+            case AttackType.Healer:
                 SoonsoonData.Instance.Missile_Manager.FireMissile(MissileObj.MissileType.FireBall, this, _target);
                 break;
         }
@@ -359,17 +375,22 @@ public class Unit : MonoBehaviour
                 targets.Add(SoonsoonData.Instance.Unit_Manager.GetLeastTeam(this));
                 break;
             case SkillData.TargetType.LeastHpEnemy:
+                targets.Add(SoonsoonData.Instance.Unit_Manager.GetLeastEnemy(this));
                 break;
             case SkillData.TargetType.MostHp:
+                targets.Add(SoonsoonData.Instance.Unit_Manager.GetGreatestHpTarget(this, false));
                 break;
             case SkillData.TargetType.MostHpEnemy:
+                targets.Add(SoonsoonData.Instance.Unit_Manager.GetGreatestHpTarget(this, true));
                 break;
             case SkillData.TargetType.MySquad:
-                targets = SoonsoonData.Instance.Unit_Manager.GetSquadTeam(this);
+                targets = SoonsoonData.Instance.Unit_Manager.GetSquadTeam(this, false);
                 break;
             case SkillData.TargetType.EnemySquad:
+                targets = SoonsoonData.Instance.Unit_Manager.GetSquadTeam(this, true);
                 break;
             case SkillData.TargetType.FarAwayEnemy:
+                targets.Add(SoonsoonData.Instance.Unit_Manager.GetFarAwayTraget(this));
                 break;
             default:
                 targets.Add(_target);
@@ -396,15 +417,15 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void SetDamage(Unit target, float dmg)
+    public void SetDamage(Unit target, float dmg, bool critical)
     {
         switch (target._attackType)
         {
-            case AttackType.sword:
+            case AttackType.Warrior:
             case AttackType.Assassin:
-            case AttackType.bow:
-            case AttackType.magic:
-            case AttackType.healer:
+            case AttackType.Archer:
+            case AttackType.Wizard:
+            case AttackType.Healer:
                 SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Hit, null, this.transform.position, false, 1f);
                 break;
         }
@@ -437,7 +458,7 @@ public class Unit : MonoBehaviour
         }
 
         // 데미지 텍스트
-        _unit_SubSet.ShowDamageText(newDmg);
+        _unit_SubSet.ShowDamageText(newDmg, critical);
 
         if (_unitHp <= 0)
         {
@@ -565,5 +586,11 @@ public class Unit : MonoBehaviour
         _target = null;
         FindTarget();
         gameObject.tag = temp;
+    }
+
+    // 주어진 확률에 따라 true 또는 false를 반환하는 함수
+    bool GetRandomBool() //0.0 ~ 1.0
+    {
+        return Random.value <= _unitCC + _buffCC - _deBuffCC;
     }
 }

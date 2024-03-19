@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Unit_Manager : MonoBehaviour
 {
+    public bool _gamePause = true;
+
     public float _findTimer;
 
     public List<Transform> _unitPool = new List<Transform>();
@@ -12,15 +14,18 @@ public class Unit_Manager : MonoBehaviour
 
     public List<Unit> _p2UnitList = new List<Unit>();
 
+    public List<GameObject> _unitSynergy = new List<GameObject>();
+
     void Awake()
     {
         SoonsoonData.Instance.Unit_Manager = this;
+        SetUnitList();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        SetUnitList();
+
     }
 
     // Update is called once per frame
@@ -54,6 +59,7 @@ public class Unit_Manager : MonoBehaviour
         }
     }
 
+    // 가장 가까운 타겟 찾기
     public Unit GetTraget(Unit unit)
     {
         Unit tUnit = null;
@@ -66,10 +72,6 @@ public class Unit_Manager : MonoBehaviour
         }
 
         float tSDis = 999999;
-
-        /*int num = 0;
-        if (unit._attackType == Unit.AttackType.Assassin)
-            num = 1;*/
 
         for (int i = 0; i < tList.Count; i++)
         {
@@ -92,7 +94,75 @@ public class Unit_Manager : MonoBehaviour
         return tUnit;
     }
 
-    // 체력이 가장 적은 아군 찾기
+    // 가장 먼 타겟 찾기
+    public Unit GetFarAwayTraget(Unit unit)
+    {
+        Unit tUnit = null;
+
+        List<Unit> tList = new List<Unit>();
+        switch (unit.tag) // 유닛의 태그에 따라
+        {
+            case "P1": tList = _p2UnitList; break; // 타겟 리스트를 반대 태그의 리스트로 할당
+            case "P2": tList = _p1UnitList; break;
+        }
+
+        float tSDis = 0;
+
+        for (int i = 0; i < tList.Count; i++)
+        {
+            float tDis = ((Vector2)tList[i].transform.localPosition - (Vector2)unit.transform.localPosition).sqrMagnitude; // sqrMagnitude 루트 처리가 되지 않은 거리를 찾는것은 연산이 가볍다
+            if (tDis <= unit._unitFR * unit._unitFR) // 유닛의 서칭 범위를 제곱하여
+            {
+                if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+                {
+                    if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                    {
+                        if (tDis > tSDis) // 범위 안에 들어온 오브젝트들 중에서 가장 가까운 거리의 오브젝트를 타겟으로 설정
+                        {
+                            tUnit = tList[i];
+                            tSDis = tDis;
+                        }
+                    }
+                }
+            }
+        }
+        return tUnit;
+    }
+
+    // 최대 체력이 가장 높은 타겟 찾기
+    public Unit GetGreatestHpTarget(Unit unit, bool Enemy)
+    {
+        Unit tUnit = null;
+
+        List<Unit> tList = new List<Unit>();
+        switch (unit.tag) // 유닛의 태그에 따라
+        {
+            case "P1": tList = Enemy ? _p2UnitList : _p1UnitList; break; // 타겟 리스트 같은 태그의 리스트로 할당
+            case "P2": tList = Enemy ? _p1UnitList : _p2UnitList; break;
+        }
+
+        float GreatestHp = 0;
+
+        for (int i = 0; i < tList.Count; i++)
+        {
+            if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+            {
+                if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                {
+                    float curHp = tList[i].GetComponent<Unit>()._unitMaxHp;
+                    if (curHp > GreatestHp) // 범위 안에 들어온 오브젝트들 중에서 가장 가까운 거리의 오브젝트를 타겟으로 설정
+                    {
+                        tUnit = tList[i];
+                        GreatestHp = curHp;
+                    }
+                }
+            }
+
+        }
+        return tUnit;
+    }
+
+    // 체력 비율이 가장 적은 아군 찾기
     public Unit GetLeastTeam(Unit unit)
     {
         Unit tUnit = null;
@@ -125,15 +195,48 @@ public class Unit_Manager : MonoBehaviour
         return tUnit;
     }
 
-    // 모든 아군 찾기
-    public List<Unit> GetSquadTeam(Unit unit)
+    // 체력 가장 적은 적군 찾기
+    public Unit GetLeastEnemy(Unit unit)
+    {
+        Unit tUnit = null;
+
+        List<Unit> tList = new List<Unit>();
+        switch (unit.tag) // 유닛의 태그에 따라
+        {
+            case "P1": tList = _p2UnitList; break; // 타겟 리스트 같은 태그의 리스트로 할당
+            case "P2": tList = _p1UnitList; break;
+        }
+
+        float LeastHp = 999999;
+
+        for (int i = 0; i < tList.Count; i++)
+        {
+            if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+            {
+                if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                {
+                    float curHp = tList[i].GetComponent<Unit>()._unitHp;
+                    if (curHp < LeastHp) // 범위 안에 들어온 오브젝트들 중에서 가장 가까운 거리의 오브젝트를 타겟으로 설정
+                    {
+                        tUnit = tList[i];
+                        LeastHp = curHp;
+                    }
+                }
+            }
+
+        }
+        return tUnit;
+    }
+
+    // 팀 찾기
+    public List<Unit> GetSquadTeam(Unit unit, bool Enemy)
     {
         List<Unit> returnList = new List<Unit>();
         List<Unit> tList = new List<Unit>();
         switch (unit.tag) // 유닛의 태그에 따라
         {
-            case "P1": tList = _p1UnitList; break; // 타겟 리스트 같은 태그의 리스트로 할당
-            case "P2": tList = _p2UnitList; break;
+            case "P1": tList = Enemy ? _p2UnitList : _p1UnitList; break; // 타겟 리스트 같은 태그의 리스트로 할당
+            case "P2": tList = Enemy ? _p1UnitList : _p2UnitList; break;
         }      
 
         for (int i = 0; i < tList.Count; i++)
@@ -148,5 +251,14 @@ public class Unit_Manager : MonoBehaviour
 
         }
         return returnList;
+    }
+
+    public void GameResume()
+    {
+        _gamePause = false;
+        for (int i = 0; i < _unitSynergy.Count; i++)
+        {
+            _unitSynergy[i].SetActive(true);
+        }
     }
 }
