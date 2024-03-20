@@ -56,6 +56,7 @@ public class UnitSynergy : MonoBehaviour
             case SynergyData.SynergyType.Wizard:
                 break;
             case SynergyData.SynergyType.Assassin:
+                AssassinSynergy();
                 break;
             case SynergyData.SynergyType.Healer:
                 break;
@@ -77,6 +78,7 @@ public class UnitSynergy : MonoBehaviour
             case SynergyData.SynergyType.Wizard:
                 break;
             case SynergyData.SynergyType.Assassin:
+                AssassinSpecialSynergy();
                 break;
             case SynergyData.SynergyType.Healer:
                 break;
@@ -168,6 +170,102 @@ public class UnitSynergy : MonoBehaviour
                 for (int i = 0; i < sm._p2UnitList.Count; i++)
                 {
                     sm._p2UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level], synergyData.Duration[Level], false);
+                }
+                break;
+        }
+    }
+
+    void AssassinSynergy()
+    {
+        float BuffAT = 0.0f;
+        float BuffCC = 0.0f;
+        interval = 0.0f;
+        switch (this.gameObject.tag)
+        {
+            case "P1":
+                if (sm._p1SynergyList[3] >= 5)
+                {
+                    Debug.Log("암살자 시너지 3 레벨");
+                    Level = 2;
+                    BuffAT = synergyData.Damage[2];
+                    BuffCC = synergyData.Critical[2];
+                    interval = synergyData.Interval[2];
+                }
+                else if (sm._p1SynergyList[3] >= 3)
+                {
+                    Debug.Log("암살자 시너지 2 레벨");
+                    Level = 1;
+                    BuffAT = synergyData.Damage[1];
+                    BuffCC = synergyData.Critical[1];
+                    interval = synergyData.Interval[1];
+                }
+                else if (sm._p1SynergyList[3] >= 1)
+                {
+                    Debug.Log("암살자 시너지 1 레벨");
+                    Level = 0;
+                    BuffAT = synergyData.Damage[0];
+                    BuffCC = synergyData.Critical[0];
+                    interval = synergyData.Interval[0];
+                }
+
+                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                {
+                    // 시너지 버프
+                    if (sm._p1UnitList[i]._attackType != AttackType.Assassin) continue;
+                    sm._p1UnitList[i]._unitAT += BuffAT;
+                    sm._p1UnitList[i]._unitCC += BuffCC;
+                }
+                break;
+            case "P2":
+                if (sm._p2SynergyList[3] >= 5)
+                {
+                    Debug.Log("암살자 시너지 3 레벨");
+                    Level = 2;
+                    BuffAT = synergyData.Damage[2];
+                    BuffCC = synergyData.Critical[2];
+                    interval = synergyData.Interval[2];
+                }
+                else if (sm._p2SynergyList[3] >= 3)
+                {
+                    Debug.Log("암살자 시너지 2 레벨");
+                    Level = 1;
+                    BuffAT = synergyData.Damage[1];
+                    BuffCC = synergyData.Critical[1];
+                    interval = synergyData.Interval[1];
+                }
+                else if (sm._p2SynergyList[3] >= 1)
+                {
+                    Debug.Log("암살자 시너지 1 레벨");
+                    Level = 0;
+                    BuffAT = synergyData.Damage[0];
+                    BuffCC = synergyData.Critical[0];
+                    interval = synergyData.Interval[0];
+                }
+
+                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                {
+                    if (sm._p2UnitList[i]._attackType != AttackType.Assassin) return;
+                    sm._p2UnitList[i]._unitAT += BuffAT;
+                    sm._p2UnitList[i]._unitCC += BuffCC;
+                }
+                break;
+        }
+    }
+
+    void AssassinSpecialSynergy()
+    {
+        switch (gameObject.tag)
+        {
+            case "P1":
+                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                {
+                    if (sm._p1UnitList[i]._attackType == AttackType.Assassin && sm._p1UnitList[i].gameObject.activeInHierarchy) sm._p1UnitList[i].SetDash();
+                }
+                break;
+            case "P2":
+                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                {
+                    if (sm._p2UnitList[i]._attackType == AttackType.Assassin && sm._p2UnitList[i].gameObject.activeInHierarchy) sm._p2UnitList[i].SetDash();
                 }
                 break;
         }

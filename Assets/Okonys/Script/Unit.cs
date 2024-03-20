@@ -96,8 +96,6 @@ public class Unit : MonoBehaviour
     {
         _spumPref = this.gameObject.GetComponent<SPUM_Prefabs>();
         _unit_SubSet = this.gameObject.GetComponentInChildren<Unit_SubSet>();
-        if (_attackType == AttackType.Assassin)
-            Invoke("Dash",0.3f);
     }
 
 
@@ -565,6 +563,12 @@ public class Unit : MonoBehaviour
         }
         return value;
     }
+
+    public void SetDash()
+    {
+        Invoke("Dash", 0.3f);
+    }
+
     void Dash()
     {
         string temp = gameObject.tag;
