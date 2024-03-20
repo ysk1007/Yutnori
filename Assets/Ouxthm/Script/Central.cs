@@ -1,24 +1,30 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Central : MonoBehaviour
 {
     public static Central instance;
 
+    public GameObject[] useArranger = new GameObject[3];  // 전투에 사용할 카드 모음
     public Transform invisibleCard; // 보이지 않는 카드의 위치
+
+    public GameObject invisibleSpace;        // 카드 자리 메꾸기
     List<Arranger> arrangers;
 
     Arranger workingArranger;
-    public static int oriIndex;
+    public static int oriIndex;     // 잡은 카드의 자식 번호
     public static int lastIndex;
 
+    public bool create;     // 빈 공간 생성했는지 확인
     private void Awake()
     {
         instance = this;
+        create = false;
+        for(int i = 0; i < useArranger.Length; i++)
+        {
+            useArranger[i] = transform.GetChild(0).GetChild(i).gameObject;
+        }
+        invisibleSpace = Resources.Load<GameObject>("UIPrefabs/invisibelSpace");
     }
     void Start()
     {
@@ -56,7 +62,12 @@ public class Central : MonoBehaviour
     {
         return RectTransformUtility.RectangleContainsScreenPoint(rt, pos);
     }
-
+    void AddInvisibleSpaceAtIndex(Arranger workingArranger, int oriIndex, Transform invisibleSpace)     // 빈 공간 오브
+    {
+        Transform workingArrangerTransform = workingArranger.transform;
+        GameObject invisible = Instantiate(invisibleSpace.gameObject, Vector3.zero, Quaternion.identity, workingArrangerTransform);
+        invisible.transform.SetSiblingIndex(oriIndex);
+    }
     void BeginDrag(Transform card)
     {
         workingArranger = arrangers.Find(t => ContainPos(t.transform as RectTransform, card.position));
@@ -71,6 +82,12 @@ public class Central : MonoBehaviour
 
         if (whichArrangerCard == null)
         {
+            if (workingArranger.tag != "ReadyArranger" && !create)
+            {
+                create = true;
+                AddInvisibleSpaceAtIndex(workingArranger, oriIndex, invisibleSpace.transform);
+            }
+
             bool updateChildren = transform != invisibleCard.parent;
 
             invisibleCard.SetParent(transform);
@@ -84,10 +101,9 @@ public class Central : MonoBehaviour
         {
             bool insert = invisibleCard.parent == transform;
 
-            if (insert)
+            if (insert)     // 카드가 다른 Array로 끼어드는 순간
             {
                 int index = whichArrangerCard.GetIndexByPosition(card);
-
                 invisibleCard.SetParent(whichArrangerCard.transform);
                 whichArrangerCard.InsertCard(invisibleCard, index);
             }
@@ -106,7 +122,8 @@ public class Central : MonoBehaviour
 
     void EndDrag(Transform card)
     {
-        if (invisibleCard.parent == transform)
+        
+        if (invisibleCard.parent == transform)      // 카드를 Array 밖에서 놓았을 때
         {
             workingArranger.InsertCard(card, oriIndex);
             workingArranger = null;
@@ -115,6 +132,7 @@ public class Central : MonoBehaviour
         else
         {
             SwapCardsInHierarchy(invisibleCard, card);
+            create = false;
         }
     }
 
