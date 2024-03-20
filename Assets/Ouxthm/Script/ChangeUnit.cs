@@ -45,7 +45,15 @@ public class ChangeUnit : MonoBehaviour
                     selectSeconds = readyBtns[index].gameObject; 
                     indexSeconds = selectSeconds.transform.GetSiblingIndex();
                     parentSeconds = selectSeconds.transform.parent;
-                    SwapUnit();
+                    if (parentSeconds.name == "ReadyArranger" && parentSeconds == parentFirst)
+                    {
+                        selectFirst = null;
+                        selectSeconds = null;
+                    }
+                    else
+                    {
+                        SwapUnit();
+                    }
                 }
             });
         }
@@ -67,9 +75,16 @@ public class ChangeUnit : MonoBehaviour
                     selectSeconds = useBtns[index].gameObject;
                     indexSeconds = selectSeconds.transform.GetSiblingIndex();
                     parentSeconds = selectSeconds.transform.parent;
-                    SwapUnit();
+                    if (parentSeconds.name == "ReadyArranger" && parentSeconds == parentFirst)
+                    {
+                        selectFirst = null;
+                        selectSeconds = null;
+                    }
+                    else
+                    {
+                        SwapUnit();
+                    }
                 }
-
             });
         }
     }
