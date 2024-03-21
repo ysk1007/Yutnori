@@ -18,6 +18,7 @@ public class SynergyManager : MonoBehaviour
     public float[] _synergyBuffCT;
     public float[] _synergyBuffRC;
 
+    public Color[] _synergyColorList;
 
     void Awake()
     {

@@ -8,6 +8,7 @@ public class Unit_SubSet : MonoBehaviour
 {
     public Transform TextPool;
     public List<TextMeshProUGUI> TextList;
+    public List<Image> iconList;
     public List<Animator> AnimatorList;
     public Color[] TextColorList;
     public Slider HpSlider; // 체력 슬라이더
@@ -73,9 +74,10 @@ public class Unit_SubSet : MonoBehaviour
 
     public void ShowDamageText(float value, bool critical)
     {
-        TextList[TextNum].text = value.ToString();
         TextList[TextNum].color = critical ? TextColorList[1] : TextColorList[0];
+        TextList[TextNum].text = value.ToString();
         AnimatorList[TextNum].SetTrigger("Show");
+        iconList[TextNum].enabled = critical ? true : false;
         if (TextNum == TextList.Count - 1)
         {
             TextNum = 0;
@@ -107,6 +109,8 @@ public class Unit_SubSet : MonoBehaviour
         {
             TextMeshProUGUI Text = TextPool.GetChild(i).GetComponent<TextMeshProUGUI>();
             TextList.Add(Text);
+
+            iconList.Add(Text.transform.GetChild(0).GetComponent<Image>());
 
             Animator Animator = TextPool.GetChild(i).GetComponent<Animator>();
             AnimatorList.Add(Animator);
