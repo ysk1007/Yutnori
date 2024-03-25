@@ -1,14 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+    public PlayerMove playerMv;
+
     public int rand;
-    private void Start()
+
+    public Button btn;
+    private void Awake()
     {
-        ThrowYut();
+        instance = this;    
+        btn.onClick.AddListener(() => 
+        {
+            ThrowYut();
+            StartCoroutine(playerMv.PlayerMoveOnMap());
+        });
     }
+
     public void ThrowYut()
     {
         rand = Random.Range(0, 5);
