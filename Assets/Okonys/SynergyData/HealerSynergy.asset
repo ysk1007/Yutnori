@@ -10,28 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d10859fedcba7774f8303ba9eea3d7e4, type: 3}
-  m_Name: WarriorSynergy
+  m_Name: HealerSynergy
   m_EditorClassIdentifier: 
-  synergyType: 0
+  synergyType: 4
   type: 1
-  MaxHp:
+  MaxHp: []
+  Damage: []
+  Recovery:
   - 300
   - 500
-  - 700
-  Damage: []
-  Recovery: []
+  - 1000
   Speed: []
   Defense: []
   Critical: []
-  Shield:
-  - 1000
-  - 1500
-  - 3000
+  Shield: []
   CoolTime: []
-  Duration:
-  - 3
-  - 3
-  - 3
+  Duration: []
   Interval:
   - 5
   - 5

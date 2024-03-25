@@ -71,6 +71,8 @@ public class Unit : MonoBehaviour
     public float _deBuffDF = 0; // 방어력 디버프
     public float _deBuffCC = 0; // 치명타 확률 디버프
 
+    public bool _wizardPower = false;
+
     public Transform _buffPool;
     public List<UnitBuff> BuffList = new List<UnitBuff>();
 
@@ -124,6 +126,8 @@ public class Unit : MonoBehaviour
         _unitCT = _unitData._unitCT[_unitRate.GetHashCode()];
         _unitFR = _unitData._unitFR[_unitRate.GetHashCode()];
         _unitSkill = _unitData._unitSkill;
+
+        _wizardPower = false;
     }
 
     // Z축 정렬
@@ -287,6 +291,8 @@ public class Unit : MonoBehaviour
                 _spumPref.PlayAnimation(6);
                 break;
         }
+
+        if (_wizardPower) _skillTimer += 1;
     }
 
     void DoSkill()

@@ -21,7 +21,7 @@ public class Unit_AnimationAction : MonoBehaviour
 
     public void AttackDone()
     {
-        unit.SetState(Unit.UnitState.run);
+        unit.SetState(UnitState.attack);
         switch (unit._attackType)
         {
             case Unit.AttackType.Warrior:

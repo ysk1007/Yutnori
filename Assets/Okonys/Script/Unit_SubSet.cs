@@ -116,4 +116,9 @@ public class Unit_SubSet : MonoBehaviour
             AnimatorList.Add(Animator);
         }
     }
+
+    public void CT_Update()
+    {
+        _unitSkillCT = unit._unitCT;
+    }
 }
