@@ -29,11 +29,6 @@ public class PlayerMove : MonoBehaviour
     {
         for (int i = 0; i <= gm.rand; i++)
         {
-            Debug.Log(gm.rand);
-            if(nowPlateNum != 0 && gm.rand == 0)
-            {
-                nowPlateNum++;
-            }
             Vector2 targetPosition = plate[nowPlateNum + i].anchoredPosition; // 목표 위치를 설정합니다.
 
             while (Vector2.Distance(player.anchoredPosition, targetPosition) > 0.1f)
