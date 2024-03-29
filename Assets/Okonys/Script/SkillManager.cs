@@ -88,4 +88,13 @@ public class SkillManager : MonoBehaviour
             skill.SetSkill(type, owner, target, timer, skillData);
         }
     }
+
+    public void ResetSkill()
+    {
+        for (int i = 0; i < _skillPool.childCount; i++)
+        {
+            SkillObj skill = _skillPool.GetChild(i).GetComponent<SkillObj>();
+            skill.SendMessage("SkillDone", SendMessageOptions.DontRequireReceiver);
+        }
+    }
 }

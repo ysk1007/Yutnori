@@ -78,4 +78,13 @@ public class EffectManager : MonoBehaviour
             effect.SetEffectObj(type, owner,pos,homing,timer);
         }
     }
+
+    public void ResetEffect()
+    {
+        for (int i = 0; i < _effectPool.childCount; i++)
+        {
+            EffectObj effect = _effectPool.GetChild(i).GetComponent<EffectObj>();
+            effect.SendMessage("EffectDone", SendMessageOptions.DontRequireReceiver);
+        }
+    }
 }

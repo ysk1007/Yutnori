@@ -48,22 +48,22 @@ public class HUD : MonoBehaviour
                 switch (_Synergytype)
                 {
                     case SynergyType.Warrior:
-                        _thisText.text = SM._p1SynergyList[0].ToString();
+                        _thisText.text = SM._p1AttackTypeSynergyList[0].ToString();
                         break;
                     case SynergyType.Archer:
-                        _thisText.text = SM._p1SynergyList[1].ToString();
+                        _thisText.text = SM._p1AttackTypeSynergyList[1].ToString();
                         break;
                     case SynergyType.Wizard:
-                        _thisText.text = SM._p1SynergyList[2].ToString();
+                        _thisText.text = SM._p1AttackTypeSynergyList[2].ToString();
                         break;
                     case SynergyType.Assassin:
-                        _thisText.text = SM._p1SynergyList[3].ToString();
+                        _thisText.text = SM._p1AttackTypeSynergyList[3].ToString();
                         break;
                     case SynergyType.Healer:
-                        _thisText.text = SM._p1SynergyList[4].ToString();
+                        _thisText.text = SM._p1AttackTypeSynergyList[4].ToString();
                         break;
                     case SynergyType.Merchant:
-                        _thisText.text = SM._p1SynergyList[5].ToString();
+                        _thisText.text = SM._p1AttackTypeSynergyList[5].ToString();
                         break;
                     case SynergyType.Human:
                         break;
@@ -81,22 +81,22 @@ public class HUD : MonoBehaviour
                 switch (_Synergytype)
                 {
                     case SynergyType.Warrior:
-                        _thisImage.color = SynergyColor(0);
+                        //_thisImage.color = SynergyColor(0);
                         break;
                     case SynergyType.Archer:
-                        _thisImage.color = SynergyColor(1);
+                        //_thisImage.color = SynergyColor(1);
                         break;
                     case SynergyType.Wizard:
-                        _thisImage.color = SynergyColor(2);
+                        //_thisImage.color = SynergyColor(2);
                         break;
                     case SynergyType.Assassin:
-                        _thisImage.color = SynergyColor(3);
+                        //_thisImage.color = SynergyColor(3);
                         break;
                     case SynergyType.Healer:
-                        _thisImage.color = SynergyColor(4);
+                        //_thisImage.color = SynergyColor(4);
                         break;
                     case SynergyType.Merchant:
-                        _thisImage.color = SynergyColor(5);
+                        //_thisImage.color = SynergyColor(5);
                         break;
                     case SynergyType.Human:
                         break;
@@ -117,9 +117,9 @@ public class HUD : MonoBehaviour
 
     Color SynergyColor(int i)
     {
-        if (SM._p1SynergyList[i] >= 5) return SM._synergyColorList[3];
-        else if (SM._p1SynergyList[i] >= 3) return SM._synergyColorList[2];
-        else if (SM._p1SynergyList[i] >= 1) return SM._synergyColorList[1];
+        if (SM._p1AttackTypeSynergyList[i] >= 5) return SM._synergyColorList[3];
+        else if (SM._p1AttackTypeSynergyList[i] >= 3) return SM._synergyColorList[2];
+        else if (SM._p1AttackTypeSynergyList[i] >= 1) return SM._synergyColorList[1];
         else return SM._synergyColorList[0];
     }
 }

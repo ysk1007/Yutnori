@@ -14,7 +14,7 @@ public class SynergyData : ScriptableObject
         Healer = 4,
         Merchant = 5,
         Human = 6,
-        Monster = 7, 
+        Ghost = 7, 
         Great = 8,
         Devil = 9,
     }
@@ -28,6 +28,7 @@ public class SynergyData : ScriptableObject
     [Header(" # Main Info")]
     public SynergyType synergyType = SynergyType.Warrior;
     public Type type = Type.Start;
+    public int[] RequiredNumber;
 
     [Header(" # Buff Info")]
     public float[] MaxHp; // Ã¼·Â

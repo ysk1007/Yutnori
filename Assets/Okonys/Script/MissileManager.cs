@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MissileManager : MonoBehaviour
@@ -76,6 +77,15 @@ public class MissileManager : MonoBehaviour
         if (Missile!=null)
         {
             Missile.SetMissile(type, owner, target);
+        }
+    }
+
+    public void ResetMissile()
+    {
+        for (int i = 0; i < _missilePool.childCount; i++)
+        {
+            MissileObj missile = _missilePool.GetChild(i).GetComponent<MissileObj>();
+            missile.SendMessage("MissileDone", SendMessageOptions.DontRequireReceiver);
         }
     }
 }

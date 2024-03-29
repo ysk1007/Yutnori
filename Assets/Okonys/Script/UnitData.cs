@@ -15,7 +15,8 @@ public class UnitData : ScriptableObject
     [Header(" # Main Info")]
     public int UnitID;
     public string UnitName;
-    public Unit.AttackType UnitType;
+    public Unit.AttackType AttackType;
+    public Unit.UnitType UnitType;
 
     [Header(" # Status Info")]
     public RateType _unitRate; // µî±Þ

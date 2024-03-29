@@ -29,6 +29,7 @@ public class UnitSynergy : MonoBehaviour
 
     void Update()
     {
+        if (SoonsoonData.Instance.Unit_Manager._gamePause) return;
         if (_Type != Type.Continue) return;
 
         timer += Time.deltaTime;
@@ -65,6 +66,11 @@ public class UnitSynergy : MonoBehaviour
                 break;
             case SynergyData.SynergyType.Merchant:
                 break;
+            case SynergyData.SynergyType.Human:
+                break;
+            case SynergyData.SynergyType.Ghost:
+                GhostSynergy();
+                break;
         }
     }
 
@@ -100,21 +106,21 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1SynergyList[0] >= 5)
+                if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("워리어 시너지 3 레벨");
                     Level = 2;
                     Buff = synergyData.MaxHp[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p1SynergyList[0] >= 3)
+                else if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("워리어 시너지 2 레벨");
                     Level = 1;
                     Buff = synergyData.MaxHp[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p1SynergyList[0] >= 1)
+                else if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("워리어 시너지 1 레벨");
                     Level = 0;
@@ -130,21 +136,21 @@ public class UnitSynergy : MonoBehaviour
                 }
                 break;
             case "P2":
-                if (sm._p2SynergyList[0] >= 5)
+                if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("워리어 시너지 3 레벨");
                     Level = 2;
                     Buff = synergyData.MaxHp[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p2SynergyList[0] >= 3)
+                else if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("워리어 시너지 2 레벨");
                     Level = 1;
                     Buff = synergyData.MaxHp[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p2SynergyList[0] >= 1)
+                else if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("워리어 시너지 1 레벨");
                     Level = 0;
@@ -188,21 +194,21 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1SynergyList[1] >= 5)
+                if (sm._p1AttackTypeSynergyList[1] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("아처 시너지 3 레벨");
                     Level = 2;
                     Buff = synergyData.Speed[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p1SynergyList[1] >= 3)
+                else if (sm._p1AttackTypeSynergyList[1] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("아처 시너지 2 레벨");
                     Level = 1;
                     Buff = synergyData.Speed[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p1SynergyList[1] >= 1)
+                else if (sm._p1AttackTypeSynergyList[1] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("아처 시너지 1 레벨");
                     Level = 0;
@@ -218,21 +224,21 @@ public class UnitSynergy : MonoBehaviour
                 }
                 break;
             case "P2":
-                if (sm._p2SynergyList[1] >= 5)
+                if (sm._p2AttackTypeSynergyList[1] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("아처 시너지 3 레벨");
                     Level = 2;
                     Buff = synergyData.Speed[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p2SynergyList[1] >= 3)
+                else if (sm._p2AttackTypeSynergyList[1] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("아처 시너지 2 레벨");
                     Level = 1;
                     Buff = synergyData.Speed[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p2SynergyList[1] >= 1)
+                else if (sm._p2AttackTypeSynergyList[1] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("아처 시너지 1 레벨");
                     Level = 0;
@@ -276,19 +282,19 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1SynergyList[2] >= 5)
+                if (sm._p1AttackTypeSynergyList[2] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("마법사 시너지 3 레벨");
                     Level = 2;
                     Buff = synergyData.CoolTime[2];
                 }
-                else if (sm._p1SynergyList[2] >= 3)
+                else if (sm._p1AttackTypeSynergyList[2] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("마법사 시너지 2 레벨");
                     Level = 1;
                     Buff = synergyData.CoolTime[1];
                 }
-                else if (sm._p1SynergyList[2] >= 1)
+                else if (sm._p1AttackTypeSynergyList[2] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("마법사 시너지 1 레벨");
                     Level = 0;
@@ -304,19 +310,19 @@ public class UnitSynergy : MonoBehaviour
                 }
                 break;
             case "P2":
-                if (sm._p2SynergyList[2] >= 5)
+                if (sm._p2AttackTypeSynergyList[2] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("마법사 시너지 3 레벨");
                     Level = 2;
                     Buff = synergyData.CoolTime[2];
                 }
-                else if (sm._p2SynergyList[2] >= 3)
+                else if (sm._p2AttackTypeSynergyList[2] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("마법사 시너지 2 레벨");
                     Level = 1;
                     Buff = synergyData.CoolTime[1];
                 }
-                else if (sm._p2SynergyList[2] >= 1)
+                else if (sm._p2AttackTypeSynergyList[2] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("마법사 시너지 1 레벨");
                     Level = 0;
@@ -363,7 +369,7 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1SynergyList[3] >= 5)
+                if (sm._p1AttackTypeSynergyList[3] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("암살자 시너지 3 레벨");
                     Level = 2;
@@ -371,7 +377,7 @@ public class UnitSynergy : MonoBehaviour
                     BuffCC = synergyData.Critical[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p1SynergyList[3] >= 3)
+                else if (sm._p1AttackTypeSynergyList[3] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("암살자 시너지 2 레벨");
                     Level = 1;
@@ -379,7 +385,7 @@ public class UnitSynergy : MonoBehaviour
                     BuffCC = synergyData.Critical[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p1SynergyList[3] >= 1)
+                else if (sm._p1AttackTypeSynergyList[3] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("암살자 시너지 1 레벨");
                     Level = 0;
@@ -397,7 +403,7 @@ public class UnitSynergy : MonoBehaviour
                 }
                 break;
             case "P2":
-                if (sm._p2SynergyList[3] >= 5)
+                if (sm._p2AttackTypeSynergyList[3] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("암살자 시너지 3 레벨");
                     Level = 2;
@@ -405,7 +411,7 @@ public class UnitSynergy : MonoBehaviour
                     BuffCC = synergyData.Critical[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p2SynergyList[3] >= 3)
+                else if (sm._p2AttackTypeSynergyList[3] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("암살자 시너지 2 레벨");
                     Level = 1;
@@ -413,7 +419,7 @@ public class UnitSynergy : MonoBehaviour
                     BuffCC = synergyData.Critical[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p2SynergyList[3] >= 1)
+                else if (sm._p2AttackTypeSynergyList[3] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("암살자 시너지 1 레벨");
                     Level = 0;
@@ -458,19 +464,19 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1SynergyList[4] >= 3)
+                if (sm._p1AttackTypeSynergyList[4] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("힐러 시너지 3 레벨");
                     Level = 2;
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p1SynergyList[4] >= 2)
+                else if (sm._p1AttackTypeSynergyList[4] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("힐러 시너지 2 레벨");
                     Level = 1;
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p1SynergyList[4] >= 1)
+                else if (sm._p1AttackTypeSynergyList[4] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("힐러 시너지 1 레벨");
                     Level = 0;
@@ -478,19 +484,19 @@ public class UnitSynergy : MonoBehaviour
                 }
                 break;
             case "P2":
-                if (sm._p2SynergyList[4] >= 3)
+                if (sm._p2AttackTypeSynergyList[4] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("힐러 시너지 3 레벨");
                     Level = 2;
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p2SynergyList[4] >= 2)
+                else if (sm._p2AttackTypeSynergyList[4] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("힐러 시너지 2 레벨");
                     Level = 1;
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p2SynergyList[4] >= 1)
+                else if (sm._p2AttackTypeSynergyList[4] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("힐러 시너지 1 레벨");
                     Level = 0;
@@ -509,6 +515,147 @@ public class UnitSynergy : MonoBehaviour
                 break;
             case "P2":
                 Heal(sm._p2UnitList[0]);
+                break;
+        }
+    }
+
+    void HumanSynergy()
+    {
+        Debug.Log("시너지");
+        interval = 0.0f;
+        switch (this.gameObject.tag)
+        {
+            case "P1":
+                if (sm._p1UnitTypeSynergyList[0] >= synergyData.RequiredNumber[2])
+                {
+                    Debug.Log("인간 시너지 3 레벨");
+                    Level = 2;
+                    interval = synergyData.Interval[2];
+                }
+                else if (sm._p1UnitTypeSynergyList[0] >= synergyData.RequiredNumber[1])
+                {
+                    Debug.Log("인간 시너지 2 레벨");
+                    Level = 1;
+                    interval = synergyData.Interval[1];
+                }
+                else if (sm._p1UnitTypeSynergyList[0] >= synergyData.RequiredNumber[0])
+                {
+                    Debug.Log("인간 시너지 1 레벨");
+                    Level = 0;
+                    interval = synergyData.Interval[0];
+                }
+                break;
+            case "P2":
+                if (sm._p2UnitTypeSynergyList[0] >= synergyData.RequiredNumber[2])
+                {
+                    Debug.Log("인간 시너지 3 레벨");
+                    Level = 2;
+                    interval = synergyData.Interval[2];
+                }
+                else if (sm._p2UnitTypeSynergyList[0] >= synergyData.RequiredNumber[1])
+                {
+                    Debug.Log("인간 시너지 2 레벨");
+                    Level = 1;
+                    interval = synergyData.Interval[1];
+                }
+                else if (sm._p2UnitTypeSynergyList[0] >= synergyData.RequiredNumber[0])
+                {
+                    Debug.Log("인간 시너지 1 레벨");
+                    Level = 0;
+                    interval = synergyData.Interval[0];
+                }
+                break;
+        }
+    }
+
+    void GhostSynergy()
+    {
+        float BuffAT = 0.0f;
+        switch (this.gameObject.tag)
+        {
+            case "P1":
+                if (sm._p1UnitTypeSynergyList[1] >= synergyData.RequiredNumber[2])
+                {
+                    Debug.Log("요괴 시너지 3 레벨");
+                    Level = 2;
+                    BuffAT = synergyData.Damage[2];
+                }
+                else if (sm._p1UnitTypeSynergyList[1] >= synergyData.RequiredNumber[1])
+                {
+                    Debug.Log("요괴 시너지 2 레벨");
+                    Level = 1;
+                    BuffAT = synergyData.Damage[1];
+                }
+                else if (sm._p1UnitTypeSynergyList[1] >= synergyData.RequiredNumber[0])
+                {
+                    Debug.Log("요괴 시너지 1 레벨");
+                    Level = 0;
+                    BuffAT = synergyData.Damage[0];
+                }
+
+                // 아군 요괴가 적 인간 보다 적다면
+                if (sm._p1UnitTypeSynergyList[1] <= sm._p2UnitTypeSynergyList[0]) break;
+
+                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                {
+                    // 시너지 버프
+                    if (sm._p1UnitList[i]._unitType != UnitType.Ghost) continue;
+                    sm._p1UnitList[i]._unitAT += BuffAT;
+                }
+                break;
+            case "P2":
+                if (sm._p2UnitTypeSynergyList[1] >= synergyData.RequiredNumber[2])
+                {
+                    Debug.Log("요괴 시너지 3 레벨");
+                    Level = 2;
+                    BuffAT = synergyData.Damage[2];
+                }
+                else if (sm._p2UnitTypeSynergyList[1] >= synergyData.RequiredNumber[1])
+                {
+                    Debug.Log("요괴 시너지 2 레벨");
+                    Level = 1;
+                    BuffAT = synergyData.Damage[1];
+                }
+                else if (sm._p2UnitTypeSynergyList[1] >= synergyData.RequiredNumber[0])
+                {
+                    Debug.Log("요괴 시너지 1 레벨");
+                    Level = 0;
+                    BuffAT = synergyData.Damage[0];
+                }
+
+                // 아군 요괴가 적 인간 보다 적다면
+                if (sm._p2UnitTypeSynergyList[1] <= sm._p1UnitTypeSynergyList[0]) break;
+
+                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                {
+                    if (sm._p2UnitList[i]._unitType != UnitType.Ghost) return;
+                    sm._p2UnitList[i]._unitAT += BuffAT;
+                }
+                break;
+        }
+        GhostSpecialSynergy();
+    }
+
+    void GhostSpecialSynergy()
+    {
+        if (Level <= 0) return;
+        switch (gameObject.tag)
+        {
+            case "P1":
+                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                {
+                    sm._p1UnitList[i]._ghostPower = true;
+                    sm._p1UnitList[i]._ghostTime = synergyData.Duration[Level];
+                    sm._p1UnitList[i]._ghostTimer = synergyData.Duration[Level];
+                }
+                break;
+            case "P2":
+                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                {
+                    sm._p2UnitList[i]._ghostPower = true;
+                    sm._p2UnitList[i]._ghostTime = synergyData.Duration[Level];
+                    sm._p2UnitList[i]._ghostTimer = synergyData.Duration[Level];
+                }
                 break;
         }
     }

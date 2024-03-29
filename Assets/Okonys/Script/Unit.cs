@@ -35,10 +35,12 @@ public class Unit : MonoBehaviour
     public enum UnitType
     {
         Human = 0,
-        Monster = 1,
+        Ghost = 1,
         Great = 2,
         Devil = 3,
     }
+
+    public int _fieldindex;
 
     public UnitState _unitState = UnitState.idle;
     public AttackType _attackType = AttackType.Warrior;
@@ -72,6 +74,10 @@ public class Unit : MonoBehaviour
     public float _deBuffCC = 0; // 치명타 확률 디버프
 
     public bool _wizardPower = false;
+    public bool _ghostPower = false;
+    public float _ghostTime = 0;
+    public bool _ghostDieFlag = false;
+
 
     public Transform _buffPool;
     public List<UnitBuff> BuffList = new List<UnitBuff>();
@@ -85,11 +91,11 @@ public class Unit : MonoBehaviour
     public float _findTimer;
     public float _attackTimer;
     public float _skillTimer;
+    public float _ghostTimer;
 
     void Awake()
     {
-        if (_unitData)
-            init();
+        init();
         GetBuffList();
     }
 
@@ -110,10 +116,19 @@ public class Unit : MonoBehaviour
         CheckState();
         if (_unitState != UnitState.skill)
             _skillTimer += Time.deltaTime;
+
+        if (_ghostDieFlag)
+            if (_ghostTimer > 0)
+                _ghostTimer -= Time.deltaTime;
+            else
+                SetDeath();
     }
 
-    void init()
+    public void init()
     {
+        if (!_unitData) return;
+        _attackType = _unitData.AttackType;
+        _unitType = _unitData.UnitType;
         _unitRate = _unitData._unitRate;
         _unitMaxHp = _unitData._unitMaxHp[_unitRate.GetHashCode()];
         _unitHp = _unitMaxHp;
@@ -127,8 +142,17 @@ public class Unit : MonoBehaviour
         _unitFR = _unitData._unitFR[_unitRate.GetHashCode()];
         _unitSkill = _unitData._unitSkill;
 
+        _target = null;
         _wizardPower = false;
-    }
+        _ghostPower = false;
+        _ghostTime = 0;
+        _ghostDieFlag = false;
+
+        _findTimer = 0;
+        _attackTimer = 0;
+        _skillTimer = 0;
+        _ghostTimer = 0;
+}
 
     // Z축 정렬
     void SetZpos()
@@ -452,7 +476,7 @@ public class Unit : MonoBehaviour
             _buffSD -= newDmg;
             if (_buffSD < 0)
             {
-                _unitHp -= _buffSD;
+                _unitHp -= Mathf.Abs(_buffSD);
                 _buffSD = 0;
             }
         }
@@ -466,12 +490,14 @@ public class Unit : MonoBehaviour
 
         if (_unitHp <= 0)
         {
-            SetDeath();
+            if (_ghostPower) _ghostDieFlag = true;
+            else SetDeath();
         }
     }
 
     public void SetHeal(Unit target, float value)
     {
+        if (_ghostDieFlag) return;
         SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Heal, null, this.transform.position, false, 1f);
         _unitHp += value;
         if (_unitHp > _unitMaxHp)
@@ -602,5 +628,25 @@ public class Unit : MonoBehaviour
     bool GetRandomBool() //0.0 ~ 1.0
     {
         return Random.value <= _unitCC + _buffCC - _deBuffCC;
+    }
+
+    public void UnitReset()
+    {
+        init();
+        SetState(UnitState.idle);
+        switch (gameObject.tag)
+        {
+            case "P1":
+                this.transform.position = SoonsoonData.Instance.Unit_Manager._p1fieldPos[_fieldindex];
+                break;
+
+            case "P2":
+                this.transform.position = SoonsoonData.Instance.Unit_Manager._p2fieldPos[_fieldindex];
+                break;
+        }
+
+        this.gameObject.SetActive(true);
+
+
     }
 }

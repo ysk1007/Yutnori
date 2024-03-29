@@ -16,6 +16,9 @@ public class Unit_Manager : MonoBehaviour
 
     public List<GameObject> _unitSynergy = new List<GameObject>();
 
+    public Vector2[] _p1fieldPos;
+    public Vector2[] _p2fieldPos;
+
     void Awake()
     {
         SoonsoonData.Instance.Unit_Manager = this;
@@ -259,6 +262,30 @@ public class Unit_Manager : MonoBehaviour
         for (int i = 0; i < _unitSynergy.Count; i++)
         {
             _unitSynergy[i].SetActive(true);
+        }
+    }
+
+    public void FieldReset()
+    {
+        SetUnitList();
+        SoonsoonData.Instance.Missile_Manager.ResetMissile();
+        SoonsoonData.Instance.Effect_Manager.ResetEffect();
+        SoonsoonData.Instance.Skill_Manager.ResetSkill();
+        _gamePause = true;
+
+        for (int i = 0; i < _unitSynergy.Count; i++)
+        {
+            _unitSynergy[i].SetActive(false);
+        }
+
+        for (int i = 0; i < _p1UnitList.Count; i++)
+        {
+            _p1UnitList[i].UnitReset();
+        }
+
+        for (int i = 0; i < _p2UnitList.Count; i++)
+        {
+            _p2UnitList[i].UnitReset();
         }
     }
 }

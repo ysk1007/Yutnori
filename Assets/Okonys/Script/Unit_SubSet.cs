@@ -11,7 +11,9 @@ public class Unit_SubSet : MonoBehaviour
     public List<Image> iconList;
     public List<Animator> AnimatorList;
     public Color[] TextColorList;
+    public Color[] SliderColorList;
     public Slider HpSlider; // 체력 슬라이더
+    public Image HpSliderFill; // 체력 슬라이더 이미지
     public Slider CTSlider; // 쿨타임 슬라이더
     public Slider SDSlider; // 보호막 슬라이더
 
@@ -47,7 +49,8 @@ public class Unit_SubSet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HpSlider.value = unit._unitHp / _unitMaxHp;
+        HpSlider.value = (!unit._ghostDieFlag) ? unit._unitHp / _unitMaxHp : unit._ghostTimer / unit._ghostTime;
+        HpSliderFill.color = (!unit._ghostDieFlag) ? SliderColorList[1] : SliderColorList[3];
         CTSlider.value = unit._skillTimer / _unitSkillCT;
 
         if (unit._buffSD > 0)

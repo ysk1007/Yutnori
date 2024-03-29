@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 199247809506806486}
   - component: {fileID: 135973237189795014}
   - component: {fileID: 108345981927406580}
+  - component: {fileID: 1705309852476670509}
   m_Layer: 0
   m_Name: Projectile 14 huricara
   m_TagString: Untagged
@@ -4839,6 +4840,7 @@ MonoBehaviour:
   rotationOffset: {x: 0, y: 0, z: 0}
   hit: {fileID: 1834516428328612, guid: f39c43985f1039b47b3065f46848760e, type: 3}
   flash: {fileID: 1757226974508410, guid: 244f87a37ba29b741848d41f7591bc93, type: 3}
+  useFlash: 0
   rb: {fileID: 54415592063891294}
   ps: {fileID: 198930930339914078}
   sc: {fileID: 135973237189795014}
@@ -5009,6 +5011,26 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1705309852476670509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428542714614976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1847786199651890
 GameObject:
   m_ObjectHideFlags: 0
