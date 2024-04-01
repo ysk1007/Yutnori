@@ -102,7 +102,7 @@ public class SkillObj : MonoBehaviour
         _defense = skillData.Defense;
         _critical = skillData.Critical;
         _shield = skillData.Shield;
-        _skillID = skillData.SkillID;
+        _skillID = skillData.SkillID - 1;
         _skillType = type;
         _owner = owner;
         _target.Clear();

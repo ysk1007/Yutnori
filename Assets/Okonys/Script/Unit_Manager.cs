@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Unit_Manager : MonoBehaviour
@@ -11,7 +12,6 @@ public class Unit_Manager : MonoBehaviour
     public List<Transform> _unitPool = new List<Transform>();
 
     public List<Unit> _p1UnitList = new List<Unit>();
-
     public List<Unit> _p2UnitList = new List<Unit>();
 
     public List<GameObject> _unitSynergy = new List<GameObject>();
@@ -19,10 +19,17 @@ public class Unit_Manager : MonoBehaviour
     public Vector2[] _p1fieldPos;
     public Vector2[] _p2fieldPos;
 
+    UnitDeploy _p1unitDeploy;
+    UnitDeploy _p2unitDeploy;
+
+    public List<int> _p1unitID = new List<int>(); // 추후 게임 매니저로 이동
+    public List<int> _p2unitID = new List<int>();
+
     void Awake()
     {
         SoonsoonData.Instance.Unit_Manager = this;
-        SetUnitList();
+        _p1unitDeploy = _unitPool[0].GetComponent<UnitDeploy>();
+        _p2unitDeploy = _unitPool[1].GetComponent<UnitDeploy>();
     }
 
     // Start is called before the first frame update
@@ -38,27 +45,26 @@ public class Unit_Manager : MonoBehaviour
     }
 
     //유닛 정보 연결
-    void SetUnitList()
+    public void SetUnitList(string tag)
     {
-        _p1UnitList.Clear();
-        _p2UnitList.Clear();
-
-        for (int i = 0; i < _unitPool.Count; i++)
+        switch (tag)
         {
-            for (int j = 0; j < _unitPool[i].childCount; j++)
-            {
-                switch (i)
+            case "P1":
+                _p1UnitList = new List<Unit>();
+                for (int i = 0; i < _unitPool[0].childCount; i++)
                 {
-                    case 0:
-                        _p1UnitList.Add(_unitPool[i].GetChild(j).GetComponent<Unit>());
-                        _unitPool[i].GetChild(j).gameObject.tag = "P1";
-                        break;
-                    case 1:
-                        _p2UnitList.Add(_unitPool[i].GetChild(j).GetComponent<Unit>());
-                        _unitPool[i].GetChild(j).gameObject.tag = "P2";
-                        break;
+                    _p1UnitList.Add(_unitPool[0].GetChild(i).GetComponent<Unit>());
+                    _unitPool[0].GetChild(i).gameObject.tag = "P1";
                 }
-            }
+                break;
+            case "P2":
+                _p2UnitList = new List<Unit>();
+                for (int i = 0; i < _unitPool[1].childCount; i++)
+                {
+                    _p2UnitList.Add(_unitPool[1].GetChild(i).GetComponent<Unit>());
+                    _unitPool[1].GetChild(i).gameObject.tag = "P2";
+                }
+                break;
         }
     }
 
@@ -267,7 +273,11 @@ public class Unit_Manager : MonoBehaviour
 
     public void FieldReset()
     {
-        SetUnitList();
+        _p1UnitList.RemoveRange(0,_p1UnitList.Count);
+        _p2UnitList.RemoveRange(0, _p2UnitList.Count);
+        _p1unitDeploy.UnitDeployment();
+        _p2unitDeploy.UnitDeployment();
+
         SoonsoonData.Instance.Missile_Manager.ResetMissile();
         SoonsoonData.Instance.Effect_Manager.ResetEffect();
         SoonsoonData.Instance.Skill_Manager.ResetSkill();
@@ -278,14 +288,6 @@ public class Unit_Manager : MonoBehaviour
             _unitSynergy[i].SetActive(false);
         }
 
-        for (int i = 0; i < _p1UnitList.Count; i++)
-        {
-            _p1UnitList[i].UnitReset();
-        }
-
-        for (int i = 0; i < _p2UnitList.Count; i++)
-        {
-            _p2UnitList[i].UnitReset();
-        }
+        SoonsoonData.Instance.Synergy_Manager.CheckSynergy();
     }
 }

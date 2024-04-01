@@ -36,6 +36,22 @@ public class SynergyManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        CheckSynergy();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void CheckSynergy()
+    {
+        _p1AttackTypeSynergyList = new int[Enum.GetValues(typeof(Unit.AttackType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p2AttackTypeSynergyList = new int[Enum.GetValues(typeof(Unit.AttackType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p1UnitTypeSynergyList = new int[Enum.GetValues(typeof(Unit.UnitType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p2UnitTypeSynergyList = new int[Enum.GetValues(typeof(Unit.UnitType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
+
         _p1UnitList = SoonsoonData.Instance.Unit_Manager._p1UnitList;
         _p2UnitList = SoonsoonData.Instance.Unit_Manager._p2UnitList;
 
@@ -56,11 +72,5 @@ public class SynergyManager : MonoBehaviour
                 _p2UnitTypeSynergyList[_p2UnitList[i]._unitType.GetHashCode()]++;
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

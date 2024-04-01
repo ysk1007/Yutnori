@@ -49,6 +49,7 @@ public class Unit_SubSet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        this.gameObject.transform.localScale = (SoonsoonData.Instance.Unit_Manager._gamePause) ? new Vector3(0, 0, 0) : new Vector3(1, 1, 1);
         HpSlider.value = (!unit._ghostDieFlag) ? unit._unitHp / _unitMaxHp : unit._ghostTimer / unit._ghostTime;
         HpSliderFill.color = (!unit._ghostDieFlag) ? SliderColorList[1] : SliderColorList[3];
         CTSlider.value = unit._skillTimer / _unitSkillCT;
@@ -123,5 +124,13 @@ public class Unit_SubSet : MonoBehaviour
     public void CT_Update()
     {
         _unitSkillCT = unit._unitCT;
+    }
+
+    public void TextListReset()
+    {
+        for (int i = 0; i < TextList.Count; i++)
+        {
+            TextList[i].enabled = false;
+        }
     }
 }

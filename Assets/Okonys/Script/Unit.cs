@@ -633,6 +633,11 @@ public class Unit : MonoBehaviour
     public void UnitReset()
     {
         init();
+        for (int i = 0; i < BuffList.Count; i++)
+        {
+            if (BuffList[i].timer > 0) BuffList[i].ReturnBuff();
+        }
+        _unit_SubSet.TextListReset();
         SetState(UnitState.idle);
         switch (gameObject.tag)
         {
@@ -646,7 +651,6 @@ public class Unit : MonoBehaviour
         }
 
         this.gameObject.SetActive(true);
-
 
     }
 }

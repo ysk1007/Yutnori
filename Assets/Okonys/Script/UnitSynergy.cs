@@ -23,6 +23,7 @@ public class UnitSynergy : MonoBehaviour
     void OnEnable()
     {
         sm = SoonsoonData.Instance.Synergy_Manager;
+        Init();
         ApplySynergy();
         if(_Type == Type.Start) SpecialSynergy();
     }
@@ -43,6 +44,8 @@ public class UnitSynergy : MonoBehaviour
         _synergyType = synergyData.synergyType;
         _Type = synergyData.type;
         timer = 0;
+        Level = 0;
+        interval = 0;
     }
 
     private void ApplySynergy()
@@ -109,21 +112,21 @@ public class UnitSynergy : MonoBehaviour
                 if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("워리어 시너지 3 레벨");
-                    Level = 2;
+                    Level = 3;
                     Buff = synergyData.MaxHp[2];
                     interval = synergyData.Interval[2];
                 }
                 else if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("워리어 시너지 2 레벨");
-                    Level = 1;
+                    Level = 2;
                     Buff = synergyData.MaxHp[1];
                     interval = synergyData.Interval[1];
                 }
                 else if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("워리어 시너지 1 레벨");
-                    Level = 0;
+                    Level = 1;
                     Buff = synergyData.MaxHp[0];
                     interval = synergyData.Interval[0];
                 }
@@ -139,21 +142,21 @@ public class UnitSynergy : MonoBehaviour
                 if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("워리어 시너지 3 레벨");
-                    Level = 2;
+                    Level = 3;
                     Buff = synergyData.MaxHp[2];
                     interval = synergyData.Interval[2];
                 }
                 else if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("워리어 시너지 2 레벨");
-                    Level = 1;
+                    Level = 2;
                     Buff = synergyData.MaxHp[1];
                     interval = synergyData.Interval[1];
                 }
                 else if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("워리어 시너지 1 레벨");
-                    Level = 0;
+                    Level = 1;
                     Buff = synergyData.MaxHp[0];
                     interval = synergyData.Interval[0];
                 }
@@ -169,18 +172,19 @@ public class UnitSynergy : MonoBehaviour
 
     void WarriorSpecialSynergy()
     {
+        if (Level == 0) return;
         switch (gameObject.tag)
         {
             case "P1":
                 for (int i = 0; i < sm._p1UnitList.Count; i++)
                 {
-                    sm._p1UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level], synergyData.Duration[Level], false);
+                    sm._p1UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level - 1], synergyData.Duration[Level - 1], false);
                 }
                 break;
             case "P2":
                 for (int i = 0; i < sm._p2UnitList.Count; i++)
                 {
-                    sm._p2UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level], synergyData.Duration[Level], false);
+                    sm._p2UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level - 1], synergyData.Duration[Level - 1], false);
                 }
                 break;
         }
@@ -508,6 +512,8 @@ public class UnitSynergy : MonoBehaviour
 
     void HealerSpecialSynergy()
     {
+        if (Level != 2) return;
+
         switch (gameObject.tag)
         {
             case "P1":
