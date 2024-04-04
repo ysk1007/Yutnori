@@ -75,7 +75,7 @@ public class SkillManager : MonoBehaviour
 
         if (skill != null)
         {
-            if (type == SkillObj.SkillType.ShortRange)
+/*            if (type == SkillObj.SkillType.ShortRange)
             {
                 owner.SetDirection();
                 Vector2 newPos;
@@ -84,7 +84,7 @@ public class SkillManager : MonoBehaviour
                 else
                     newPos = new Vector2(target[0].transform.position.x - 1, target[0].transform.position.y);
                 owner.transform.position = newPos;
-            }
+            }*/
             skill.SetSkill(type, owner, target, timer, skillData);
         }
     }

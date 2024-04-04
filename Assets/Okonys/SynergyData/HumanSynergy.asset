@@ -14,19 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   synergyType: 6
   type: 0
-  RequiredNumber: 030000000400000005000000
-  MaxHp: []
-  Damage: []
+  RequiredNumber: 030000000600000009000000
+  MaxHp:
+  - 100
+  - 300
+  - 1000
+  Damage:
+  - 10
+  - 30
+  - 100
   Recovery: []
-  Speed: []
-  Defense: []
-  Critical: []
+  Speed:
+  - 0.3
+  - 0.6
+  - 0.9
+  Defense:
+  - 10
+  - 20
+  - 30
+  Critical:
+  - 0.1
+  - 0.2
+  - 0.3
   Shield: []
   CoolTime:
   - 0.1
+  - 0.2
   - 0.3
-  - 0.5
   Duration: []
-  Interval: []
+  Interval:
+  - 0
+  - 0
+  - 0
   SynergyDesc: 
   icon: {fileID: 0}

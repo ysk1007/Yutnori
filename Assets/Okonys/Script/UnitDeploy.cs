@@ -30,6 +30,7 @@ public class UnitDeploy : MonoBehaviour
                     if (um._p1unitID[i] != 0)
                     {
                         GameObject newUnit = Instantiate(_unitPool._unitPrefabs[um._p1unitID[i] - 1], um._p1fieldPos[i], Quaternion.identity);
+                        newUnit.GetComponent<Unit>()._fieldindex = i;
                         newUnit.transform.SetParent(gameObject.transform);
                         newUnit.transform.GetChild(0).transform.localScale = new Vector3(-1,1,1);
                         newUnit.gameObject.tag = "P1";
@@ -44,6 +45,7 @@ public class UnitDeploy : MonoBehaviour
                     if (um._p2unitID[i] != 0)
                     {
                         GameObject newUnit = Instantiate(_unitPool._unitPrefabs[um._p2unitID[i] - 1], um._p2fieldPos[i], Quaternion.identity);
+                        newUnit.GetComponent<Unit>()._fieldindex = i;
                         newUnit.transform.SetParent(gameObject.transform);
                         newUnit.transform.GetChild(0).transform.localScale = new Vector3(1, 1, 1); 
                         newUnit.gameObject.tag = "P2";

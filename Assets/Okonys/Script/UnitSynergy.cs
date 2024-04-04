@@ -70,6 +70,7 @@ public class UnitSynergy : MonoBehaviour
             case SynergyData.SynergyType.Merchant:
                 break;
             case SynergyData.SynergyType.Human:
+                HumanSynergy();
                 break;
             case SynergyData.SynergyType.Ghost:
                 GhostSynergy();
@@ -104,7 +105,8 @@ public class UnitSynergy : MonoBehaviour
     void WarriorSynergy()
     {
         Debug.Log("시너지");
-        float Buff = 0.0f;
+        float BuffHP = 0.0f;
+        float BuffDF = 0.0f;
         interval = 0.0f;
         switch (this.gameObject.tag)
         {
@@ -113,58 +115,79 @@ public class UnitSynergy : MonoBehaviour
                 {
                     Debug.Log("워리어 시너지 3 레벨");
                     Level = 3;
-                    Buff = synergyData.MaxHp[2];
+                    BuffHP = synergyData.MaxHp[2];
+                    BuffDF = synergyData.Defense[2];
                     interval = synergyData.Interval[2];
                 }
                 else if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("워리어 시너지 2 레벨");
                     Level = 2;
-                    Buff = synergyData.MaxHp[1];
+                    BuffHP = synergyData.MaxHp[1];
+                    BuffDF = synergyData.Defense[1];
                     interval = synergyData.Interval[1];
                 }
                 else if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("워리어 시너지 1 레벨");
                     Level = 1;
-                    Buff = synergyData.MaxHp[0];
+                    BuffHP = synergyData.MaxHp[0];
+                    BuffDF = synergyData.Defense[0];
                     interval = synergyData.Interval[0];
                 }
 
                 for (int i = 0; i < sm._p1UnitList.Count; i++)
                 {
                     Debug.Log("시너지 버프");
-                    sm._p1UnitList[i]._unitMaxHp += Buff;
-                    sm._p1UnitList[i]._unitHp += Buff;
+                    sm._p1UnitList[i]._unitMaxHp += BuffHP;
+                    sm._p1UnitList[i]._unitHp += BuffHP;
                 }
+
+                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                {
+                    // 워리어만 버프
+                    if (sm._p1UnitList[i]._attackType != AttackType.Warrior) continue;
+                    sm._p1UnitList[i]._unitDF += BuffDF;
+                }
+
                 break;
             case "P2":
                 if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("워리어 시너지 3 레벨");
                     Level = 3;
-                    Buff = synergyData.MaxHp[2];
+                    BuffHP = synergyData.MaxHp[2];
+                    BuffDF = synergyData.Defense[2];
                     interval = synergyData.Interval[2];
                 }
                 else if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("워리어 시너지 2 레벨");
                     Level = 2;
-                    Buff = synergyData.MaxHp[1];
+                    BuffHP = synergyData.MaxHp[1];
+                    BuffDF = synergyData.Defense[1];
                     interval = synergyData.Interval[1];
                 }
                 else if (sm._p2AttackTypeSynergyList[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("워리어 시너지 1 레벨");
                     Level = 1;
-                    Buff = synergyData.MaxHp[0];
+                    BuffHP = synergyData.MaxHp[0];
+                    BuffDF = synergyData.Defense[0];
                     interval = synergyData.Interval[0];
                 }
 
                 for (int i = 0; i < sm._p2UnitList.Count; i++)
                 {
-                    sm._p2UnitList[i]._unitMaxHp += Buff;
-                    sm._p2UnitList[i]._unitHp += Buff;
+                    sm._p2UnitList[i]._unitMaxHp += BuffHP;
+                    sm._p2UnitList[i]._unitHp += BuffHP;
+                }
+
+                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                {
+                    // 워리어만 버프
+                    if (sm._p2UnitList[i]._attackType != AttackType.Warrior) continue;
+                    sm._p2UnitList[i]._unitDF += BuffDF;
                 }
                 break;
         }
@@ -527,7 +550,12 @@ public class UnitSynergy : MonoBehaviour
 
     void HumanSynergy()
     {
-        Debug.Log("시너지");
+        float BuffHP = 0.0f;
+        float BuffAS = 0.0f;
+        float BuffAT = 0.0f;
+        float BuffCC = 0.0f;
+        float BuffDF = 0.0f;
+        float BuffCT = 0.0f;
         interval = 0.0f;
         switch (this.gameObject.tag)
         {
@@ -535,46 +563,128 @@ public class UnitSynergy : MonoBehaviour
                 if (sm._p1UnitTypeSynergyList[0] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("인간 시너지 3 레벨");
-                    Level = 2;
+                    Level = 3;
                     interval = synergyData.Interval[2];
+                    BuffHP = synergyData.MaxHp[2];
+                    BuffAS = synergyData.Speed[2];
+                    BuffAT = synergyData.Damage[2];
+                    BuffCC = synergyData.Critical[2];
+                    BuffDF = synergyData.Defense[2];
+                    BuffCT = synergyData.CoolTime[2];
                 }
                 else if (sm._p1UnitTypeSynergyList[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("인간 시너지 2 레벨");
-                    Level = 1;
+                    Level = 2;
                     interval = synergyData.Interval[1];
+                    BuffHP = synergyData.MaxHp[1];
+                    BuffAS = synergyData.Speed[1];
+                    BuffAT = synergyData.Damage[1];
+                    BuffCC = synergyData.Critical[1];
+                    BuffDF = synergyData.Defense[1];
+                    BuffCT = synergyData.CoolTime[1];
                 }
                 else if (sm._p1UnitTypeSynergyList[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("인간 시너지 1 레벨");
-                    Level = 0;
+                    Level = 1;
+                    BuffHP = synergyData.MaxHp[0];
+                    BuffAS = synergyData.Speed[0];
+                    BuffAT = synergyData.Damage[0];
+                    BuffCC = synergyData.Critical[0];
+                    BuffDF = synergyData.Defense[0];
+                    BuffCT = synergyData.CoolTime[0];
                     interval = synergyData.Interval[0];
                 }
+
+                if (Level < 1) break;
+
+                List<Unit> p1humans = new List<Unit>();
+
+
+                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                {
+                    // 인간 찾기
+                    if (sm._p1UnitList[i]._unitType != UnitType.Human) continue;
+                    p1humans.Add(sm._p1UnitList[i]);
+                }
+
+                int randomIndex1 = Random.Range(0, p1humans.Count);
+                p1humans[randomIndex1]._unitMaxHp += BuffHP;
+                p1humans[randomIndex1]._unitHp += BuffHP;
+                p1humans[randomIndex1]._unitAS += BuffAS;
+                p1humans[randomIndex1]._unitAT += BuffAT;
+                p1humans[randomIndex1]._unitCC += BuffCC;
+                p1humans[randomIndex1]._unitDF += BuffDF;
+                p1humans[randomIndex1]._unitCT -= p1humans[randomIndex1]._unitCT * BuffCT;
+                p1humans[randomIndex1]._unit_SubSet.CT_Update();
+                p1humans[randomIndex1].transform.localScale = new Vector3(1.3f, 1.3f, 2);
                 break;
             case "P2":
                 if (sm._p2UnitTypeSynergyList[0] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("인간 시너지 3 레벨");
-                    Level = 2;
+                    Level = 3;
                     interval = synergyData.Interval[2];
+                    BuffHP = synergyData.MaxHp[2];
+                    BuffAS = synergyData.Speed[2];
+                    BuffAT = synergyData.Damage[2];
+                    BuffCC = synergyData.Critical[2];
+                    BuffDF = synergyData.Defense[2];
+                    BuffCT = synergyData.CoolTime[2];
                 }
                 else if (sm._p2UnitTypeSynergyList[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("인간 시너지 2 레벨");
-                    Level = 1;
+                    Level = 2;
                     interval = synergyData.Interval[1];
+                    BuffHP = synergyData.MaxHp[1];
+                    BuffAS = synergyData.Speed[1];
+                    BuffAT = synergyData.Damage[1];
+                    BuffCC = synergyData.Critical[1];
+                    BuffDF = synergyData.Defense[1];
+                    BuffCT = synergyData.CoolTime[1];
                 }
                 else if (sm._p2UnitTypeSynergyList[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("인간 시너지 1 레벨");
-                    Level = 0;
+                    Level = 1;
+                    interval = synergyData.Interval[0];
+                    BuffHP = synergyData.MaxHp[0];
+                    BuffAS = synergyData.Speed[0];
+                    BuffAT = synergyData.Damage[0];
+                    BuffCC = synergyData.Critical[0];
+                    BuffDF = synergyData.Defense[0];
+                    BuffCT = synergyData.CoolTime[0];
                     interval = synergyData.Interval[0];
                 }
+
+                if (Level < 1) break;
+
+                List<Unit> p2humans = new List<Unit>();
+
+
+                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                {
+                    // 인간 찾기
+                    if (sm._p1UnitList[i]._unitType != UnitType.Human) continue;
+                    p2humans.Add(sm._p1UnitList[i]);
+                }
+
+                int randomIndex2 = Random.Range(0, p2humans.Count);
+                p2humans[randomIndex2]._unitMaxHp += BuffHP;
+                p2humans[randomIndex2]._unitHp += BuffHP;
+                p2humans[randomIndex2]._unitAS += BuffAS;
+                p2humans[randomIndex2]._unitAT += BuffAT;
+                p2humans[randomIndex2]._unitCC += BuffCC;
+                p2humans[randomIndex2]._unitDF += BuffDF;
+                p2humans[randomIndex2]._unitCT -= p2humans[randomIndex2]._unitCT * BuffCT;
+                p2humans[randomIndex2]._unit_SubSet.CT_Update();
+                p2humans[randomIndex2].transform.localScale = new Vector3(1.3f, 1.3f, 2);
                 break;
         }
     }
-
-    void GhostSynergy()
+        void GhostSynergy()
     {
         float BuffAT = 0.0f;
         switch (this.gameObject.tag)

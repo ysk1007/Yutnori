@@ -73,6 +73,8 @@ public class Unit : MonoBehaviour
     public float _deBuffDF = 0; // 방어력 디버프
     public float _deBuffCC = 0; // 치명타 확률 디버프
 
+    public float _damageinflicted = 0; // 가한 데미지
+
     public bool _wizardPower = false;
     public bool _ghostPower = false;
     public float _ghostTime = 0;
@@ -484,6 +486,8 @@ public class Unit : MonoBehaviour
         {
             _unitHp -= newDmg;
         }
+
+        target._damageinflicted += newDmg;
 
         // 데미지 텍스트
         _unit_SubSet.ShowDamageText(newDmg, critical);

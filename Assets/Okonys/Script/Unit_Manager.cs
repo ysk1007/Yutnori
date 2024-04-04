@@ -269,6 +269,7 @@ public class Unit_Manager : MonoBehaviour
         {
             _unitSynergy[i].SetActive(true);
         }
+        SoonsoonData.Instance.Damage_Measure.MeasureStart();
     }
 
     public void FieldReset()
@@ -289,5 +290,6 @@ public class Unit_Manager : MonoBehaviour
         }
 
         SoonsoonData.Instance.Synergy_Manager.CheckSynergy();
+        SoonsoonData.Instance.Damage_Measure.MeasureReset();
     }
 }
