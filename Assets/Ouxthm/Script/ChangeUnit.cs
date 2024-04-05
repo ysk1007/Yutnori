@@ -62,6 +62,11 @@ public class ChangeUnit : MonoBehaviour
                     selectFirst = readyBtns[index].gameObject;
                     indexFirst = selectFirst.transform.GetSiblingIndex();
                     parentFirst = selectFirst.transform.parent;
+                    if (parentFirst.name == "UseArranger")
+                    {
+                        exceptionBtn.gameObject.SetActive(true);
+                    }
+
                 }
                 else if (selectSeconds == null)
                 {
@@ -93,6 +98,7 @@ public class ChangeUnit : MonoBehaviour
                     selectFirst = useBtns[index].gameObject;
                     indexFirst = selectFirst.transform.GetSiblingIndex();
                     parentFirst = selectFirst.transform.parent;
+                    Debug.Log(parentFirst.name);
                     if (parentFirst.name == "UseArranger")
                     {
                         exceptionBtn.gameObject.SetActive(true);
@@ -115,7 +121,6 @@ public class ChangeUnit : MonoBehaviour
                 }
             });
         }
-        
 
     }
 
@@ -129,6 +134,9 @@ public class ChangeUnit : MonoBehaviour
 
         selectFirst = null;
         selectSeconds = null;
-        exceptionBtn.gameObject.SetActive(true);
+
+        parentFirst = null;
+        parentSeconds = null;
+        exceptionBtn.gameObject.SetActive(false);
     }
 }
