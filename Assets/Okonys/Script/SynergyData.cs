@@ -26,6 +26,7 @@ public class SynergyData : ScriptableObject
     }
 
     [Header(" # Main Info")]
+    public string synergyName;
     public SynergyType synergyType = SynergyType.Warrior;
     public Type type = Type.Start;
     public int[] RequiredNumber;

@@ -11,6 +11,7 @@ public class MeasureObj : MonoBehaviour
     public Slider _damageSlider;
     public TextMeshProUGUI _damageText;
     public float _damageValue;
+    public Image _uniticon;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,5 +24,12 @@ public class MeasureObj : MonoBehaviour
         _damageValue = _unit._damageinflicted;
         _damageText.text = _damageValue.ToString();
         if (_damageMeasure._highestDamage > 0) _damageSlider.value = _damageValue / _damageMeasure._highestDamage;
-    }        
+    }
+
+    public void init(DamageMeasure damageMeasure, Unit unit)
+    {
+        _damageMeasure = damageMeasure;
+        _unit = unit;
+        _uniticon.sprite = unit._unitData.icon;
+    }
 }

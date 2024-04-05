@@ -47,8 +47,7 @@ public class DamageMeasure : MonoBehaviour
             GameObject newObj = Instantiate(MeasureObj, transform.position, Quaternion.identity);
             newObj.transform.SetParent(gameObject.transform);
             _childObjects[i] = newObj.transform;
-            newObj.GetComponent<MeasureObj>()._damageMeasure = this;
-            newObj.GetComponent<MeasureObj>()._unit = um._p1UnitList[i];
+            newObj.GetComponent<MeasureObj>().init(this, um._p1UnitList[i]);
             _units[i] = um._p1UnitList[i];
         }
     }

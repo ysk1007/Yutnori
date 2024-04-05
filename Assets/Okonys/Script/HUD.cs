@@ -21,7 +21,7 @@ public class HUD : MonoBehaviour
         Healer = 4,
         Merchant = 5,
         Human = 6,
-        Monster = 7,
+        Ghost = 7,
         Great = 8,
         Devil = 9,
     }
@@ -66,8 +66,10 @@ public class HUD : MonoBehaviour
                         _thisText.text = SM._p1AttackTypeSynergyList[5].ToString();
                         break;
                     case SynergyType.Human:
+                        _thisText.text = SM._p1UnitTypeSynergyList[0].ToString();
                         break;
-                    case SynergyType.Monster:
+                    case SynergyType.Ghost:
+                        _thisText.text = SM._p1UnitTypeSynergyList[1].ToString();
                         break;
                     case SynergyType.Great:
                         break;
@@ -100,7 +102,7 @@ public class HUD : MonoBehaviour
                         break;
                     case SynergyType.Human:
                         break;
-                    case SynergyType.Monster:
+                    case SynergyType.Ghost:
                         break;
                     case SynergyType.Great:
                         break;
