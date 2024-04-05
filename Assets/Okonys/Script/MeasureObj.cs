@@ -22,7 +22,7 @@ public class MeasureObj : MonoBehaviour
     void Update()
     {
         _damageValue = _unit._damageinflicted;
-        _damageText.text = _damageValue.ToString();
+        _damageText.text = _damageValue.ToString("N0");
         if (_damageMeasure._highestDamage > 0) _damageSlider.value = _damageValue / _damageMeasure._highestDamage;
     }
 

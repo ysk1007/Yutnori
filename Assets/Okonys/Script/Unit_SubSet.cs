@@ -79,7 +79,7 @@ public class Unit_SubSet : MonoBehaviour
     public void ShowDamageText(float value, bool critical)
     {
         TextList[TextNum].color = critical ? TextColorList[1] : TextColorList[0];
-        TextList[TextNum].text = value.ToString();
+        TextList[TextNum].text = value.ToString("N0");
         AnimatorList[TextNum].SetTrigger("Show");
         iconList[TextNum].enabled = critical ? true : false;
         if (TextNum == TextList.Count - 1)
