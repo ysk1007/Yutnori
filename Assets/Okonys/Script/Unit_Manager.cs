@@ -22,8 +22,11 @@ public class Unit_Manager : MonoBehaviour
     UnitDeploy _p1unitDeploy;
     UnitDeploy _p2unitDeploy;
 
-    public List<int> _p1unitID = new List<int>(); // 추후 게임 매니저로 이동
-    public List<int> _p2unitID = new List<int>();
+    public List<SlotClass> _p1unitID = new List<SlotClass>(); // 추후 게임 매니저로 이동
+    public List<SlotClass> _p2unitID = new List<SlotClass>();
+    public List<SlotClass> _userInvenUnit = new List<SlotClass>();
+
+    InventoryManager im;
 
     void Awake()
     {
@@ -35,7 +38,7 @@ public class Unit_Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        im = SoonsoonData.Instance.Inventory_Manager;
     }
 
     // Update is called once per frame
@@ -276,6 +279,7 @@ public class Unit_Manager : MonoBehaviour
     {
         _p1UnitList.RemoveRange(0,_p1UnitList.Count);
         _p2UnitList.RemoveRange(0, _p2UnitList.Count);
+        UnitDataUpdate();
         _p1unitDeploy.UnitDeployment();
         _p2unitDeploy.UnitDeployment();
 
@@ -291,5 +295,28 @@ public class Unit_Manager : MonoBehaviour
 
         SoonsoonData.Instance.Synergy_Manager.CheckSynergy();
         SoonsoonData.Instance.Damage_Measure.MeasureReset();
+    }
+
+    public void UnitRelocation()
+    {
+        _p1UnitList.RemoveRange(0, _p1UnitList.Count);
+        UnitDataUpdate();
+        _p1unitDeploy.UnitDeployment(); 
+        
+        for (int i = 0; i < _unitSynergy.Count; i++)
+        {
+            _unitSynergy[i].SetActive(false);
+        }
+
+        SoonsoonData.Instance.Synergy_Manager.CheckSynergy();
+        SoonsoonData.Instance.Damage_Measure.MeasureReset();
+    }
+
+    void UnitDataUpdate()
+    {
+        for (int i = 0; i < _p1unitID.Count; i++)
+        {
+            _p1unitID[i] = im._userSquad[i];
+        }
     }
 }

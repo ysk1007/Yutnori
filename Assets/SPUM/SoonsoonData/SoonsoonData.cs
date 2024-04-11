@@ -40,6 +40,7 @@ public class SoonsoonData
     public EffectManager Effect_Manager;
     public SkillManager Skill_Manager;
     public SynergyManager Synergy_Manager;
+    public InventoryManager Inventory_Manager;
     public DamageMeasure Damage_Measure;
     public UnitPool Unit_pool;
 
