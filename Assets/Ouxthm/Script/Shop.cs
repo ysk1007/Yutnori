@@ -10,33 +10,38 @@ public class Shop : MonoBehaviour
 
     private void Awake()
     {
-        for(int i = 0; i < btn.Length; i++)
-        {
-            btn[i] = transform.GetChild(0).GetChild(0).GetChild(i).GetComponent<Button>();
-            ui[i] = transform.GetChild(0).GetChild(i + 1).gameObject;
-        }
-        ui[0].SetActive(true);
-        ui[1].SetActive(false);
-        ui[2].SetActive(false);
+        ui[0].transform.localScale = Vector3.one;
+        ui[1].transform.localScale = Vector3.zero;
+        ui[2].transform.localScale = Vector3.zero;
 
         btn[0].onClick.AddListener(() =>
         {
-            ui[0].SetActive(true);
-            ui[1].SetActive(false);
-            ui[2].SetActive(false);
+            ui[0].transform.localScale = Vector3.one;
+            ui[1].transform.localScale = Vector3.zero;
+            ui[2].transform.localScale = Vector3.zero;
         });
 
         btn[1].onClick.AddListener(() =>
         {
-            ui[0].SetActive(false);
-            ui[1].SetActive(true);
-            ui[2].SetActive(false);
+            ui[0].transform.localScale = Vector3.zero;
+            ui[1].transform.localScale = Vector3.one;
+            ui[2].transform.localScale = Vector3.zero;
         });
         btn[2].onClick.AddListener(() =>
         {
-            ui[0].SetActive(false);
-            ui[1].SetActive(false);
-            ui[2].SetActive(true);
+            ui[0].transform.localScale = Vector3.zero;
+            ui[1].transform.localScale = Vector3.zero;
+            ui[2].transform.localScale = Vector3.one;
         });
+    }
+
+    public void OpenShop()
+    {
+        gameObject.transform.localScale = Vector3.one;
+    }
+
+    public void CloseShop()
+    {
+        gameObject.transform.localScale = Vector3.zero;
     }
 }

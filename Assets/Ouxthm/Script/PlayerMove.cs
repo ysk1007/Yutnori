@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    GameManager gm;
+    YutManager ym;
     public RectTransform player;
 
     public RectTransform[] plate = new RectTransform[24];
@@ -24,12 +24,12 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        gm = GameManager.instance;
+        ym = YutManager.instance;
     }
 
     public IEnumerator PlayerMoveOnMap()    // 플레이어 기물 이동
     {
-        for (int i = 0; i < gm.nowYut; i++)
+        for (int i = 0; i < ym.nowYut; i++)
         {
             Vector2 targetPosition = plate[nowPlateNum + i].anchoredPosition; // 목표 위치를 설정합니다.
 
@@ -45,7 +45,7 @@ public class PlayerMove : MonoBehaviour
             }
             yield return null;
         }
-        nowPlateNum += gm.nowYut;
+        nowPlateNum += ym.nowYut;
     }
 
 }

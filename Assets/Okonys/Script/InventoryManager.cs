@@ -69,6 +69,8 @@ public class InventoryManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!SoonsoonData.Instance.Unit_Manager._gamePause) return;
+
         _cursor.SetActive(_isMoving);
         _cursor.transform.position = Input.mousePosition;
         if (_isMoving)
@@ -76,13 +78,14 @@ public class InventoryManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            BeginMove();
+
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
             if (_isMoving)
             {
                 EndMove();
-            }
-            else
-            {
-                BeginMove();
             }
         }
     }
@@ -114,8 +117,27 @@ public class InventoryManager : MonoBehaviour
                 _tempSlot = new SlotClass(_originalSlot); // 임시 슬롯에 이미 있는 유닛을 가져옴
 
                 _originalSlot = new SlotClass(_movingSlot); // 선택한 슬롯에 배치
-                SquadAdd(_originalSlot, _curindex); // 스쿼드에 추가
-                SquadAdd(_tempSlot, _lastindex);
+
+                if (_curindex < _userSquad.Length) // 선택한 슬롯이 스쿼드
+                {
+                    SquadAdd(_originalSlot, _curindex); // 스쿼드에 추가
+
+                    if (_lastindex < _userSquad.Length) // 마지막 슬롯이 스쿼드
+                        SquadAdd(_tempSlot, _lastindex);
+
+                    else //마지막 슬롯이 인벤토리
+                        InventoryAdd(_tempSlot, _lastindex - _userSquad.Length);
+                }
+                else // 선택한 슬롯이 인벤토리
+                {
+                    InventoryAdd(_originalSlot, _curindex - _userSquad.Length); // 인벤토리에 추가
+
+                    if (_lastindex < _userSquad.Length) // 마지막 슬롯이 스쿼드
+                        SquadAdd(_tempSlot, _lastindex);
+
+                    else //마지막 슬롯이 인벤토리
+                        InventoryAdd(_tempSlot, _lastindex - _userSquad.Length);
+                }
 
                 _movingSlot.Clear();
                 RefreshUi(); 
@@ -126,7 +148,14 @@ public class InventoryManager : MonoBehaviour
             {
                 _originalSlot = new SlotClass(_movingSlot); // 선택한 슬롯에 배치
                 _movingSlot.Clear(); // 배치 슬롯은 초기화
-                SquadAdd(_originalSlot, _curindex); // 스쿼드에 추가
+                if (_curindex < _userSquad.Length)
+                {
+                    SquadAdd(_originalSlot, _curindex); // 스쿼드에 추가
+                }
+                else
+                {
+                    InventoryAdd(_originalSlot, _curindex - _userSquad.Length); // 인벤토리에 추가
+                }
             }
         }
         _isMoving = false;
@@ -136,36 +165,17 @@ public class InventoryManager : MonoBehaviour
 
     private SlotClass GetClosestSlot()
     {
-        if (Vector2.Distance(_squadSlotHoloder.transform.position, Input.mousePosition) < Vector2.Distance(_invenSlotHoloder.transform.position, Input.mousePosition))
+        for (int i = 0; i < _Slots.Length; i++)
         {
-            for (int i = 0; i < _userSquad.Length; i++)
+            if (Vector2.Distance(_Slots[i].transform.position, Input.mousePosition) <= 48)
             {
-                if (Vector2.Distance(_Slots[i].transform.position, Input.mousePosition) <= 48)
-                {
-                    _curindex = i;
-                    if (!_isMoving) _lastindex = i;
-                    return _userSquad[i];
-                }
+                _curindex = i;
+                if (!_isMoving) _lastindex = i;
+                return (i < _userSquad.Length) ? _userSquad[i] : _userInventory[i - _userSquad.Length];
             }
-
-            _curindex = -1;
-            return null;
         }
-        else
-        {
-            for (int i = 0; i < _userInventory.Length; i++)
-            {
-                if (Vector2.Distance(_Slots[i].transform.position, Input.mousePosition) <= 48)
-                {
-                    _curindex = i;
-                    if (!_isMoving) _lastindex = i;
-                    return _userInventory[i];
-                }
-            }
-
-            _curindex = -1;
-            return null;
-        }
+        _curindex = -1;
+        return null;
     }
 
     public void RefreshUi()
@@ -210,6 +220,12 @@ public class InventoryManager : MonoBehaviour
                 _userInventory[i] = slot;
             }
         }
+        RefreshUi();
+    }
+
+    public void InventoryAdd(SlotClass slot, int index)
+    {
+        _userInventory[index] = slot;
         RefreshUi();
     }
 

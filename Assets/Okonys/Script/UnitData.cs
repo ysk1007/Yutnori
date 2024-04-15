@@ -12,11 +12,21 @@ public class UnitData : ScriptableObject
         upper = 2,
     }
 
+    public enum nobleRate
+    {
+        common = 0,
+        uncommon = 1,
+        rare = 2,
+        epic = 3,
+        legendary = 4
+    }
+
     [Header(" # Main Info")]
     public int UnitID;
     public string UnitName;
     public Unit.AttackType AttackType;
     public Unit.UnitType UnitType;
+    public nobleRate _nobleRate; // 고귀 등급
 
     [Header(" # Status Info")]
     public RateType _unitRate; // 등급
