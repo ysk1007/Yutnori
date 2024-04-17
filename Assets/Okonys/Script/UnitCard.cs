@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using static UnitData;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public UnitData _unitData;
 
@@ -32,8 +32,8 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     Vector3 _originalSize = new Vector3(0.7f, 0.7f, 1f);
     Vector3 _SelectSize = new Vector3(0.9f, 0.9f, 1f);
-    UnitShop _unitShop;
 
+    UnitShop _unitShop;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +43,7 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     // 마우스가 오브젝트 위에 올라갔을 때 호출되는 함수
@@ -51,7 +51,6 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (_isSell) return;
 
-        _unitShop._selectProductIndex = _productIndex;
         transform.localScale = _SelectSize;
     }
 
@@ -60,30 +59,12 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (_isSell) return;
 
-        _unitShop._selectProductIndex = -1;
         transform.localScale = _originalSize;
     }
 
     public void init()
     {
         _isSell = false;
-        float randomNumber = Random.value; // 0부터 1 사이의 랜덤 값
-
-        if (randomNumber < 0.667f) // 66.7%
-        {
-            _rateType = RateType.lower;
-            _productRate.sprite = _unitShop._rateSprites[0];
-        }
-        else if (randomNumber < 0.889f) // 22.2%
-        {
-            _rateType = RateType.middle;
-            _productRate.sprite = _unitShop._rateSprites[1];
-        }
-        else // 11.1%
-        {
-            _rateType = RateType.upper;
-            _productRate.sprite = _unitShop._rateSprites[2];
-        }
         _nobleRate = _unitData._nobleRate;
         _unitName.text = _unitData.UnitName;
         _characterIcon.sprite = _unitData.icon;

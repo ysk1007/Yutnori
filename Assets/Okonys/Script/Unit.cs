@@ -131,7 +131,6 @@ public class Unit : MonoBehaviour
         if (!_unitData) return;
         _attackType = _unitData.AttackType;
         _unitType = _unitData.UnitType;
-        _unitRate = _unitData._unitRate;
         _unitMaxHp = _unitData._unitMaxHp[_unitRate.GetHashCode()];
         _unitHp = _unitMaxHp;
         _unitAT = _unitData._unitAT[_unitRate.GetHashCode()];

@@ -297,7 +297,7 @@ public class Unit_Manager : MonoBehaviour
         SoonsoonData.Instance.Damage_Measure.MeasureReset();
     }
 
-    public void UnitRelocation()
+    public void UnitRelocation() // p1 À¯´Ö Àç¹èÄ¡
     {
         _p1UnitList.RemoveRange(0, _p1UnitList.Count);
         UnitDataUpdate();

@@ -215,9 +215,10 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < _userInventory.Length; i++)
         {
-            if (_userInventory[i] == null) // unit id 가 없음
+            if (_userInventory[i]._unitData == null) // unit id 가 없음
             {
                 _userInventory[i] = slot;
+                break;
             }
         }
         RefreshUi();

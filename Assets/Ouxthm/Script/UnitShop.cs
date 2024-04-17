@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ public class UnitShop : MonoBehaviour
 {
     public Button[] btn = new Button[2];
     public TextMeshProUGUI[] probabilityText = new TextMeshProUGUI[5];
+    public int _selectProductIndex = -1;
     public int upgradeLv;
     public float[] oneTier;
     public float[] twoTier;
@@ -24,9 +26,12 @@ public class UnitShop : MonoBehaviour
     public Sprite[] _typeSprites;
     public Sprite[] _rateSprites;
 
-    public UnitProduct[] _unitProducts;
+    public Transform _untiProductArray;
+    UnitProduct[] _unitProducts;
+    Vector3 _productSize = new Vector3(0.7f, 0.7f, 1f);
 
     UnitPool _unitPool;
+    InventoryManager _inventoryManager;
     private void Awake()
     {
         SoonsoonData.Instance.UnitShop = this;
@@ -38,7 +43,16 @@ public class UnitShop : MonoBehaviour
         threeTier = new float[] { 0, 0, 0.05f, 0.15f, 0.25f, 0.3f, 0.33f, 0.33f, 0.33f };
         fourTier = new float[] { 0, 0, 0, 0.03f, 0.03f, 0.1f, 0.15f, 0.2f, 0.3f };
         fiveTier = new float[] { 0, 0, 0, 0, 0, 0.05f, 0.02f, 0.05f, 0.1f };
-        for(int i = 0; i < probabilityText.Length; i++)
+
+        _unitProducts = new UnitProduct[_untiProductArray.childCount];
+        for (int i = 0; i < _untiProductArray.childCount; i++)
+        {
+            _unitProducts[i] = _untiProductArray.GetChild(i).GetComponent<UnitProduct>();
+            _unitProducts[i]._productIndex = i;
+            _unitProducts[i].GetComponent<Button>().onClick.AddListener(BuyProduct);
+        }
+
+        for (int i = 0; i < probabilityText.Length; i++)
         {
             probabilityText[i] = transform.GetChild(0).GetChild(i).GetComponentInChildren<TextMeshProUGUI>();
         }
@@ -51,7 +65,13 @@ public class UnitShop : MonoBehaviour
     private void Start()
     {
         _unitPool = SoonsoonData.Instance.Unit_pool;
+        _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
         newProduct();
+    }
+
+    private void Update()
+    {
+
     }
 
     public void newProduct()
@@ -97,7 +117,18 @@ public class UnitShop : MonoBehaviour
                     _unitProducts[i].init();
                     break;
             }
+            _unitProducts[i].transform.localScale = _productSize;
         }
+    }
+
+    public void BuyProduct()
+    {
+        if (_selectProductIndex < 0) return;
+        SlotClass product = new SlotClass(_unitProducts[_selectProductIndex]._unitData, _unitProducts[_selectProductIndex]._rateType.GetHashCode());
+        _inventoryManager.InventoryAdd(product);
+        _unitProducts[_selectProductIndex]._isSell = true;
+        _unitProducts[_selectProductIndex].transform.localScale = Vector3.zero;
+        _selectProductIndex = -1;
     }
 
     public void LevelUP()
