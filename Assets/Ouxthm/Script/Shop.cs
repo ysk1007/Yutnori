@@ -7,6 +7,7 @@ public class Shop : MonoBehaviour
 {
     public Button[] btn = new Button[3];
     public GameObject[] ui = new GameObject[3];
+    UnitShop _unitShop;
 
     private void Awake()
     {
@@ -35,13 +36,20 @@ public class Shop : MonoBehaviour
         });
     }
 
+    private void Start()
+    {
+        _unitShop = SoonsoonData.Instance.UnitShop;
+    }
+
     public void OpenShop()
     {
         gameObject.transform.localScale = Vector3.one;
+        _unitShop._isOpenShop = true;
     }
 
     public void CloseShop()
     {
         gameObject.transform.localScale = Vector3.zero;
+        _unitShop._isOpenShop = false;
     }
 }

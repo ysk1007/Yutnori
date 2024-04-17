@@ -44,6 +44,7 @@ public class SoonsoonData
     public DamageMeasure Damage_Measure;
     public UnitPool Unit_pool;
     public UnitShop UnitShop;
+    public UnitInventory UnitInventory;
 
     public SPUM_Manager _spumManager;
     public bool _gifAlphaTrigger; // for using gif trigger at Soonsoon Exporter.

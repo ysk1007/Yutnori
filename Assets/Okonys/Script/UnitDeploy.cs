@@ -28,7 +28,7 @@ public class UnitDeploy : MonoBehaviour
             case "P1":
                 for (int i = 0; i < um._p1unitID.Count; i++)
                 {
-                    if (um._p1unitID[i]._unitData != null)
+                    if (um._p1unitID[i]?._unitData != null)
                     {
                         GameObject newUnit = Instantiate(_unitPool._unitPrefabs[um._p1unitID[i]._unitData.UnitID - 1], um._p1fieldPos[i], Quaternion.identity);
                         switch (um._p1unitID[i]._unitRate)
@@ -56,7 +56,7 @@ public class UnitDeploy : MonoBehaviour
             case "P2":
                 for (int i = 0; i < um._p2unitID.Count; i++)
                 {
-                    if (um._p2unitID[i]._unitData != null)
+                    if (um._p2unitID[i]?._unitData != null)
                     {
                         GameObject newUnit = Instantiate(_unitPool._unitPrefabs[um._p2unitID[i]._unitData.UnitID - 1], um._p2fieldPos[i], Quaternion.identity);
                         switch (um._p2unitID[i]._unitRate)

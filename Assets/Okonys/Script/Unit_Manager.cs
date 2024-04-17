@@ -308,6 +308,7 @@ public class Unit_Manager : MonoBehaviour
             _unitSynergy[i].SetActive(false);
         }
 
+        SoonsoonData.Instance.UnitInventory.initInventory();
         SoonsoonData.Instance.Synergy_Manager.CheckSynergy();
         SoonsoonData.Instance.Damage_Measure.MeasureReset();
     }

@@ -15,6 +15,7 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] public SlotClass[] _userSquad;
     [SerializeField] public SlotClass[] _userInventory;
+    //[SerializeField] public SlotClass[] _totalUnits;
 
     public GameObject[] _Slots;
 
@@ -34,6 +35,7 @@ public class InventoryManager : MonoBehaviour
         SoonsoonData.Instance.Inventory_Manager = this;
         _userSquad = new SlotClass[9];
         _userInventory = new SlotClass[12];
+        //_totalUnits = new SlotClass[_userSquad.Length + _userInventory.Length];
     }
 
     // Start is called before the first frame update
@@ -52,7 +54,7 @@ public class InventoryManager : MonoBehaviour
             _userInventory[i] = _unitManager._userInvenUnit[i];
         }
 
-        _Slots = new GameObject[_squadSlotHoloder.transform.childCount + _invenSlotHoloder.transform.childCount]; 
+        _Slots = new GameObject[_squadSlotHoloder.transform.childCount + _invenSlotHoloder.transform.childCount];
 
         for (int i = 0; i < _squadSlotHoloder.transform.childCount; i++)
         {
@@ -207,7 +209,6 @@ public class InventoryManager : MonoBehaviour
                 _Slots[i + _squadSlotHoloder.transform.childCount].transform.GetChild(0).GetComponent<Image>().enabled = false;
             }
         }
-
         SoonsoonData.Instance.Unit_Manager.UnitRelocation();
     }
 
@@ -215,7 +216,7 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < _userInventory.Length; i++)
         {
-            if (_userInventory[i]._unitData == null) // unit id 가 없음
+            if (_userInventory[i]?._unitData == null) // unit id 가 없음
             {
                 _userInventory[i] = slot;
                 break;
@@ -240,7 +241,7 @@ public class InventoryManager : MonoBehaviour
     {
         for (int i = 0; i < _userSquad.Length; i++)
         {
-            if (_userSquad[i]._unitData == null) // unit 데이터가 없음
+            if (_userSquad[i]?._unitData == null) // unit 데이터가 없음
             {
                 _userSquad[i] = slot;
                 break;

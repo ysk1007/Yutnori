@@ -10,6 +10,8 @@ public class UnitShop : MonoBehaviour
     public Button[] btn = new Button[2];
     public TextMeshProUGUI[] probabilityText = new TextMeshProUGUI[5];
     public int _selectProductIndex = -1;
+    public int _selectInventoryIndex = -1;
+    public bool _isOpenShop = false;
     public int upgradeLv;
     public float[] oneTier;
     public float[] twoTier;
@@ -128,6 +130,23 @@ public class UnitShop : MonoBehaviour
         _inventoryManager.InventoryAdd(product);
         _unitProducts[_selectProductIndex]._isSell = true;
         _unitProducts[_selectProductIndex].transform.localScale = Vector3.zero;
+        _selectProductIndex = -1;
+    }
+
+    public void SellProduct()
+    {
+        if (_selectInventoryIndex < 0) return;
+        if (!_isOpenShop) return;
+
+        if (_selectInventoryIndex < _inventoryManager._userSquad.Length)
+        {
+            _inventoryManager.SquadRemove(_selectInventoryIndex);
+        }
+        else
+        {
+            _inventoryManager.InventoryRemove(_selectInventoryIndex - _inventoryManager._userSquad.Length);
+        }
+
         _selectProductIndex = -1;
     }
 

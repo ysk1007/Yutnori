@@ -14,7 +14,7 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public UnitData.nobleRate _nobleRate;
     public UnitData.RateType _rateType;
 
-    public int _productIndex;
+    public int _unitIndex;
     public bool _isSell = false;
 
     public Image _productBg;
@@ -40,6 +40,11 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _unitShop = SoonsoonData.Instance.UnitShop;
     }
 
+    void OnEnable()
+    {
+        if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -51,6 +56,7 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (_isSell) return;
 
+        _unitShop._selectInventoryIndex = _unitIndex;
         transform.localScale = _SelectSize;
     }
 
@@ -59,11 +65,14 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (_isSell) return;
 
+        _unitShop._selectInventoryIndex = -1;
         transform.localScale = _originalSize;
     }
 
     public void init()
     {
+        if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
+
         _isSell = false;
         _nobleRate = _unitData._nobleRate;
         _unitName.text = _unitData.UnitName;
