@@ -8,15 +8,19 @@ public class Shop : MonoBehaviour
     public Button[] btn = new Button[3];
     public GameObject[] ui = new GameObject[3];
     UnitShop _unitShop;
+    Gambling _gambling;
 
     private void Awake()
     {
+        _gambling = ui[2].GetComponent<Gambling>();
+
         ui[0].transform.localScale = Vector3.one;
         ui[1].transform.localScale = Vector3.zero;
         ui[2].transform.localScale = Vector3.zero;
 
         btn[0].onClick.AddListener(() =>
         {
+            if (_gambling._doPlay) return;
             ui[0].transform.localScale = Vector3.one;
             ui[1].transform.localScale = Vector3.zero;
             ui[2].transform.localScale = Vector3.zero;
@@ -24,12 +28,14 @@ public class Shop : MonoBehaviour
 
         btn[1].onClick.AddListener(() =>
         {
+            if (_gambling._doPlay) return;
             ui[0].transform.localScale = Vector3.zero;
             ui[1].transform.localScale = Vector3.one;
             ui[2].transform.localScale = Vector3.zero;
         });
         btn[2].onClick.AddListener(() =>
         {
+            if (_gambling._doPlay) return;
             ui[0].transform.localScale = Vector3.zero;
             ui[1].transform.localScale = Vector3.zero;
             ui[2].transform.localScale = Vector3.one;
@@ -49,6 +55,8 @@ public class Shop : MonoBehaviour
 
     public void CloseShop()
     {
+        if (_gambling._doPlay) return;
+
         gameObject.transform.localScale = Vector3.zero;
         _unitShop._isOpenShop = false;
     }
