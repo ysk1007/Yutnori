@@ -50,17 +50,25 @@ public class ItemShop : MonoBehaviour
 
     public List<ItemProduct> _itemProducts;
 
+    public int _selectItemIndex = -1;
+
 
     [SerializeField]
     private float[] _itemProbability; // 아이템 등급 등장 확률
 
     private void Awake()
     {
+        SoonsoonData.Instance.ItemShop = this;
         _itemStock = new List<itemStock>(_itemDatas.Count);
         ItemSort();
+
+        int index = 0;
         foreach (var item in _itemProductArray.GetComponentsInChildren<ItemProduct>())
         {
             _itemProducts.Add(item);
+            item.GetComponent<ItemProduct>()._itemShop = this;
+            item.GetComponent<ItemProduct>()._productIndex = index;
+            index++;
         }
     }
 
@@ -199,5 +207,17 @@ public class ItemShop : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void BuyItem()
+    {
+        if (_selectItemIndex < 0) return;
+
+        SoonsoonData.Instance.Artifact_Manager.SetArtifact(_itemProducts[_selectItemIndex]._itemData);
+        _itemProducts[_selectItemIndex]._itemData = null;
+
+        _itemProducts[_selectItemIndex]._isSell = true;
+        _itemProducts[_selectItemIndex].transform.localScale = Vector3.zero;
+        _selectItemIndex = -1;
     }
 }

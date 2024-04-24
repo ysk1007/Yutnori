@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unit;
 
 public class SynergyManager : MonoBehaviour
 {
@@ -9,9 +10,15 @@ public class SynergyManager : MonoBehaviour
     public int[] _p1AttackTypeSynergyList = new int[0];
     public int[] _p2AttackTypeSynergyList = new int[0];
 
+    // 아티팩트로 얻는 추가 시너지
+    public int[] _AttackTypeAddArtifact = new int[0];
+
     [Header("0 인간 1 요괴 2 위인 3 악귀")]
     public int[] _p1UnitTypeSynergyList = new int[0];
     public int[] _p2UnitTypeSynergyList = new int[0];
+
+    // 아티팩트로 얻는 추가 시너지
+    public int[] _UnitTypeAddArtifact = new int[0];
 
     public List<Unit> _p1UnitList = new List<Unit>();
     public List<Unit> _p2UnitList = new List<Unit>();
@@ -24,13 +31,22 @@ public class SynergyManager : MonoBehaviour
 
     public Color[] _synergyColorList;
 
+    int AttackType;
+    int UnitType;
+
     void Awake()
     {
         SoonsoonData.Instance.Synergy_Manager = this;
-        _p1AttackTypeSynergyList = new int[Enum.GetValues(typeof(Unit.AttackType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
-        _p2AttackTypeSynergyList = new int[Enum.GetValues(typeof(Unit.AttackType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
-        _p1UnitTypeSynergyList = new int[Enum.GetValues(typeof(Unit.UnitType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
-        _p2UnitTypeSynergyList = new int[Enum.GetValues(typeof(Unit.UnitType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
+
+        AttackType = Enum.GetValues(typeof(Unit.AttackType)).Length; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p1AttackTypeSynergyList = new int[AttackType]; 
+        _p2AttackTypeSynergyList = new int[AttackType];
+        _AttackTypeAddArtifact = new int[AttackType];
+
+        UnitType = Enum.GetValues(typeof(Unit.UnitType)).Length; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p1UnitTypeSynergyList = new int[UnitType];
+        _p2UnitTypeSynergyList = new int[UnitType];
+        _UnitTypeAddArtifact = new int[UnitType];
     }
 
     // Start is called before the first frame update
@@ -47,10 +63,10 @@ public class SynergyManager : MonoBehaviour
 
     public void CheckSynergy()
     {
-        _p1AttackTypeSynergyList = new int[Enum.GetValues(typeof(Unit.AttackType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
-        _p2AttackTypeSynergyList = new int[Enum.GetValues(typeof(Unit.AttackType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
-        _p1UnitTypeSynergyList = new int[Enum.GetValues(typeof(Unit.UnitType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
-        _p2UnitTypeSynergyList = new int[Enum.GetValues(typeof(Unit.UnitType)).Length]; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p1AttackTypeSynergyList = new int[AttackType]; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p2AttackTypeSynergyList = new int[AttackType]; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p1UnitTypeSynergyList = new int[UnitType]; // 타입의 개수를 가져와 배열의 길이로 지정
+        _p2UnitTypeSynergyList = new int[UnitType]; // 타입의 개수를 가져와 배열의 길이로 지정
 
         _p1UnitList = SoonsoonData.Instance.Unit_Manager._p1UnitList;
         _p2UnitList = SoonsoonData.Instance.Unit_Manager._p2UnitList;

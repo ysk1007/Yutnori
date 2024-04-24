@@ -48,22 +48,22 @@ public class HUD : MonoBehaviour
                 switch (_Synergytype)
                 {
                     case SynergyType.Warrior:
-                        _thisText.text = SM._p1AttackTypeSynergyList[0].ToString();
+                        _thisText.text = (SM._p1AttackTypeSynergyList[0] + SM._AttackTypeAddArtifact[0]).ToString();
                         break;
                     case SynergyType.Archer:
-                        _thisText.text = SM._p1AttackTypeSynergyList[1].ToString();
+                        _thisText.text = (SM._p1AttackTypeSynergyList[1] + SM._AttackTypeAddArtifact[1]).ToString();
                         break;
                     case SynergyType.Wizard:
-                        _thisText.text = SM._p1AttackTypeSynergyList[2].ToString();
+                        _thisText.text = (SM._p1AttackTypeSynergyList[2] + SM._AttackTypeAddArtifact[2]).ToString();
                         break;
                     case SynergyType.Assassin:
-                        _thisText.text = SM._p1AttackTypeSynergyList[3].ToString();
+                        _thisText.text = (SM._p1AttackTypeSynergyList[3] + SM._AttackTypeAddArtifact[3]).ToString();
                         break;
                     case SynergyType.Healer:
-                        _thisText.text = SM._p1AttackTypeSynergyList[4].ToString();
+                        _thisText.text = (SM._p1AttackTypeSynergyList[4] + SM._AttackTypeAddArtifact[4]).ToString();
                         break;
                     case SynergyType.Merchant:
-                        _thisText.text = SM._p1AttackTypeSynergyList[5].ToString();
+                        _thisText.text = (SM._p1AttackTypeSynergyList[5] + SM._AttackTypeAddArtifact[5]).ToString();
                         break;
                     case SynergyType.Human:
                         _thisText.text = SM._p1UnitTypeSynergyList[0].ToString();

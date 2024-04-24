@@ -42,9 +42,12 @@ public class SoonsoonData
     public SynergyManager Synergy_Manager;
     public InventoryManager Inventory_Manager;
     public DamageMeasure Damage_Measure;
+    public ArtifactManager Artifact_Manager;
     public UnitPool Unit_pool;
     public UnitShop UnitShop;
+    public ItemShop ItemShop;
     public UnitInventory UnitInventory;
+    public ArtifactPopup ArtifactPopup;
 
     public SPUM_Manager _spumManager;
     public bool _gifAlphaTrigger; // for using gif trigger at Soonsoon Exporter.

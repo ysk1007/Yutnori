@@ -111,7 +111,7 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[2])
+                if (sm._p1AttackTypeSynergyList[0] + sm._AttackTypeAddArtifact[0] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("워리어 시너지 3 레벨");
                     Level = 3;
@@ -119,7 +119,7 @@ public class UnitSynergy : MonoBehaviour
                     BuffDF = synergyData.Defense[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[1])
+                else if (sm._p1AttackTypeSynergyList[0] + sm._AttackTypeAddArtifact[0] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("워리어 시너지 2 레벨");
                     Level = 2;
@@ -127,7 +127,7 @@ public class UnitSynergy : MonoBehaviour
                     BuffDF = synergyData.Defense[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p1AttackTypeSynergyList[0] >= synergyData.RequiredNumber[0])
+                else if (sm._p1AttackTypeSynergyList[0] + sm._AttackTypeAddArtifact[0] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("워리어 시너지 1 레벨");
                     Level = 1;
@@ -221,21 +221,21 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1AttackTypeSynergyList[1] >= synergyData.RequiredNumber[2])
+                if (sm._p1AttackTypeSynergyList[1] + sm._AttackTypeAddArtifact[1] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("아처 시너지 3 레벨");
                     Level = 2;
                     Buff = synergyData.Speed[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p1AttackTypeSynergyList[1] >= synergyData.RequiredNumber[1])
+                else if (sm._p1AttackTypeSynergyList[1] + sm._AttackTypeAddArtifact[1] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("아처 시너지 2 레벨");
                     Level = 1;
                     Buff = synergyData.Speed[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p1AttackTypeSynergyList[1] >= synergyData.RequiredNumber[0])
+                else if (sm._p1AttackTypeSynergyList[1] + sm._AttackTypeAddArtifact[1] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("아처 시너지 1 레벨");
                     Level = 0;
@@ -309,19 +309,19 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1AttackTypeSynergyList[2] >= synergyData.RequiredNumber[2])
+                if (sm._p1AttackTypeSynergyList[2] + sm._AttackTypeAddArtifact[2] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("마법사 시너지 3 레벨");
                     Level = 2;
                     Buff = synergyData.CoolTime[2];
                 }
-                else if (sm._p1AttackTypeSynergyList[2] >= synergyData.RequiredNumber[1])
+                else if (sm._p1AttackTypeSynergyList[2] + sm._AttackTypeAddArtifact[2] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("마법사 시너지 2 레벨");
                     Level = 1;
                     Buff = synergyData.CoolTime[1];
                 }
-                else if (sm._p1AttackTypeSynergyList[2] >= synergyData.RequiredNumber[0])
+                else if (sm._p1AttackTypeSynergyList[2] + sm._AttackTypeAddArtifact[2] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("마법사 시너지 1 레벨");
                     Level = 0;
@@ -396,7 +396,7 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1AttackTypeSynergyList[3] >= synergyData.RequiredNumber[2])
+                if (sm._p1AttackTypeSynergyList[3] + sm._AttackTypeAddArtifact[3] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("암살자 시너지 3 레벨");
                     Level = 2;
@@ -404,7 +404,7 @@ public class UnitSynergy : MonoBehaviour
                     BuffCC = synergyData.Critical[2];
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p1AttackTypeSynergyList[3] >= synergyData.RequiredNumber[1])
+                else if (sm._p1AttackTypeSynergyList[3] + sm._AttackTypeAddArtifact[3] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("암살자 시너지 2 레벨");
                     Level = 1;
@@ -412,7 +412,7 @@ public class UnitSynergy : MonoBehaviour
                     BuffCC = synergyData.Critical[1];
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p1AttackTypeSynergyList[3] >= synergyData.RequiredNumber[0])
+                else if (sm._p1AttackTypeSynergyList[3] + sm._AttackTypeAddArtifact[3] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("암살자 시너지 1 레벨");
                     Level = 0;
@@ -491,19 +491,19 @@ public class UnitSynergy : MonoBehaviour
         switch (this.gameObject.tag)
         {
             case "P1":
-                if (sm._p1AttackTypeSynergyList[4] >= synergyData.RequiredNumber[2])
+                if (sm._p1AttackTypeSynergyList[4] + sm._AttackTypeAddArtifact[4] >= synergyData.RequiredNumber[2])
                 {
                     Debug.Log("힐러 시너지 3 레벨");
                     Level = 2;
                     interval = synergyData.Interval[2];
                 }
-                else if (sm._p1AttackTypeSynergyList[4] >= synergyData.RequiredNumber[1])
+                else if (sm._p1AttackTypeSynergyList[4] + sm._AttackTypeAddArtifact[4] >= synergyData.RequiredNumber[1])
                 {
                     Debug.Log("힐러 시너지 2 레벨");
                     Level = 1;
                     interval = synergyData.Interval[1];
                 }
-                else if (sm._p1AttackTypeSynergyList[4] >= synergyData.RequiredNumber[0])
+                else if (sm._p1AttackTypeSynergyList[4] + sm._AttackTypeAddArtifact[4] >= synergyData.RequiredNumber[0])
                 {
                     Debug.Log("힐러 시너지 1 레벨");
                     Level = 0;
