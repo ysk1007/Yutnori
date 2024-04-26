@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+    public int MaxPopulation;
+
     [SerializeField] private GameObject _cursor;
 
     [SerializeField] private GameObject _invenSlotHoloder;
@@ -15,7 +14,6 @@ public class InventoryManager : MonoBehaviour
 
     [SerializeField] public SlotClass[] _userSquad;
     [SerializeField] public SlotClass[] _userInventory;
-    //[SerializeField] public SlotClass[] _totalUnits;
 
     public GameObject[] _Slots;
 
@@ -35,7 +33,6 @@ public class InventoryManager : MonoBehaviour
         SoonsoonData.Instance.Inventory_Manager = this;
         _userSquad = new SlotClass[9];
         _userInventory = new SlotClass[12];
-        //_totalUnits = new SlotClass[_userSquad.Length + _userInventory.Length];
     }
 
     // Start is called before the first frame update
@@ -142,20 +139,39 @@ public class InventoryManager : MonoBehaviour
                 }
 
                 _movingSlot.Clear();
-                RefreshUi(); 
+                RefreshUi();
                 _isMoving = false;
                 return true;
             }
             else // 슬롯에 유닛이 없음
             {
-                _originalSlot = new SlotClass(_movingSlot); // 선택한 슬롯에 배치
-                _movingSlot.Clear(); // 배치 슬롯은 초기화
-                if (_curindex < _userSquad.Length)
+                if (_curindex < _userSquad.Length) // 선택한 슬롯이 스쿼드
                 {
-                    SquadAdd(_originalSlot, _curindex); // 스쿼드에 추가
+                    if (_unitManager.UserPopulation >= MaxPopulation) // 최대 인구가 부족함
+                    {
+                        if (_lastindex < _userSquad.Length) // 마지막 슬롯이 스쿼드
+                        {
+                            _originalSlot = new SlotClass(_movingSlot); // 선택한 슬롯에 배치
+                            _movingSlot.Clear(); // 배치 슬롯은 초기화
+                            SquadAdd(_originalSlot, _curindex); // 스쿼드에 추가
+                        }
+                        else //마지막 슬롯이 인벤토리
+                        {
+                            InventoryAdd(_movingSlot, _lastindex - _userSquad.Length);
+                            SoonsoonData.Instance.LogPopup.ShowLog("더 이상 유닛을 배치할 수 없습니다.");
+                        }
+                    }
+                    else
+                    {
+                        _originalSlot = new SlotClass(_movingSlot); // 선택한 슬롯에 배치
+                        _movingSlot.Clear(); // 배치 슬롯은 초기화
+                        SquadAdd(_originalSlot, _curindex); // 스쿼드에 추가
+                    }
                 }
-                else
+                else // 선택한 슬롯이 인벤토리
                 {
+                    _originalSlot = new SlotClass(_movingSlot); // 선택한 슬롯에 배치
+                    _movingSlot.Clear(); // 배치 슬롯은 초기화
                     InventoryAdd(_originalSlot, _curindex - _userSquad.Length); // 인벤토리에 추가
                 }
             }
@@ -212,17 +228,32 @@ public class InventoryManager : MonoBehaviour
         SoonsoonData.Instance.Unit_Manager.UnitRelocation();
     }
 
-    public void InventoryAdd(SlotClass slot)
+    public bool InventoryAdd(SlotClass slot)
     {
+        bool _sucess = false;
+
         for (int i = 0; i < _userInventory.Length; i++)
         {
             if (_userInventory[i]?._unitData == null) // unit id 가 없음
             {
                 _userInventory[i] = slot;
+                _sucess = true;
                 break;
             }
         }
+
+        if (!_sucess) // 인벤토리가 가득 찼음
+        {
+            _sucess = SquadAdd(slot);
+            if (!_sucess) // 스쿼드도 빈칸이 없다면
+            {
+                SoonsoonData.Instance.LogPopup.ShowLog("당신의 부대가 정원초과 상태 입니다.");
+                return _sucess;
+            }
+        }
+
         RefreshUi();
+        return _sucess;
     }
 
     public void InventoryAdd(SlotClass slot, int index)
@@ -237,17 +268,27 @@ public class InventoryManager : MonoBehaviour
         RefreshUi();
     }
 
-    public void SquadAdd(SlotClass slot)
+    public bool SquadAdd(SlotClass slot)
     {
-        for (int i = 0; i < _userSquad.Length; i++)
+
+        bool _sucess = false;
+        if (_unitManager.UserPopulation >= MaxPopulation) return _sucess;
+
+            for (int i = 0; i < _userSquad.Length; i++)
         {
             if (_userSquad[i]?._unitData == null) // unit 데이터가 없음
             {
                 _userSquad[i] = slot;
+                _sucess = true;
                 break;
             }
         }
+
+        if (!_sucess) // 스쿼드가 가득 찼음
+            return _sucess;
+
         RefreshUi();
+        return _sucess;
     }
 
     public void SquadAdd(SlotClass slot, int index)

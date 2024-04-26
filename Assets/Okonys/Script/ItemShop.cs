@@ -56,6 +56,8 @@ public class ItemShop : MonoBehaviour
     [SerializeField]
     private float[] _itemProbability; // 아이템 등급 등장 확률
 
+    UserInfoManager _userInfo;
+
     private void Awake()
     {
         SoonsoonData.Instance.ItemShop = this;
@@ -75,6 +77,7 @@ public class ItemShop : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _userInfo = UserInfoManager.Instance;
         newItem();
     }
 
@@ -212,7 +215,13 @@ public class ItemShop : MonoBehaviour
     public void BuyItem()
     {
         if (_selectItemIndex < 0) return;
+        if (_userInfo.userData.UserGold < _itemProducts[_selectItemIndex]._itemData._itemPrice)
+        {
+            SoonsoonData.Instance.LogPopup.ShowLog("골드가 부족 합니다.");
+            return;
+        }
 
+        _userInfo.userData.UserGold -= _itemProducts[_selectItemIndex]._itemData._itemPrice;
         SoonsoonData.Instance.Artifact_Manager.SetArtifact(_itemProducts[_selectItemIndex]._itemData);
         _itemProducts[_selectItemIndex]._itemData = null;
 

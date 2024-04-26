@@ -10,11 +10,14 @@ public class UserData //유저 데이터 클래스
 {
     public string UserName; //닉네임
     public string UserId; //고유 아이디
+    public int UserHp; // 체력
     public int UserGold; // 골드 재화
 
     // X : UnitID , Y : UnitRate
     public Vector2[] UserSquad; // 유저 유닛
     public Vector2[] UserInventory; // 유저 인벤토리
+
+    public List<int> UserArtifacts; // 유저 아티팩트
 
     public int TurnCounter; // 턴 카운트
 }
@@ -47,8 +50,10 @@ public class UserInfoManager : MonoBehaviour
 
     public void DataCreate() //데이터 생성
     {
+        userData.UserHp = 100;
         userData.UserSquad = new Vector2[9];
-        userData.UserInventory = new Vector2[9];
+        userData.UserInventory = new Vector2[12];
+        userData.UserArtifacts = new List<int>();
         ES3.Save(keyName, userData);
     }
 

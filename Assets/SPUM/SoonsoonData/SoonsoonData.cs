@@ -46,6 +46,7 @@ public class SoonsoonData
     public UnitPool Unit_pool;
     public UnitShop UnitShop;
     public ItemShop ItemShop;
+    public LogPopup LogPopup;
     public UnitInventory UnitInventory;
     public ArtifactPopup ArtifactPopup;
 

@@ -13,6 +13,7 @@ public class UnitShop : MonoBehaviour
     public int _selectInventoryIndex = -1;
     public bool _isOpenShop = false;
     public int upgradeLv;
+    public int _rerollPrice = 1;
     public float[] oneTier;
     public float[] twoTier;
     public float[] threeTier;
@@ -34,6 +35,8 @@ public class UnitShop : MonoBehaviour
 
     UnitPool _unitPool;
     InventoryManager _inventoryManager;
+    UserInfoManager _userInfo;
+
     private void Awake()
     {
         SoonsoonData.Instance.UnitShop = this;
@@ -66,6 +69,7 @@ public class UnitShop : MonoBehaviour
 
     private void Start()
     {
+        _userInfo = UserInfoManager.Instance;
         _unitPool = SoonsoonData.Instance.Unit_pool;
         _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
         newProduct();
@@ -126,24 +130,37 @@ public class UnitShop : MonoBehaviour
     public void BuyProduct()
     {
         if (_selectProductIndex < 0) return;
+        if (_userInfo.userData.UserGold < _unitProducts[_selectProductIndex]._productPrice)
+        {
+            SoonsoonData.Instance.LogPopup.ShowLog("골드가 부족 합니다.");
+            return;
+        }
+
         SlotClass product = new SlotClass(_unitProducts[_selectProductIndex]._unitData, _unitProducts[_selectProductIndex]._rateType.GetHashCode());
-        _inventoryManager.InventoryAdd(product);
+
+        if (!_inventoryManager.InventoryAdd(product)) return;
+
+        _userInfo.userData.UserGold -= _unitProducts[_selectProductIndex]._productPrice;
         _unitProducts[_selectProductIndex]._isSell = true;
         _unitProducts[_selectProductIndex].transform.localScale = Vector3.zero;
         _selectProductIndex = -1;
+
+        CheckProduct();
     }
 
-    public void SellProduct()
+    public void SellProduct(UnitCard unitCard)
     {
         if (_selectInventoryIndex < 0) return;
         if (!_isOpenShop) return;
 
         if (_selectInventoryIndex < _inventoryManager._userSquad.Length)
         {
+            _userInfo.userData.UserGold += unitCard._productPrice;
             _inventoryManager.SquadRemove(_selectInventoryIndex);
         }
         else
         {
+            _userInfo.userData.UserGold += unitCard._productPrice;
             _inventoryManager.InventoryRemove(_selectInventoryIndex - _inventoryManager._userSquad.Length);
         }
 
@@ -160,7 +177,23 @@ public class UnitShop : MonoBehaviour
     }
     public void Reroll()
     {
+        if (_userInfo.userData.UserGold < _rerollPrice)
+        {
+            SoonsoonData.Instance.LogPopup.ShowLog("골드가 부족 합니다.");
+            return;
+        }
+        _userInfo.userData.UserGold -= _rerollPrice;
         newProduct();
+    }
+
+    public void CheckProduct() // 제품이 모두 품절인지 체크하는 메소드
+    {
+        for (int i = 0; i < _unitProducts.Length; i++)
+        {
+            if (_unitProducts[i]._isSell == false) return;
+        }
+
+        newProduct(); // 모두 품절이면 재입고
     }
 
     public void UpdateProbability()     // 확률 텍스트 업데이트

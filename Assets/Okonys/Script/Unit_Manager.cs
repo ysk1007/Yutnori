@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Unit_Manager : MonoBehaviour
 {
+    public int UserPopulation;
     public bool _gamePause = true;
 
     public float _findTimer;
@@ -44,7 +45,7 @@ public class Unit_Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        UserPopulation = _p1UnitList.Count;
     }
 
     //유닛 정보 연결
