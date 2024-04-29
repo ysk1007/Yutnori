@@ -15,10 +15,13 @@ public class Gambling : MonoBehaviour
     int _ballIndex = 0;
     public bool _doPlay = false;
 
+    UserInfoManager _infoManager;
+    private int _gambleMoney;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _infoManager = UserInfoManager.Instance;
     }
 
     // Update is called once per frame
@@ -27,11 +30,18 @@ public class Gambling : MonoBehaviour
         
     }
 
-    public void Mix()
+    public void Mix(int gambleMoney)
     {
         if (_doPlay) return;
+        if (_infoManager.userData.UserGold < gambleMoney)
+        {
+            SoonsoonData.Instance.LogPopup.ShowLog("°ñµå°¡ ºÎÁ· ÇÕ´Ï´Ù.");
+            return;
+        }
 
         _doPlay = true;
+        _infoManager.userData.UserGold -= gambleMoney;
+        _gambleMoney = gambleMoney;
         _startButton.SetActive(false);
         _animator.SetTrigger("Start");
         _ballIndex = Random.Range(0, 3);
@@ -41,9 +51,11 @@ public class Gambling : MonoBehaviour
     {
         if (!_doPlay) return;
 
-        if (_ballIndex == index) Debug.Log("½Â¸®");
-        else Debug.Log("ÆÐ¹è");
+        _infoManager.userData.UserGold += (_ballIndex == index) ? _gambleMoney * 3 : 0;
+        if (_ballIndex == index) SoonsoonData.Instance.LogPopup.ShowLog("½Â¸®!");
+        else SoonsoonData.Instance.LogPopup.ShowLog("ÆÐ¹è");
 
+        _gambleMoney = 0;
         _doPlay = false;
         ButtonSetting();
         _animator.SetTrigger("End");

@@ -35,6 +35,12 @@ public class UnitPopup : MonoBehaviour
     public TextMeshProUGUI _AS_text;
     public TextMeshProUGUI _CC_text;
     public TextMeshProUGUI _AR_text;
+
+    [SerializeField] private float posX;
+    [SerializeField] private float posY;
+
+    float screenWidth = Screen.width;
+
     // Start is called before the first frame update
     void Start()
     {
