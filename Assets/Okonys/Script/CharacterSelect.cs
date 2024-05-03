@@ -1,9 +1,18 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CharacterSelect : MonoBehaviour
 {
+    [SerializeField] private Transform _basicCharacters;
+    [SerializeField] private List<GameObject> _characters;
+
+    [SerializeField] private TextMeshProUGUI _characterName;
+
     [SerializeField] private Color[] _checkColors;
     [SerializeField] private Image[] _checkType;
     [SerializeField] private Image[] _checkSynergy;
@@ -21,10 +30,23 @@ public class CharacterSelect : MonoBehaviour
     int _slectType = 0;
     int _slectSynergy = 0;
 
+    Vector3 _selectSize = new Vector3(3f, 3f, 3f);
+
+    private void Awake()
+    {
+        int childCount = _basicCharacters.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            _characters.Add(_basicCharacters.GetChild(i).gameObject);
+            _basicCharacters.GetChild(i).localScale = Vector3.zero;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-
+        CheckTypeUpdate(0);
+        CheckSynergyUpdate(0);
     }
 
     // Update is called once per frame
@@ -62,37 +84,44 @@ public class CharacterSelect : MonoBehaviour
         for (int i = 0; i < _checkSynergy.Length; i++)
         {
             _checkSynergy[i].color = (i == _slectSynergy) ? _checkColors[1] : _checkColors[0];
+            _characters[i].transform.localScale = ((i == _slectSynergy) ? _selectSize : Vector3.zero);
         }
 
         switch (_slectSynergy)
         {
             case 0:
                 _synergyText.text = "전사";
+                _characterName.text = "나무꾼";
                 _synergyText.color = _synergyColor[0];
                 _synergyDescText.text = "아군의 체력을 상승 시키고, 아군을 보호 합니다.";
                 break;
             case 1:
                 _synergyText.text = "궁수";
+                _characterName.text = "사냥꾼";
                 _synergyText.color = _synergyColor[1];
                 _synergyDescText.text = "멀리서 적을 공격하며, 일정 시간마다 공격속도가 상승 합니다.";
                 break;
             case 2:
                 _synergyText.text = "도사";
+                _characterName.text = "선비";
                 _synergyText.color = _synergyColor[2];
                 _synergyDescText.text = "강력한 마법을 사용하며, 스킬 쿨타임이 감소 합니다.";
                 break;
             case 3:
                 _synergyText.text = "암살자";
+                _characterName.text = "좀도둑";
                 _synergyText.color = _synergyColor[3];
                 _synergyDescText.text = "적 진영 후방으로 침투하여 공격 합니다. 치명타 확률이 높습니다.";
                 break;
             case 4:
                 _synergyText.text = "지원가";
+                _characterName.text = "주모";
                 _synergyText.color = _synergyColor[4];
                 _synergyDescText.text = "전투에 도움이 되는 버프들을 사용 합니다.";
                 break;
             case 5:
                 _synergyText.text = "상인";
+                _characterName.text = "거지";
                 _synergyText.color = _synergyColor[5];
                 _synergyDescText.text = "골드를 더 많이 획득 할 수 있습니다.";
                 break;
