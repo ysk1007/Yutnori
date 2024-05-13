@@ -7,6 +7,11 @@ using UnityEngine.UI;
 
 public class OptionPopup : MonoBehaviour
 {
+
+    public static OptionPopup Instance;
+
+    [SerializeField] private bool _changed = false;
+
     [SerializeField] private Transform _topButton;
     [SerializeField] private Transform _panel;
 
@@ -14,12 +19,26 @@ public class OptionPopup : MonoBehaviour
     [SerializeField] private List<Image> _buttonImages;
     [SerializeField] private List<RectTransform> _panels;
 
+    [SerializeField] private Popup _savePopup;
+
     [SerializeField] private Color[] _colors;
 
     [SerializeField] private int _selectedIndex;
 
     private void Awake()
     {
+
+        if (Instance != this && Instance != null)
+        {
+            // 다른 Instance가 존재하면 현재 gameObject를 파괴한다.
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
 
         for (int i = 0; i < _topButton.childCount; i++)
         {
@@ -52,7 +71,11 @@ public class OptionPopup : MonoBehaviour
 
     public void OptionZero()
     {
-        this.transform.localScale = Vector3.zero;
+        if (_changed)
+        {
+            _savePopup.OnePopup();
+        }
+        else this.transform.localScale = Vector3.zero;
     }
 
     public void SelectPanel(int index)
@@ -68,5 +91,15 @@ public class OptionPopup : MonoBehaviour
         {
             _panels[i].localScale = (i == _selectedIndex) ? Vector3.one : Vector3.zero;
         }
+    }
+
+    public void OptionChanged()
+    {
+        _changed = true;
+    }
+
+    public void OptionSaved()
+    {
+        _changed = false;
     }
 }

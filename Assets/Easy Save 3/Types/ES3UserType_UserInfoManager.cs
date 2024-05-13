@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("Instance", "DataExist", "userData")]
+	[ES3PropertiesAttribute("Instance", "DataExist", "data")]
 	public class ES3UserType_UserInfoManager : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -18,7 +18,7 @@ namespace ES3Types
 			
 			writer.WritePropertyByRef("Instance", UserInfoManager.Instance);
 			writer.WriteProperty("DataExist", instance.DataExist, ES3Type_bool.Instance);
-			writer.WriteProperty("userData", instance.userData, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(UserData)));
+			writer.WriteProperty("data", instance.data, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(Data)));
 		}
 
 		protected override void ReadComponent<T>(ES3Reader reader, object obj)
@@ -30,13 +30,13 @@ namespace ES3Types
 				{
 					
 					case "Instance":
-						UserInfoManager.Instance = reader.Read<UserInfoManager>();
+						UserInfoManager.Instance = reader.Read<UserInfoManager>(ES3UserType_UserInfoManager.Instance);
 						break;
 					case "DataExist":
 						instance.DataExist = reader.Read<System.Boolean>(ES3Type_bool.Instance);
 						break;
-					case "userData":
-						instance.userData = reader.Read<UserData>();
+					case "data":
+						instance.data = reader.Read<Data>();
 						break;
 					default:
 						reader.Skip();

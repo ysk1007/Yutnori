@@ -25,6 +25,7 @@ public class InventoryManager : MonoBehaviour
     public int _curindex;
     public int _lastindex;
 
+    UserInfoManager _userInfoManager;
     UnitPool _unitPool;
     Unit_Manager _unitManager;
 
@@ -38,6 +39,7 @@ public class InventoryManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _userInfoManager = UserInfoManager.Instance;
         _unitPool = SoonsoonData.Instance.Unit_pool;
         _unitManager = SoonsoonData.Instance.Unit_Manager;
 
@@ -301,5 +303,36 @@ public class InventoryManager : MonoBehaviour
     {
         _userSquad[index] = null;
         RefreshUi();
+    }
+
+    public void UserUnitsSave()
+    {
+        for (int i = 0; i < _userSquad.Length; i++)
+        {
+            if (_userSquad[i]?._unitData == null)
+            {
+                _userInfoManager.userData.UserSquad[i] = Vector2.zero;
+                continue;
+            }
+
+            int UnitNumber = _userSquad[i].GetUnitData().UnitID;
+            int UnitRate = _userSquad[i].GetUnitRate();
+
+            _userInfoManager.userData.UserSquad[i] = new Vector2(UnitNumber, UnitRate);
+        }
+
+        for (int i = 0; i < _userInventory.Length; i++)
+        {
+            if (_userInventory[i]?._unitData == null)
+            {
+                _userInfoManager.userData.UserInventory[i] = Vector2.zero;
+                continue;
+            }
+
+            int UnitNumber = _userInventory[i].GetUnitData().UnitID;
+            int UnitRate = _userInventory[i].GetUnitRate();
+
+            _userInfoManager.userData.UserInventory[i] = new Vector2(UnitNumber, UnitRate);
+        }
     }
 }
