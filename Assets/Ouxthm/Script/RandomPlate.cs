@@ -25,7 +25,7 @@ public class RandomPlate : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, randPlate.Length);
                 GameObject randomPrefab = (GameObject)randPlate[randomIndex];
-                GameObject instance = Instantiate(randomPrefab, Vector3.zero, Quaternion.Euler(30,0,0), plate[i].transform);
+                GameObject instance = Instantiate(randomPrefab, Vector3.zero, Quaternion.Euler(45,0,0), plate[i].transform);
 
                 instance.transform.SetParent(plate[i].transform, false);
 

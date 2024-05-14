@@ -14,7 +14,6 @@ public class PlayerMove : MonoBehaviour
     public int moveSpeed = 10;
     private void Awake()
     {
-        player = transform.GetChild(4).GetComponent<RectTransform>();
         nowPlateNum = 0;
         for(int i = 0; i < plate.Length; i++)
         {
