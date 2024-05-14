@@ -48,7 +48,10 @@ public class UserData //유저 데이터 클래스
     // X : UnitID , Y : UnitRate
     public Vector2[] UserSquad; // 유저 유닛
     public Vector2[] UserInventory; // 유저 인벤토리
+    public Vector2[] EnemySquad; // 적 팀 유닛
 
+    public int[] ShopArtifacts;
+    public int[] ShopUnits;
     public List<int> UserArtifacts; // 유저 아티팩트
 
     public int TurnCounter; // 턴 카운트
@@ -102,6 +105,7 @@ public class UserInfoManager : MonoBehaviour
     public OptionData optionData;
 
 
+
     private void Awake()
     {
         if (Instance != this && Instance != null)
@@ -118,12 +122,20 @@ public class UserInfoManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+
+    }
+
     public void DataCreate() //데이터 생성
     {
         UserData userData = new UserData();
         userData.UserHp = 100;
         userData.UserSquad = new Vector2[9];
         userData.UserInventory = new Vector2[12];
+        userData.EnemySquad = new Vector2[9];
+        userData.ShopArtifacts = new int[6];
+        userData.ShopUnits = new int[5];
         userData.UserArtifacts = new List<int>();
 
         OptionData optionData = new OptionData();

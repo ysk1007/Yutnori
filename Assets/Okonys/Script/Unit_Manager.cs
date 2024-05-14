@@ -27,6 +27,8 @@ public class Unit_Manager : MonoBehaviour
     public List<SlotClass> _p2unitID = new List<SlotClass>();
     public List<SlotClass> _userInvenUnit = new List<SlotClass>();
 
+    UserInfoManager _userInfoManager;
+    UnitPool Unit_pool;
     InventoryManager im;
 
     void Awake()
@@ -39,7 +41,10 @@ public class Unit_Manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        _userInfoManager = UserInfoManager.Instance;
+        Unit_pool = SoonsoonData.Instance.Unit_pool;
         im = SoonsoonData.Instance.Inventory_Manager;
+        UserUnitDataLoad();
     }
 
     // Update is called once per frame
@@ -319,6 +324,45 @@ public class Unit_Manager : MonoBehaviour
         for (int i = 0; i < _p1unitID.Count; i++)
         {
             _p1unitID[i] = im._userSquad[i];
+        }
+    }
+
+    void UserUnitDataLoad()
+    {
+        // 플레이어 유닛 로드
+        for (int i = 0; i < _p1unitID.Count; i++)
+        {
+            if (_userInfoManager.userData.UserSquad[i].x == 0)
+            {
+                _p1unitID[i].Clear();
+                continue;
+            }
+
+            _p1unitID[i] = new SlotClass(Unit_pool._unitDatas[(int)_userInfoManager.userData.UserSquad[i].x - 1], (int)_userInfoManager.userData.UserSquad[i].y);
+        }
+
+        // 플레이어 인벤토리 유닛 로드
+        for (int i = 0; i < _userInvenUnit.Count; i++)
+        {
+            if (_userInfoManager.userData.UserInventory[i].x == 0)
+            {
+                _userInvenUnit[i].Clear();
+                continue;
+            }
+
+            _userInvenUnit[i] = new SlotClass(Unit_pool._unitDatas[(int)_userInfoManager.userData.UserInventory[i].x - 1], (int)_userInfoManager.userData.UserInventory[i].y);
+        }
+
+        // 적 유닛 로드
+        for (int i = 0; i < _p2unitID.Count; i++)
+        {
+            if (_userInfoManager.userData.EnemySquad[i].x == 0)
+            {
+                _p2unitID[i].Clear();
+                continue;
+            }
+
+            _p2unitID[i] = new SlotClass(Unit_pool._unitDatas[(int)_userInfoManager.userData.EnemySquad[i].x - 1], (int)_userInfoManager.userData.EnemySquad[i].y);
         }
     }
 }

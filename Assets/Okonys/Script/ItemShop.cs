@@ -78,7 +78,6 @@ public class ItemShop : MonoBehaviour
     void Start()
     {
         _userInfo = UserInfoManager.Instance;
-        newItem();
     }
 
     // Update is called once per frame
@@ -87,9 +86,30 @@ public class ItemShop : MonoBehaviour
         
     }
 
-    public void newItem()
+    public void ShopArtifactsLoad()
     {
         for (int i = 0; i < _itemProducts.Count; i++)
+        {
+            if (_userInfo.userData.ShopArtifacts[i] == 0)
+            {
+                _itemProducts[i].transform.localScale = Vector3.zero;
+                _itemProducts[i]._itemData = null;
+                _itemProducts[i].init();
+                continue;
+            }
+
+            int itemNum = _userInfo.userData.ShopArtifacts[i] - 1;
+
+            _itemProducts[i]._itemData = _itemStock[itemNum].GetItemData();
+            _itemProducts[i].init();
+            // 해당 아이템의 재고 여부를 false로 설정하여 더 이상 등장하지 않도록 합니다.
+            _itemStock[itemNum].SetHaveStock(false);
+        }
+    }
+
+    public void newItem()
+    {
+        for (int i = 0; i < _itemProducts.Count; i++) // 재고 정리
         {
             if (!_itemProducts[i]._itemData) continue;
 
@@ -122,6 +142,7 @@ public class ItemShop : MonoBehaviour
             if (!hasStock)
             {
                 Debug.Log("All items are out of stock. Stopping newItem() function.");
+                _itemProducts[i].transform.localScale = Vector3.zero;
                 _itemProducts[i]._itemData = null;
                 _itemProducts[i].init();
                 continue;
@@ -164,6 +185,7 @@ public class ItemShop : MonoBehaviour
                 _itemProducts[i].init();
                 // 해당 아이템의 재고 여부를 false로 설정하여 더 이상 등장하지 않도록 합니다.
                 selectedStock.SetHaveStock(false);
+                _userInfo.userData.ShopArtifacts[i] = _itemProducts[i]._itemData.ItemID - 1;
             }
             else
             {
@@ -172,6 +194,7 @@ public class ItemShop : MonoBehaviour
                 continue;
             }
         }
+        _userInfo.UserDataSave();
     }
 
     // 주어진 리스트에서 재고가 있는 아이템 중에서 랜덤하게 선택하는 메서드
@@ -223,10 +246,13 @@ public class ItemShop : MonoBehaviour
 
         _userInfo.userData.UserGold -= _itemProducts[_selectItemIndex]._itemData._itemPrice;
         SoonsoonData.Instance.Artifact_Manager.SetArtifact(_itemProducts[_selectItemIndex]._itemData);
+        _userInfo.userData.UserArtifacts.Add(_itemProducts[_selectItemIndex]._itemData.ItemID);
+        _userInfo.userData.ShopArtifacts[_selectItemIndex] = 0;
         _itemProducts[_selectItemIndex]._itemData = null;
 
         _itemProducts[_selectItemIndex]._isSell = true;
         _itemProducts[_selectItemIndex].transform.localScale = Vector3.zero;
         _selectItemIndex = -1;
+        _userInfo.UserDataSave();
     }
 }

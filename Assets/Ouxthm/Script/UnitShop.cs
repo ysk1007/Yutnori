@@ -30,8 +30,12 @@ public class UnitShop : MonoBehaviour
     public Sprite[] _rateSprites;
 
     public Transform _untiProductArray;
+
+    public HorizontalLayoutGroup _layoutGroup;
+
     UnitProduct[] _unitProducts;
     Vector3 _productSize = new Vector3(0.7f, 0.7f, 1f);
+    Vector3 _sellSize = new Vector3(0.7f, 0f, 1f);
 
     UnitPool _unitPool;
     InventoryManager _inventoryManager;
@@ -72,12 +76,33 @@ public class UnitShop : MonoBehaviour
         _userInfo = UserInfoManager.Instance;
         _unitPool = SoonsoonData.Instance.Unit_pool;
         _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
-        newProduct();
+        ShopProductsLoad();
     }
 
     private void Update()
     {
 
+    }
+
+    public void ShopProductsLoad()
+    {
+        for (int i = 0; i < _unitProducts.Length; i++)
+        {
+            if (_userInfo.userData.ShopUnits[i] == 0)
+            {
+                _unitProducts[i].transform.localScale = _sellSize;
+                _unitProducts[i]._unitData = null;
+                _unitProducts[i]._isSell = true;
+                continue;
+            }
+
+            int unitNum = _userInfo.userData.ShopUnits[i] - 1;
+
+            _unitProducts[i]._unitData = _unitPool._unitDatas[unitNum];
+            _unitProducts[i].init();
+            _unitProducts[i].transform.localScale = _productSize;
+        }
+        CheckProduct();
     }
 
     public void newProduct()
@@ -124,7 +149,9 @@ public class UnitShop : MonoBehaviour
                     break;
             }
             _unitProducts[i].transform.localScale = _productSize;
+            _userInfo.userData.ShopUnits[i] = _unitProducts[i]._unitData.UnitID;
         }
+        _userInfo.UserDataSave();
     }
 
     public void BuyProduct()
@@ -141,11 +168,13 @@ public class UnitShop : MonoBehaviour
         if (!_inventoryManager.InventoryAdd(product)) return;
 
         _userInfo.userData.UserGold -= _unitProducts[_selectProductIndex]._productPrice;
+        _userInfo.userData.ShopUnits[_selectProductIndex] = 0;
         _unitProducts[_selectProductIndex]._isSell = true;
-        _unitProducts[_selectProductIndex].transform.localScale = Vector3.zero;
+        _unitProducts[_selectProductIndex].transform.localScale = _sellSize;
         _selectProductIndex = -1;
 
         CheckProduct();
+        _userInfo.UserDataSave();
     }
 
     public void SellProduct(UnitCard unitCard)
