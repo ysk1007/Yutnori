@@ -2,21 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
     List<List<int>> road = new List<List<int>> {
         new List<int>{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19},
         new List<int>{ 5, 20, 21, 22, 23, 24, 15, 16, 17, 18, 19},
-        new List<int>{ 10, 25, 26, 22, 28, 29},
-        new List<int>{ 22, 28, 29}
+        new List<int>{ 10, 25, 26, 22, 27, 28},
+        new List<int>{ 22, 27, 28}
     };
 
     YutManager yutManager;
+    CanvasManager canvasManager;
     public RectTransform player;
+    public bool _isMove = false;
+    public SPUM_Prefabs _playerPref;
 
     public Transform plates;
-    public List<RectTransform> plate;
+    public List<RectTransform> platePos;
+    public List<Plate> plate;
+
+    public Button _yutThrowBtn;
 
     public int currentIndex;
     public int nowPlateNum = 0;     // 현재 밟고 있는 길 번호
@@ -26,35 +33,51 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         nowPlateNum = 0;
-        plate = new List<RectTransform>(plates.childCount);
+        platePos = new List<RectTransform>(plates.childCount);
         for (int i = 0; i < plates.childCount; i++)
         {
-            plate.Add(plates.GetChild(i).GetComponent<RectTransform>());
+            platePos.Add(plates.GetChild(i).GetComponent<RectTransform>());
+            plate.Add(plates.GetChild(i).GetComponent<Plate>());
         }
+        _yutThrowBtn.onClick.AddListener(delegate { StartCoroutine(Move()); });
     }
 
     void Start()
     {
         yutManager = YutManager.instance;
+        canvasManager = SoonsoonData.Instance.Canvas_Manager;
+        yutManager._plateList = plate;
     }
 
-    public IEnumerator PlayerMoveOnMap()    // 플레이어 기물 이동
+    private void Update()
     {
-        // 길 탐색
-        RouteFind();
 
+    }
+    public IEnumerator Move()
+    {
+        _playerPref.PlayAnimation(1);
         // 이동 거리만큼 반복
         for (int i = 0; i < yutManager._moveDistance; i++)
         {
-            // 현재 경로의 현재 칸 인덱스를 가져옴
-            int currentIndex = road[nowRoadNum][nowPlateNum];
-
-            // 
-            Vector2 targetPosition = plate[currentIndex + i].anchoredPosition; // 목표 위치를 설정합니다.
             nowPlateNum++;
+
+            if (road[nowRoadNum].Count - 1 < nowPlateNum)
+            {
+                nowRoadNum = 0;
+                nowPlateNum = 0;
+            }
+
+            // 현재 경로의 다음 칸 인덱스를 가져옴
+            currentIndex = road[nowRoadNum][nowPlateNum];
+
+            Vector2 targetPosition = platePos[currentIndex].anchoredPosition; // 목표 위치를 설정합니다.
+            Vector2 direction = (targetPosition - player.anchoredPosition).normalized;
+
+            _playerPref._anim.transform.localScale = (direction.x >= 0) ? new Vector3(-1, 1, 1) : Vector3.one;
+
             while (Vector2.Distance(player.anchoredPosition, targetPosition) > 0.1f)
             {
-                player.anchoredPosition = Vector2.Lerp(player.anchoredPosition, targetPosition, moveSpeed * Time.deltaTime);
+                player.anchoredPosition = Vector2.MoveTowards(player.anchoredPosition, targetPosition, moveSpeed * Time.deltaTime);
                 if (Vector2.Distance(player.anchoredPosition, targetPosition) <= 0.1f)
                 {
                     // 거의 도달했을 때, 플레이어의 위치를 목표 위치로 명시적으로 설정
@@ -62,24 +85,13 @@ public class PlayerMove : MonoBehaviour
                 }
                 yield return null;
             }
-            yield return null;
         }
-    }
-
-    public void Move()
-    {
-        // 이동 거리만큼 반복
-        for (int i = 1; i < yutManager._moveDistance + 1; i++)
-        {
-            nowPlateNum += i;
-            // 현재 경로의 다음 칸 인덱스를 가져옴
-            currentIndex = road[nowRoadNum][nowPlateNum];
-
-            Vector2 targetPosition = plate[currentIndex].anchoredPosition; // 목표 위치를 설정합니다.
-            player.anchoredPosition = targetPosition;
-        }
+        _playerPref.PlayAnimation(0);
         // 길 탐색
         RouteFind();
+        yield return new WaitForSeconds(0.5f);
+        _yutThrowBtn.gameObject.SetActive(true);
+        PlateEvent();
     }
 
     void RouteFind() // 진행 경로 찾기
@@ -101,6 +113,30 @@ public class PlayerMove : MonoBehaviour
             case 22:
                 nowRoadNum = 3;
                 nowPlateNum = 0;
+                break;
+        }
+    }
+
+    void PlateEvent()
+    {
+        switch (plate[currentIndex]._plateType)
+        {
+            case Plate.PlateType.Enemy:
+                Debug.Log("적");
+                canvasManager.ShowUi();
+                break;
+            case Plate.PlateType.Random:
+                Debug.Log("랜덤");
+                canvasManager.ShowUi();
+                break;
+            case Plate.PlateType.Home:
+                Debug.Log("홈");
+                break;
+            case Plate.PlateType.Boss:
+                Debug.Log("보스");
+                break;
+            case Plate.PlateType.Chest:
+                Debug.Log("보상");
                 break;
         }
     }

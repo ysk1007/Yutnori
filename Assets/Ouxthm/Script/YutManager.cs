@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,11 +11,38 @@ public class YutManager : MonoBehaviour
 
     public float rand;
     public int _moveDistance;      // À· ÀÌµ¿ °Å¸®
+    public List<Plate> _plateList;
+
+    public float _randomPlateProbability; // ·£´ý Ä­ÀÌ µîÀåÇÒ È®·ü
+
+    public Sprite[] _icons;
+    public Color[] _colors;
 
     public Button btn;
     private void Awake()
     {
         instance = this;
+    }
+
+    public void RandomPlate()
+    {
+        for (int i = 0; i < _plateList.Count; i++)
+        {
+            switch (_plateList[i]._plateType.GetHashCode())
+            {
+                case 0:
+                case 1:
+                    int type;
+                    float randomNumber = Random.value;
+                    type = (_randomPlateProbability > randomNumber) ? 1 : 0;
+                    _plateList[i].init(type);
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    break;
+            }
+        }
     }
 
     public void ThrowYut()
@@ -49,7 +77,6 @@ public class YutManager : MonoBehaviour
 
     public void SetYut(int i)
     {
-        Debug.Log(i+"Ä­ ÀÌµ¿");
         _moveDistance = i;
     }
 }

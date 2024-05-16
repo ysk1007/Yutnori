@@ -49,6 +49,7 @@ public class SoonsoonData
     public LogPopup LogPopup;
     public UnitInventory UnitInventory;
     public ArtifactPopup ArtifactPopup;
+    public CanvasManager Canvas_Manager;
 
     public SPUM_Manager _spumManager;
     public bool _gifAlphaTrigger; // for using gif trigger at Soonsoon Exporter.
