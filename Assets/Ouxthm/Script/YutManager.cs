@@ -9,17 +9,12 @@ public class YutManager : MonoBehaviour
     public PlayerMove playerMv;
 
     public float rand;
-    public int nowYut;      // 지금 윷 번호
+    public int _moveDistance;      // 윷 이동 거리
 
     public Button btn;
     private void Awake()
     {
-        instance = this;    
-        btn.onClick.AddListener(() => 
-        {
-            ThrowYut();
-            StartCoroutine(playerMv.PlayerMoveOnMap());
-        });
+        instance = this;
     }
 
     public void ThrowYut()
@@ -28,27 +23,33 @@ public class YutManager : MonoBehaviour
         if(rand <= 0.2f)
         {
             Debug.Log("결과는 '도'입니다");
-            nowYut = 1;
+            _moveDistance = 1;
         }
         else if(0.2f < rand && rand <= 0.5f)
         {
             Debug.Log("결과는 '개'입니다");
-            nowYut = 2;
+            _moveDistance = 2;
         }
         else if(0.5f < rand && rand <= 0.7f)
         {
             Debug.Log("결과는 '걸'입니다");
-            nowYut = 3;
+            _moveDistance = 3;
         }
         else if(0.7f < rand && rand <= 0.85f)
         {
             Debug.Log("결과는 '윷'입니다");
-            nowYut = 4;
+            _moveDistance = 4;
         }
         else
         {
             Debug.Log("결과는 '모'입니다");
-            nowYut = 5;
+            _moveDistance = 5;
         }
+    }
+
+    public void SetYut(int i)
+    {
+        Debug.Log(i+"칸 이동");
+        _moveDistance = i;
     }
 }
