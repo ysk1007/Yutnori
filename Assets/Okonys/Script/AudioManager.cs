@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -25,7 +22,12 @@ public class AudioManager : MonoBehaviour
     AudioSource[] sfxPlayers;
     int channelIndex;
 
-    public enum Sfx { Dead, Hit, LevelUp = 3, Lose, Melee, Range = 7, Select, Win }
+    UserInfoManager _userInfoManager;
+
+    public enum Sfx { YutSounds, 
+        Do = 5,Gae = 7,Geol = 9,Yut = 11,Mo = 13,
+
+        Dead, Hit, LevelUp, Lose, Melee, Range, Select, Win }
 
     private void Awake()
     {
@@ -35,6 +37,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
+        _userInfoManager = UserInfoManager.Instance;
         PlayBgm(true);
     }
 
@@ -88,7 +91,13 @@ public class AudioManager : MonoBehaviour
         //쉬고있는 효과음 플레이어를 찾기
         for (int i = 0; i < sfxPlayers.Length; i++)
         {
-            int loopIndex = (i + channelIndex) % sfxPlayers.Length;
+            int loopIndex;
+
+            if (sfx == Sfx.YutSounds) loopIndex = Random.Range(0, 5);
+            else
+            {
+                loopIndex = (i + channelIndex) % sfxPlayers.Length;
+            }
 
             if (sfxPlayers[loopIndex].isPlaying) //이미 효과음을 재생중이라면
                 continue;
@@ -101,7 +110,14 @@ public class AudioManager : MonoBehaviour
             }
 
             channelIndex = loopIndex; //마지막 채널 인덱스 갱신
-            sfxPlayers[loopIndex].clip = sfxClips[(int)sfx + ranIndex];
+
+            // 도개걸윷모 음성 효과일 때 남여 음성효과 구분
+            if (sfx == Sfx.Do || sfx == Sfx.Gae || sfx == Sfx.Geol || sfx == Sfx.Yut || sfx == Sfx.Mo)
+                sfxPlayers[loopIndex].clip = sfxClips[(int)sfx + _userInfoManager.optionData.GetVoiceType()];
+
+            else 
+                sfxPlayers[loopIndex].clip = sfxClips[(int)sfx + ranIndex];
+
             sfxPlayers[loopIndex].Play();
             break;
         }

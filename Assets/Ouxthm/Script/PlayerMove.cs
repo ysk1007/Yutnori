@@ -39,7 +39,6 @@ public class PlayerMove : MonoBehaviour
             platePos.Add(plates.GetChild(i).GetComponent<RectTransform>());
             plate.Add(plates.GetChild(i).GetComponent<Plate>());
         }
-        _yutThrowBtn.onClick.AddListener(delegate { StartCoroutine(Move()); });
     }
 
     void Start()
@@ -47,6 +46,7 @@ public class PlayerMove : MonoBehaviour
         yutManager = YutManager.instance;
         canvasManager = SoonsoonData.Instance.Canvas_Manager;
         yutManager._plateList = plate;
+        yutManager.SetPlate();
     }
 
     private void Update()
@@ -122,21 +122,16 @@ public class PlayerMove : MonoBehaviour
         switch (plate[currentIndex]._plateType)
         {
             case Plate.PlateType.Enemy:
-                Debug.Log("적");
                 canvasManager.ShowUi();
                 break;
             case Plate.PlateType.Random:
-                Debug.Log("랜덤");
                 canvasManager.ShowUi();
                 break;
             case Plate.PlateType.Home:
-                Debug.Log("홈");
                 break;
             case Plate.PlateType.Boss:
-                Debug.Log("보스");
                 break;
             case Plate.PlateType.Chest:
-                Debug.Log("보상");
                 break;
         }
     }

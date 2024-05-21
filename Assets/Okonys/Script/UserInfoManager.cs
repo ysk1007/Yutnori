@@ -55,6 +55,10 @@ public class UserData //유저 데이터 클래스
     public List<int> UserArtifacts; // 유저 아티팩트
 
     public int TurnCounter; // 턴 카운트
+
+    public bool isPlateData; // 발판 데이터의 유무
+    public int[] PlatesData; // 발판 종류
+    public int CurrentPos; // 현재 플레이어가 밟고 있는 발판 번호
 }
 
 [System.Serializable]
@@ -63,6 +67,7 @@ public class OptionData //유저 데이터 클래스
     [SerializeField] private float _masterVolume;
     [SerializeField] private float _bgmVolume;
     [SerializeField] private float _sfxVolume;
+    [SerializeField] private int _voiceType;
 
     public void SetMasterVolume(float volume)
     {
@@ -77,6 +82,11 @@ public class OptionData //유저 데이터 클래스
         _sfxVolume = volume;
     }
 
+    public void SetVoiceType(int i)
+    {
+        _voiceType = i;
+    }
+
     public float GetMasterVolume()
     {
         return _masterVolume;
@@ -89,6 +99,11 @@ public class OptionData //유저 데이터 클래스
     public float GetSfxVolume()
     {
         return _sfxVolume;
+    }
+
+    public int GetVoiceType()
+    {
+        return _voiceType;
     }
 }
 
@@ -138,10 +153,15 @@ public class UserInfoManager : MonoBehaviour
         userData.ShopUnits = new int[5];
         userData.UserArtifacts = new List<int>();
 
+        userData.isPlateData = false;
+        userData.PlatesData = new int[29];
+        userData.CurrentPos = 0;
+
         OptionData optionData = new OptionData();
         optionData.SetMasterVolume(0.5f);
         optionData.SetBgmVolume(0.5f);
         optionData.SetSfxVolume(0.5f);
+        optionData.SetVoiceType(0);
 
         Data data = new Data();
         data.SetUserData(userData);

@@ -11,6 +11,7 @@ public class VolumeSetting : MonoBehaviour
     [SerializeField] private Slider _masterSlider;
     [SerializeField] private Slider _bgmSlider;
     [SerializeField] private Slider _sfxSlider;
+    [SerializeField] private TMP_Dropdown _voiceType;
 
     [SerializeField] private TextMeshProUGUI _masterVolumeText;
     [SerializeField] private TextMeshProUGUI _bgmVolumeText;
@@ -65,6 +66,7 @@ public class VolumeSetting : MonoBehaviour
         _masterSlider.value = _userInfoManager.optionData.GetMasterVolume();
         _bgmSlider.value = _userInfoManager.optionData.GetBgmVolume();
         _sfxSlider.value = _userInfoManager.optionData.GetSfxVolume();
+        _voiceType.value = _userInfoManager.optionData.GetVoiceType();
     }
 
     public void SaveVolume()
@@ -72,6 +74,7 @@ public class VolumeSetting : MonoBehaviour
         _userInfoManager.optionData.SetMasterVolume(_masterSlider.value);
         _userInfoManager.optionData.SetBgmVolume(_bgmSlider.value);
         _userInfoManager.optionData.SetSfxVolume(_sfxSlider.value);
+        _userInfoManager.optionData.SetVoiceType(_voiceType.value);
         _userInfoManager.OptionDataSave();
     }
 }
