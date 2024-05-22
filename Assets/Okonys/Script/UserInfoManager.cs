@@ -50,6 +50,7 @@ public class UserData //유저 데이터 클래스
     public Vector2[] UserInventory; // 유저 인벤토리
     public Vector2[] EnemySquad; // 적 팀 유닛
 
+    public bool isShopArtifactDatas; // 상점 아티팩트 데이터 유무
     public int[] ShopArtifacts;
     public int[] ShopUnits;
     public List<int> UserArtifacts; // 유저 아티팩트
@@ -58,7 +59,8 @@ public class UserData //유저 데이터 클래스
 
     public bool isPlateData; // 발판 데이터의 유무
     public int[] PlatesData; // 발판 종류
-    public int CurrentPos; // 현재 플레이어가 밟고 있는 발판 번호
+    public int CurrentPlateNum; // 현재 플레이어가 밟고 있는 발판 번호
+    public int CurrentRoadNum; // 현재 플레이어의 진행 길
 }
 
 [System.Serializable]
@@ -149,13 +151,15 @@ public class UserInfoManager : MonoBehaviour
         userData.UserSquad = new Vector2[9];
         userData.UserInventory = new Vector2[12];
         userData.EnemySquad = new Vector2[9];
+        userData.isShopArtifactDatas = false;
         userData.ShopArtifacts = new int[6];
         userData.ShopUnits = new int[5];
         userData.UserArtifacts = new List<int>();
 
         userData.isPlateData = false;
         userData.PlatesData = new int[29];
-        userData.CurrentPos = 0;
+        userData.CurrentPlateNum = 0;
+        userData.CurrentRoadNum = 0;
 
         OptionData optionData = new OptionData();
         optionData.SetMasterVolume(0.5f);

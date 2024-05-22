@@ -88,22 +88,34 @@ public class ItemShop : MonoBehaviour
 
     public void ShopArtifactsLoad()
     {
-        for (int i = 0; i < _itemProducts.Count; i++)
+        // 상점에 아티팩트 데이터가 없으면 새로 생성
+        if (!_userInfo.userData.isShopArtifactDatas)
         {
-            if (_userInfo.userData.ShopArtifacts[i] == 0)
+            newItem();
+            _userInfo.userData.isShopArtifactDatas = true;
+            _userInfo.UserDataSave();
+        }
+
+        // 있으면 로드 합니다.
+        else
+        {
+            for (int i = 0; i < _itemProducts.Count; i++)
             {
-                _itemProducts[i].transform.localScale = Vector3.zero;
-                _itemProducts[i]._itemData = null;
+                if (_userInfo.userData.ShopArtifacts[i] == 0)
+                {
+                    _itemProducts[i].transform.localScale = Vector3.zero;
+                    _itemProducts[i]._itemData = null;
+                    _itemProducts[i].init();
+                    continue;
+                }
+
+                int itemNum = _userInfo.userData.ShopArtifacts[i] - 1;
+
+                _itemProducts[i]._itemData = _itemStock[itemNum].GetItemData();
                 _itemProducts[i].init();
-                continue;
+                // 해당 아이템의 재고 여부를 false로 설정하여 더 이상 등장하지 않도록 합니다.
+                _itemStock[itemNum].SetHaveStock(false);
             }
-
-            int itemNum = _userInfo.userData.ShopArtifacts[i] - 1;
-
-            _itemProducts[i]._itemData = _itemStock[itemNum].GetItemData();
-            _itemProducts[i].init();
-            // 해당 아이템의 재고 여부를 false로 설정하여 더 이상 등장하지 않도록 합니다.
-            _itemStock[itemNum].SetHaveStock(false);
         }
     }
 
@@ -141,7 +153,7 @@ public class ItemShop : MonoBehaviour
             // 재고가 없으면 함수를 종료합니다.
             if (!hasStock)
             {
-                Debug.Log("All items are out of stock. Stopping newItem() function.");
+                SoonsoonData.Instance.LogPopup.ShowLog("아이템이 모두 떨어졌어요!");
                 _itemProducts[i].transform.localScale = Vector3.zero;
                 _itemProducts[i]._itemData = null;
                 _itemProducts[i].init();
@@ -185,7 +197,7 @@ public class ItemShop : MonoBehaviour
                 _itemProducts[i].init();
                 // 해당 아이템의 재고 여부를 false로 설정하여 더 이상 등장하지 않도록 합니다.
                 selectedStock.SetHaveStock(false);
-                _userInfo.userData.ShopArtifacts[i] = _itemProducts[i]._itemData.ItemID - 1;
+                _userInfo.userData.ShopArtifacts[i] = _itemProducts[i]._itemData.ItemID;
             }
             else
             {

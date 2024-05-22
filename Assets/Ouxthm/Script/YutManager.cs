@@ -53,6 +53,7 @@ public class YutManager : MonoBehaviour
         _audioManager = AudioManager.instance;
     }
 
+    // 윷 시뮬레이터가 끝나면 실행되는 메소드
     void OnVideoEnd(VideoPlayer vp)
     {
         _textAnim.SetTrigger("Show");
@@ -76,12 +77,14 @@ public class YutManager : MonoBehaviour
         }
     }
 
+    // 움직임 코루틴 실행
     public void PlayerMove()
     {
         _yutSimulation.localScale = Vector3.zero;
         playerMv.StartCoroutine("Move");
     }
 
+    // 발판 배치를 불러오거나 생성하는 셋업 메소드
     public void SetPlate()
     {
         if (!_userInfoManager.userData.isPlateData)

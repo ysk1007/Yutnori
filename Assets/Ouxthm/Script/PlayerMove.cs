@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,8 +14,10 @@ public class PlayerMove : MonoBehaviour
 
     YutManager yutManager;
     CanvasManager canvasManager;
+    UserInfoManager _userInfoManager;
     public RectTransform player;
     public bool _isMove = false;
+    public bool _isMarket = false;
     public SPUM_Prefabs _playerPref;
 
     public Transform plates;
@@ -24,6 +25,8 @@ public class PlayerMove : MonoBehaviour
     public List<Plate> plate;
 
     public Button _yutThrowBtn;
+    [SerializeField] private GameObject _continueButton;
+    [SerializeField] private GameObject _marketVisitButton;
 
     public int currentIndex;
     public int nowPlateNum = 0;     // 현재 밟고 있는 길 번호
@@ -43,16 +46,29 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
+        _userInfoManager = UserInfoManager.Instance;
         yutManager = YutManager.instance;
         canvasManager = SoonsoonData.Instance.Canvas_Manager;
         yutManager._plateList = plate;
         yutManager.SetPlate();
+        UserPosSetting();
+        MarketVisit();
     }
 
     private void Update()
     {
 
     }
+
+    void UserPosSetting()
+    {
+        nowPlateNum = _userInfoManager.userData.CurrentPlateNum;
+        nowRoadNum = _userInfoManager.userData.CurrentRoadNum;
+        RouteFind();
+        Vector2 targetPosition = platePos[currentIndex].anchoredPosition; // 목표 위치를 설정합니다.
+        player.anchoredPosition = targetPosition;
+    }
+
     public IEnumerator Move()
     {
         _playerPref.PlayAnimation(1);
@@ -85,13 +101,44 @@ public class PlayerMove : MonoBehaviour
                 }
                 yield return null;
             }
+
+            if (currentIndex == 0)
+            {
+                MarketVisit();
+                while (_isMarket)
+                {
+                    yield return null;
+                }
+                _playerPref.PlayAnimation(1);
+            }
         }
         _playerPref.PlayAnimation(0);
         // 길 탐색
         RouteFind();
+
+        // 현재 발판 번호 저장
+        _userInfoManager.userData.CurrentPlateNum = nowPlateNum;
+        _userInfoManager.userData.CurrentRoadNum = nowRoadNum;
+        _userInfoManager.UserDataSave();
+
         yield return new WaitForSeconds(0.5f);
         _yutThrowBtn.gameObject.SetActive(true);
         PlateEvent();
+    }
+
+    public void MarketVisit()
+    {
+        if (currentIndex != 0) return;
+
+        _isMarket = true;
+        _playerPref.PlayAnimation(0);
+        _continueButton.SetActive(true);
+        _marketVisitButton.SetActive(true);
+    }
+
+    public void MarketExit()
+    {
+        _isMarket = false;
     }
 
     void RouteFind() // 진행 경로 찾기
