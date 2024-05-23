@@ -549,6 +549,9 @@ public class Unit : MonoBehaviour
     public void SetDeathDone()
     {
         gameObject.SetActive(false);
+
+        // À¯´ÖÀÌ Á×À»¶§ ½ÂÆÐ °á°ú¸¦ È®ÀÎ
+        SoonsoonData.Instance.Unit_Manager.CheckGameResult(this);
     }
 
     public void SetDirection()

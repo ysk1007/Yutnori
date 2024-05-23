@@ -73,16 +73,19 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (randomNumber < 0.667f) // 66.7%
         {
             _rateType = RateType.lower;
+            if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
             _productRate.sprite = _unitShop._rateSprites[0];
         }
         else if (randomNumber < 0.889f) // 22.2%
         {
             _rateType = RateType.middle;
+            if(!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
             _productRate.sprite = _unitShop._rateSprites[1];
         }
         else // 11.1%
         {
             _rateType = RateType.upper;
+            if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
             _productRate.sprite = _unitShop._rateSprites[2];
         }
         _nobleRate = _unitData._nobleRate;

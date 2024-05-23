@@ -20,6 +20,7 @@ public class HUD : MonoBehaviour
         UserHp = 11,
         UserPopulation = 12,
         MaxPopulation = 13,
+        TurnCount = 14,
     }
     public UiType _uiType = UiType.WarriorCount;
     private SynergyManager SM;
@@ -85,6 +86,9 @@ public class HUD : MonoBehaviour
                 break;
             case UiType.MaxPopulation:
                 _thisText.text = _inventoryManager.MaxPopulation.ToString();
+                break;
+            case UiType.TurnCount:
+                _thisText.text = _userInfoManager.userData.TurnCounter.ToString()+"ео";
                 break;
             default:
                 break;

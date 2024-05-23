@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,10 +41,12 @@ public class Data
 [System.Serializable]
 public class UserData //유저 데이터 클래스
 {
+    public bool isUserData; // 데이터 유무
     public string UserName; //닉네임
     public string UserId; //고유 아이디
     public int UserHp; // 체력
     public int UserGold; // 골드 재화
+    public int SelectCharacter;
 
     // X : UnitID , Y : UnitRate
     public Vector2[] UserSquad; // 유저 유닛
@@ -144,9 +147,10 @@ public class UserInfoManager : MonoBehaviour
 
     }
 
-    public void DataCreate() //데이터 생성
+    public void DataCreate() // 초기 데이터 생성
     {
         UserData userData = new UserData();
+        userData.isUserData = false;
         userData.UserHp = 100;
         userData.UserSquad = new Vector2[9];
         userData.UserInventory = new Vector2[12];
@@ -160,6 +164,7 @@ public class UserInfoManager : MonoBehaviour
         userData.PlatesData = new int[29];
         userData.CurrentPlateNum = 0;
         userData.CurrentRoadNum = 0;
+        userData.TurnCounter = 1;
 
         OptionData optionData = new OptionData();
         optionData.SetMasterVolume(0.5f);
@@ -173,6 +178,37 @@ public class UserInfoManager : MonoBehaviour
 
         this.userData = userData;
         this.optionData = optionData;
+        this.data = data;
+
+        ES3.Save(keyName, data);
+    }
+
+    public void GameDataCreate(int index) // 게임 데이터 생성
+    {
+        UserData userData = new UserData();
+        userData.isUserData = true;
+        userData.UserHp = 100;
+        userData.SelectCharacter = index;
+        userData.UserSquad = new Vector2[9];
+        userData.UserSquad[0] = new Vector2(index + 1, 0); 
+        userData.UserInventory = new Vector2[12];
+        userData.EnemySquad = new Vector2[9];
+        userData.isShopArtifactDatas = false;
+        userData.ShopArtifacts = new int[6];
+        userData.ShopUnits = new int[5];
+        userData.UserArtifacts = new List<int>();
+
+        userData.isPlateData = false;
+        userData.PlatesData = new int[29];
+        userData.CurrentPlateNum = 0;
+        userData.CurrentRoadNum = 0;
+        userData.TurnCounter = 1;
+
+        Data data = new Data();
+        data.SetUserData(userData);
+        data.SetOptionData(this.optionData);
+
+        this.userData = userData;
         this.data = data;
 
         ES3.Save(keyName, data);

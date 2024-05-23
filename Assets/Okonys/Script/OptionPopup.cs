@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OptionPopup : MonoBehaviour
@@ -24,6 +25,8 @@ public class OptionPopup : MonoBehaviour
     [SerializeField] private Color[] _colors;
 
     [SerializeField] private int _selectedIndex;
+
+    [SerializeField] private GameObject _gotoMainBtn;
 
     private void Awake()
     {
@@ -56,6 +59,7 @@ public class OptionPopup : MonoBehaviour
     void Start()
     {
         SelectPanel(0);
+        if (SceneManager.GetActiveScene().buildIndex == 0) MainButtonEnable(false);
     }
 
     // Update is called once per frame
@@ -101,5 +105,16 @@ public class OptionPopup : MonoBehaviour
     public void OptionSaved()
     {
         _changed = false;
+    }
+
+    public void GoToMainScene()
+    {
+        SceneManager.LoadScene(0);
+        _gotoMainBtn.SetActive(false);
+    }
+
+    public void MainButtonEnable(bool b)
+    {
+        _gotoMainBtn.SetActive(b);
     }
 }

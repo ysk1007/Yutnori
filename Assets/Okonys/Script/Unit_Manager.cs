@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.UI.CanvasScaler;
 
 public class Unit_Manager : MonoBehaviour
 {
@@ -269,6 +270,71 @@ public class Unit_Manager : MonoBehaviour
 
         }
         return returnList;
+    }
+
+    // 모든 유닛이 죽었는지 확인하고 승패의 결과를 체크
+    public void CheckGameResult(Unit unit)
+    {
+        List<Unit> tList = new List<Unit>();
+        switch (unit.tag) // 유닛의 태그에 따라
+        {
+            case "P1": 
+                tList = _p1UnitList;
+                for (int i = 0; i < tList.Count; i++) // 죽은 유닛의 스쿼드를 전부 탐색하여
+                {
+                    if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+                    {
+                        /*if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                        {
+                        }*/
+                        return; // 하나라도 생존해 있다면 return
+                    }
+                }
+
+                // P1의 유닛이 전부 사망
+                GameLose();
+                break; // 타겟 리스트 태그의 리스트로 할당
+
+            case "P2": 
+                tList = _p2UnitList;
+                for (int i = 0; i < tList.Count; i++) // 죽은 유닛의 스쿼드를 전부 탐색하여
+                {
+                    if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+                    {
+                        /*if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                        {
+                        }*/
+                        return; // 하나라도 생존해 있다면 return
+                    }
+                }
+
+                // P2의 유닛이 전부 사망
+                GameWin();
+                break;
+        }
+
+        for (int i = 0; i < tList.Count; i++) // 죽은 팀 스쿼드를 전부 탐색하여
+        {
+            if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+            {
+                /*if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                {
+                }*/
+                return;
+            }
+        }
+    }
+
+    public void GameWin()
+    {
+        _gamePause = true;
+        SoonsoonData.Instance.LogPopup.ShowLog("승리");
+    }
+
+    public void GameLose()
+    {
+        _gamePause = true;
+        SoonsoonData.Instance.LogPopup.ShowLog("패배");
     }
 
     public void GameResume()

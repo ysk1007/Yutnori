@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -15,9 +16,12 @@ public class PlayerMove : MonoBehaviour
     YutManager yutManager;
     CanvasManager canvasManager;
     UserInfoManager _userInfoManager;
+    Unit_Manager _unit_Manager;
+    EnemyPool _enemyPool;
     public RectTransform player;
     public bool _isMove = false;
     public bool _isMarket = false;
+    [SerializeField] private Transform players;
     public SPUM_Prefabs _playerPref;
 
     public Transform plates;
@@ -46,9 +50,16 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
+        _enemyPool = SoonsoonData.Instance.Enemy_Pool;
         _userInfoManager = UserInfoManager.Instance;
         yutManager = YutManager.instance;
         canvasManager = SoonsoonData.Instance.Canvas_Manager;
+        _unit_Manager = SoonsoonData.Instance.Unit_Manager;
+
+        players.GetChild(_userInfoManager.userData.SelectCharacter).gameObject.SetActive(true);
+        player = players.GetChild(_userInfoManager.userData.SelectCharacter).gameObject.GetComponent<RectTransform>();
+        _playerPref = player.GetComponent<SPUM_Prefabs>();
+
         yutManager._plateList = plate;
         yutManager.SetPlate();
         UserPosSetting();
@@ -119,6 +130,7 @@ public class PlayerMove : MonoBehaviour
         // 현재 발판 번호 저장
         _userInfoManager.userData.CurrentPlateNum = nowPlateNum;
         _userInfoManager.userData.CurrentRoadNum = nowRoadNum;
+        _userInfoManager.userData.TurnCounter++;
         _userInfoManager.UserDataSave();
 
         yield return new WaitForSeconds(0.5f);
@@ -170,6 +182,8 @@ public class PlayerMove : MonoBehaviour
         {
             case Plate.PlateType.Enemy:
                 canvasManager.ShowUi();
+                _unit_Manager._p2unitID = _enemyPool.GetRandomEnemy();
+                _unit_Manager.FieldReset();
                 break;
             case Plate.PlateType.Random:
                 canvasManager.ShowUi();
