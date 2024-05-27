@@ -35,7 +35,7 @@ public class EnemyPool : MonoBehaviour
     void Start()
     {
         _userInfoManager = UserInfoManager.Instance;
-        _gameLevel = _userInfoManager.userData.TurnCounter / 10;
+        SetGameLevel();
     }
 
     // Update is called once per frame
@@ -46,7 +46,7 @@ public class EnemyPool : MonoBehaviour
 
     public List<SlotClass> GetRandomEnemy()
     {
-        _gameLevel = _userInfoManager.userData.TurnCounter / 10;
+        SetGameLevel();
         int RandomNum;
         switch (_gameLevel)
         {
@@ -69,5 +69,12 @@ public class EnemyPool : MonoBehaviour
                 RandomNum = Random.Range(0, _enemySquad_Lv4.Length);
                 return _enemySquad_Lv4[RandomNum].GetSquad();
         }
+    }
+    
+    void SetGameLevel()
+    {
+        _gameLevel = _userInfoManager.userData.TurnCounter / 10;
+        _userInfoManager.userData.GameLevel = _gameLevel;
+        _userInfoManager.UserDataSave();
     }
 }

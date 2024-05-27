@@ -57,4 +57,28 @@ public class UnitPool : MonoBehaviour
             }
         }
     }
+
+    public UnitData ReturnRewardUnit(int GameLevel)
+    {
+        UnitData rewardUnit;
+        switch (GameLevel)
+        {
+            case 0:
+                rewardUnit = _commonUnits[Random.Range(0, _commonUnits.Count)];
+                break;
+            case 1:
+                rewardUnit = _uncommonUnits[Random.Range(0, _commonUnits.Count)];
+                break;
+            case 2:
+                rewardUnit = _rareUnits[Random.Range(0, _commonUnits.Count)];
+                break;
+            case 3:
+                rewardUnit = _epicUnits[Random.Range(0, _commonUnits.Count)];
+                break;
+            default:
+                rewardUnit = _epicUnits[Random.Range(0, _commonUnits.Count)];
+                break;
+        }
+        return rewardUnit;
+    }
 }

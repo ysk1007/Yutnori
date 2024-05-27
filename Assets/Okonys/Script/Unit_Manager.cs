@@ -31,6 +31,8 @@ public class Unit_Manager : MonoBehaviour
     UserInfoManager _userInfoManager;
     UnitPool Unit_pool;
     InventoryManager im;
+    BattleReward _battleReward;
+    PlayerMove _playerMove;
 
     void Awake()
     {
@@ -45,6 +47,8 @@ public class Unit_Manager : MonoBehaviour
         _userInfoManager = UserInfoManager.Instance;
         Unit_pool = SoonsoonData.Instance.Unit_pool;
         im = SoonsoonData.Instance.Inventory_Manager;
+        _playerMove = SoonsoonData.Instance.Player_Move;
+        _battleReward = SoonsoonData.Instance.Battle_Reward;
         UserUnitDataLoad();
     }
 
@@ -329,6 +333,24 @@ public class Unit_Manager : MonoBehaviour
     {
         _gamePause = true;
         SoonsoonData.Instance.LogPopup.ShowLog("½Â¸®");
+        switch (_playerMove.CurrentPlateType())
+        {
+            case Plate.PlateType.Enemy:
+                _battleReward.NormalBattleReward();
+                break;
+            case Plate.PlateType.Random:
+                _battleReward.NormalBattleReward();
+                break;
+            case Plate.PlateType.Home:
+                break;
+            case Plate.PlateType.Boss:
+                _battleReward.NormalBattleReward();
+                break;
+            case Plate.PlateType.Chest:
+                break;
+            default:
+                break;
+        }
     }
 
     public void GameLose()

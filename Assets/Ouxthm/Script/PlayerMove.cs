@@ -39,6 +39,7 @@ public class PlayerMove : MonoBehaviour
     public int moveSpeed = 10;
     private void Awake()
     {
+        SoonsoonData.Instance.Player_Move = this;
         nowPlateNum = 0;
         platePos = new List<RectTransform>(plates.childCount);
         for (int i = 0; i < plates.childCount; i++)
@@ -195,5 +196,10 @@ public class PlayerMove : MonoBehaviour
             case Plate.PlateType.Chest:
                 break;
         }
+    }
+
+    public Plate.PlateType CurrentPlateType()
+    {
+        return plate[currentIndex]._plateType;
     }
 }

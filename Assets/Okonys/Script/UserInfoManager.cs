@@ -59,6 +59,7 @@ public class UserData //유저 데이터 클래스
     public List<int> UserArtifacts; // 유저 아티팩트
 
     public int TurnCounter; // 턴 카운트
+    public int GameLevel; // 게임 레벨
 
     public bool isPlateData; // 발판 데이터의 유무
     public int[] PlatesData; // 발판 종류
@@ -165,6 +166,7 @@ public class UserInfoManager : MonoBehaviour
         userData.CurrentPlateNum = 0;
         userData.CurrentRoadNum = 0;
         userData.TurnCounter = 1;
+        userData.GameLevel = 0;
 
         OptionData optionData = new OptionData();
         optionData.SetMasterVolume(0.5f);
@@ -203,6 +205,7 @@ public class UserInfoManager : MonoBehaviour
         userData.CurrentPlateNum = 0;
         userData.CurrentRoadNum = 0;
         userData.TurnCounter = 1;
+        userData.GameLevel = 0;
 
         Data data = new Data();
         data.SetUserData(userData);

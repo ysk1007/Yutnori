@@ -22,6 +22,11 @@ public class YutManager : MonoBehaviour
     [SerializeField] private Animator _textAnim;
     [SerializeField] private TMP_ColorGradient[] _textColors;
 
+    [SerializeField] private Color[] _particleColorParent;
+    [SerializeField] private Color[] _particleColorChild;
+    [SerializeField] private ParticleSystem _particleParent;
+    [SerializeField] private ParticleSystem _particleChild;
+
     public static YutManager instance;
     public PlayerMove playerMv;
 
@@ -163,6 +168,7 @@ public class YutManager : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     public void ThrowYut()
     {
         rand = Random.Range(0f, 1f);
@@ -170,6 +176,7 @@ public class YutManager : MonoBehaviour
         if(rand <= 0.2f)
         {
             _yutText.text = "µµ";
+            SetParticleColor(0);
             _yutText.colorGradientPreset = _textColors[0];
             _yutSimulationPlayer.clip = _doClip[cilpNum];
             _moveDistance = 1;
@@ -177,6 +184,7 @@ public class YutManager : MonoBehaviour
         else if(0.2f < rand && rand <= 0.5f)
         {
             _yutText.text = "°³";
+            SetParticleColor(1);
             _yutText.colorGradientPreset = _textColors[1];
             _yutSimulationPlayer.clip = _gaeClip[cilpNum];
             _moveDistance = 2;
@@ -184,6 +192,7 @@ public class YutManager : MonoBehaviour
         else if(0.5f < rand && rand <= 0.7f)
         {
             _yutText.text = "°É";
+            SetParticleColor(2);
             _yutText.colorGradientPreset = _textColors[2];
             _yutSimulationPlayer.clip = _geolClip[cilpNum];
             _moveDistance = 3;
@@ -191,6 +200,7 @@ public class YutManager : MonoBehaviour
         else if(0.7f < rand && rand <= 0.85f)
         {
             _yutText.text = "À·";
+            SetParticleColor(3);
             _yutText.colorGradientPreset = _textColors[3];
             _yutSimulationPlayer.clip = _yutClip[cilpNum];
             _moveDistance = 4;
@@ -198,6 +208,7 @@ public class YutManager : MonoBehaviour
         else
         {
             _yutText.text = "¸ð";
+            SetParticleColor(4);
             _yutText.colorGradientPreset = _textColors[4];
             _yutSimulationPlayer.clip = _moClip[cilpNum];
             _moveDistance = 5;
@@ -210,5 +221,12 @@ public class YutManager : MonoBehaviour
     public void SetYut(int i)
     {
         _moveDistance = i;
+    }
+
+    [System.Obsolete]
+    void SetParticleColor(int index)
+    {
+        _particleChild.startColor = _particleColorChild[index];
+        _particleParent.startColor = _particleColorParent[index];
     }
 }

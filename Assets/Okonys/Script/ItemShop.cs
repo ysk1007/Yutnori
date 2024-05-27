@@ -225,6 +225,70 @@ public class ItemShop : MonoBehaviour
         }
     }
 
+    public itemStock ReturnRewardItem()
+    {
+        bool hasStock = false; // 재고가 있는지 여부를 나타내는 변수
+
+        // 모든 아이템의 재고 여부를 확인하여 재고가 있는 경우 hasStock을 true로 설정합니다.
+        foreach (var item in _itemStock)
+        {
+            if (item.GetItemRate())
+            {
+                hasStock = true;
+                break;
+            }
+        }
+
+        // 재고가 없으면 함수를 종료합니다.
+        if (!hasStock)
+        {
+            SoonsoonData.Instance.LogPopup.ShowLog("아이템이 모두 떨어졌어요!");
+            return null;
+        }
+
+        float randomNumber = Random.value; // 0부터 1 사이의 랜덤한 값
+
+        float cumulativeProbability = 0f; // 누적 확률
+        int selectedGrade = 0; // 선택된 등급
+
+        for (int j = 0; j < _itemProbability.Length; j++)
+        {
+            cumulativeProbability += _itemProbability[j];
+
+            if (randomNumber < cumulativeProbability)
+            {
+                selectedGrade = j;
+                break;
+            }
+        }
+
+        itemStock selectedStock = null;
+
+        switch (selectedGrade)
+        {
+            case 0: // 레어 등급
+                selectedStock = GetRandomStock(_itemStock.Where(item => _rareItems.Contains(item.GetItemData())).ToList());
+                break;
+            case 1: // 에픽 등급
+                selectedStock = GetRandomStock(_itemStock.Where(item => _epicItems.Contains(item.GetItemData())).ToList());
+                break;
+            case 2: // 전설 등급
+                selectedStock = GetRandomStock(_itemStock.Where(item => _legendaryitems.Contains(item.GetItemData())).ToList());
+                break;
+        }
+
+        if (selectedStock != null)
+        {
+            return selectedStock;
+        }
+        else
+        {
+            // 해당 등급의 재고가 없는 경우 null 반환
+            return null;
+        }
+    }
+
+
     void ItemSort() // 등급 별 정리
     {
         for (int i = 0; i < _itemDatas.Count; i++)
@@ -257,14 +321,20 @@ public class ItemShop : MonoBehaviour
         }
 
         _userInfo.userData.UserGold -= _itemProducts[_selectItemIndex]._itemData._itemPrice;
+
+        // 추가 부분
         SoonsoonData.Instance.Artifact_Manager.SetArtifact(_itemProducts[_selectItemIndex]._itemData);
         _userInfo.userData.UserArtifacts.Add(_itemProducts[_selectItemIndex]._itemData.ItemID);
+
+        // 초기화 부분
         _userInfo.userData.ShopArtifacts[_selectItemIndex] = 0;
         _itemProducts[_selectItemIndex]._itemData = null;
 
         _itemProducts[_selectItemIndex]._isSell = true;
         _itemProducts[_selectItemIndex].transform.localScale = Vector3.zero;
         _selectItemIndex = -1;
+
+        // 데이터 저장
         _userInfo.UserDataSave();
     }
 }
