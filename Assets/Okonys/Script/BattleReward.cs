@@ -33,8 +33,6 @@ public class BattleReward : MonoBehaviour
         _userInfoManager = UserInfoManager.Instance;
         _unitPool = SoonsoonData.Instance.Unit_pool;
         _itemShop = SoonsoonData.Instance.ItemShop;
-
-        NormalBattleReward();
     }
 
     // Update is called once per frame
@@ -116,6 +114,18 @@ public class BattleReward : MonoBehaviour
             case 3:
                 _rewardList[index].init(Reward.RewardType.artifact, null, null, null, _itemShop.ReturnRewardItem());
                 break;
+        }
+    }
+
+    public void GetAllReward()
+    {
+        for (int i = 0; i < _rewardList.Count; i++)
+        {
+            if (_rewardList[i].transform.gameObject.activeInHierarchy)
+            {
+                _rewardList[i].RewardGet();
+                continue;
+            }
         }
     }
 }

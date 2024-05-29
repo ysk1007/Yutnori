@@ -40,4 +40,9 @@ public class CanvasManager : MonoBehaviour
         _yutCanvas.SetActive(true);
         _units.transform.localScale = Vector3.zero;
     }
+
+    public void FadeImage()
+    {
+        _canvasAnimator.SetTrigger("FadeImage");
+    }
 }

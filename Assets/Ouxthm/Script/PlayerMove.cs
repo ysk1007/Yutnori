@@ -18,6 +18,7 @@ public class PlayerMove : MonoBehaviour
     UserInfoManager _userInfoManager;
     Unit_Manager _unit_Manager;
     EnemyPool _enemyPool;
+    EventPanel _eventPanel;
     public RectTransform player;
     public bool _isMove = false;
     public bool _isMarket = false;
@@ -56,6 +57,7 @@ public class PlayerMove : MonoBehaviour
         yutManager = YutManager.instance;
         canvasManager = SoonsoonData.Instance.Canvas_Manager;
         _unit_Manager = SoonsoonData.Instance.Unit_Manager;
+        _eventPanel = SoonsoonData.Instance.Event_Panel;
 
         players.GetChild(_userInfoManager.userData.SelectCharacter).gameObject.SetActive(true);
         player = players.GetChild(_userInfoManager.userData.SelectCharacter).gameObject.GetComponent<RectTransform>();
@@ -187,7 +189,8 @@ public class PlayerMove : MonoBehaviour
                 _unit_Manager.FieldReset();
                 break;
             case Plate.PlateType.Random:
-                canvasManager.ShowUi();
+                canvasManager.FadeImage();
+                _eventPanel.RandomEvent();
                 break;
             case Plate.PlateType.Home:
                 break;
