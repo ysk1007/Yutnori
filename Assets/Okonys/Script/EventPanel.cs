@@ -1,7 +1,9 @@
+using Febucci.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -15,15 +17,22 @@ public class EventPanel : MonoBehaviour
     [SerializeField] private Transform _buttonList;
     [SerializeField] private List<Button> _Buttons;
     [SerializeField] private List<ChoiceButton> _choiceButtons;
+    [SerializeField] private List<Animator> _buttonAnimators;
 
     [SerializeField] private Image _eventImage;
+    [SerializeField] private SlotClass[] _eventUnit;
     [SerializeField] private TextMeshProUGUI _titleText;
     [SerializeField] private TextMeshProUGUI _mainText;
+    [SerializeField] private TypewriterByCharacter _typeWriter;
+
+    int _nextButtonIndex;
 
     UserInfoManager _userInfoManager;
     Popup _thisPopup;
     CanvasManager _canvasManager;
     Unit_Manager _unitManager;
+    InventoryManager _inventoryManager;
+    UnitPool _unitPool;
 
     private void Awake()
     {
@@ -32,6 +41,7 @@ public class EventPanel : MonoBehaviour
         {
             _Buttons.Add(_buttonList.GetChild(i).GetComponent<Button>());
             _choiceButtons.Add(_buttonList.GetChild(i).GetComponent<ChoiceButton>());
+            _buttonAnimators.Add(_buttonList.GetChild(i).GetComponent<Animator>());
             _choiceButtons[i]._buttonIndex = i;
         }
         _thisPopup = GetComponent<Popup>();
@@ -43,6 +53,8 @@ public class EventPanel : MonoBehaviour
         _userInfoManager = UserInfoManager.Instance;
         _canvasManager = SoonsoonData.Instance.Canvas_Manager;
         _unitManager = SoonsoonData.Instance.Unit_Manager;
+        _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
+        _unitPool = SoonsoonData.Instance.Unit_pool;
     }
 
     // Update is called once per frame
@@ -60,11 +72,40 @@ public class EventPanel : MonoBehaviour
         init();
     }
 
+    public EventData GetEventData()
+    {
+        return _currentEvent;
+    }
+
+    public SlotClass GetEventUnit(int index)
+    {
+        return _eventUnit[index];
+    }
+
     public void init()
     {
         _titleText.text = _currentEvent._eventName;
-        _mainText.text = _currentEvent._mainText[_currentScene - 1];
+        //_mainText.text = _currentEvent._mainText[_currentScene - 1];
+        _typeWriter.ShowText(_currentEvent._mainText[_currentScene - 1]);
         _eventImage.sprite = _currentEvent._eventImage;
+
+        for (int i = 0; i < _currentEvent._someUnit.Length; i++)
+        {
+            if (_currentEvent._someUnit[i]?.GetUnitData()?.UnitName == "RandomGet")
+            {
+                _eventUnit[i] = new SlotClass(_unitPool.ReturnRewardUnit(_userInfoManager.userData.GameLevel), _unitPool.RandomUnitRate());
+            }
+            else if (_currentEvent._someUnit[i]?.GetUnitData()?.UnitName == "RandomLose")
+            {
+                _eventUnit[i] = _inventoryManager.ReturnRandomUnit();
+            }
+            else if(_currentEvent._someUnit[i]?.GetUnitData() != null)
+            {
+                _eventUnit[i] = new SlotClass(_currentEvent._someUnit[i]?.GetUnitData(), _unitPool.RandomUnitRate());
+            }
+        }
+
+        // 버튼 할당
         for (int i = 0; i < _Buttons.Count; i++)
         {
             if (_currentEvent._choiceNumber[_currentScene - 1] > i)
@@ -83,6 +124,37 @@ public class EventPanel : MonoBehaviour
         }
     }
 
+    public void ButtonShow()
+    {
+        _nextButtonIndex = 0;
+        float delay = 0;
+        for (int i = 0; i < _buttonAnimators.Count; i++)
+        {
+            delay += 0.5f;
+            Invoke("ButtonAnimation", delay);
+        }
+    }
+
+    public void ButtonFade()
+    {
+        for (int i = 0; i < _buttonAnimators.Count; i++)
+        {
+            _buttonAnimators[i].SetTrigger("Fade");
+        }
+    }
+
+    public void ButtonAnimation()
+    {
+        _buttonAnimators[_nextButtonIndex].SetTrigger("Show");
+        _nextButtonIndex++;
+    }
+
+    public void EventFail()
+    {
+        _userInfoManager.userData.UserHp -= 25;
+        EventContinue();
+    }
+
     public void EventContinue()
     {
         _currentScene++;
@@ -93,6 +165,7 @@ public class EventPanel : MonoBehaviour
     {
         _canvasManager.FadeImage();
         _thisPopup.ZeroPopup();
+        _userInfoManager.UserDataSave();
     }
 
     public void EventBattle()
@@ -117,8 +190,14 @@ public class EventPanel : MonoBehaviour
 
     public void EventGetSomething(int index)
     {
-        _userInfoManager.userData.UserGold += _currentEvent._goldValue[index];
+        _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
         _userInfoManager.userData.UserHp += _currentEvent._hpValue[index];
+
+        if(_currentEvent._someUnit?[index] != null)
+        {
+            if (!_inventoryManager.InventoryAdd(_eventUnit[index])) return;
+        }
+
         EventContinue();
     }
 
@@ -137,8 +216,12 @@ public class EventPanel : MonoBehaviour
 
     public void EventLoseSomething(int index)
     {
-        _userInfoManager.userData.UserGold += _currentEvent._goldValue[index];
+        _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
         _userInfoManager.userData.UserHp += _currentEvent._hpValue[index];
+
+        _inventoryManager.UnitRemove(_eventUnit[index]);
+
+
         EventContinue();
     }
 
@@ -157,8 +240,19 @@ public class EventPanel : MonoBehaviour
 
     public void EventGetLose(int index)
     {
-        _userInfoManager.userData.UserGold += _currentEvent._goldValue[index];
+        _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
         _userInfoManager.userData.UserHp += _currentEvent._hpValue[index];
+
+
+        if (_currentEvent._someUnit[index]?.GetUnitData()?.UnitName == "RandomGet")
+        {
+            if (!_inventoryManager.InventoryAdd(_eventUnit[index])) return;
+        }
+        else if (_currentEvent._someUnit[index]?.GetUnitData()?.UnitName == "RandomLose")
+        {
+            _inventoryManager.UnitRemove(_eventUnit[index]);
+        }
+
         EventContinue();
     }
 

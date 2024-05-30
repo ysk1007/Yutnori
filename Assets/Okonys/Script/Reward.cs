@@ -27,6 +27,7 @@ public class Reward : MonoBehaviour
     UserInfoManager _userInfoManager;
     InventoryManager _inventoryManager;
     ArtifactManager _artifactManager;
+    UnitPool _unitPool;
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class Reward : MonoBehaviour
         _userInfoManager = UserInfoManager.Instance;
         _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
         _artifactManager = SoonsoonData.Instance.Artifact_Manager;
+        _unitPool = SoonsoonData.Instance.Unit_pool;
     }
 
     // Update is called once per frame
@@ -58,19 +60,7 @@ public class Reward : MonoBehaviour
                 _text.text = text + " 냥";
                 break;
             case RewardType.unit:
-                float randomNumber = Random.value; // 0부터 1 사이의 랜덤 값
-                if (randomNumber < 0.667f) // 66.7%
-                {
-                    _unitRate = 0;
-                }
-                else if (randomNumber < 0.889f) // 22.2%
-                {
-                    _unitRate = 1;
-                }
-                else // 11.1%
-                {
-                    _unitRate = 2;
-                }
+                _unitRate = _unitPool.RandomUnitRate();
                 _unitData = unit;
                 _icon.sprite = unit.icon;
                 _text.text = unit.UnitName;
@@ -92,7 +82,7 @@ public class Reward : MonoBehaviour
         switch (_rewardType)
         {
             case Reward.RewardType.money:
-                _userInfoManager.userData.UserGold += _goldValue;
+                _userInfoManager.userData.SetUserGold(_goldValue);
                 break;
 
             case Reward.RewardType.use:

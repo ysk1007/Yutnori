@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -258,6 +259,36 @@ public class InventoryManager : MonoBehaviour
         return _sucess;
     }
 
+    public SlotClass ReturnRandomUnit()
+    {
+        List<int> numbers = new List<int>();
+
+        for (int i = 0; i <  _userSquad.Length + _userInventory.Length; i++)
+        {
+            if(i < _userSquad.Length)
+            {
+                if (_userSquad[i]?.GetUnitData() != null) { numbers.Add(i); }
+            }
+            else
+            {
+                if (_userInventory[i - _userSquad.Length]?.GetUnitData() != null) { numbers.Add(i); }
+            }
+        }
+
+        if (numbers.Count == 0) return null; // À¯´ÖÀÌ ¾øÀ½
+
+        int index = Random.Range(0, numbers.Count);
+
+        if (numbers[index] < _userSquad.Length)
+        {
+            return _userSquad[numbers[index]];
+        }
+        else
+        {
+            return _userInventory[numbers[index] - _userSquad.Length];
+        }
+    }
+
     public void InventoryAdd(SlotClass slot, int index)
     {
         _userInventory[index] = slot;
@@ -303,6 +334,29 @@ public class InventoryManager : MonoBehaviour
     {
         _userSquad[index] = null;
         RefreshUi();
+    }
+
+    public void UnitRemove(SlotClass unit)
+    {
+        for (int i = 0; i < _userSquad.Length + _userInventory.Length; i++)
+        {
+            if (i < _userSquad.Length)
+            {
+                if (_userSquad[i]?.GetUnitData()?.UnitID == unit.GetUnitData().UnitID) 
+                { 
+                    SquadRemove(i);
+                    return;
+                }
+            }
+            else
+            {
+                if (_userInventory[i - _userSquad.Length]?.GetUnitData()?.UnitID == unit.GetUnitData().UnitID) 
+                { 
+                    InventoryRemove(i - _userSquad.Length);
+                    return;
+                }
+            }
+        }
     }
 
     public void UserUnitsSave()

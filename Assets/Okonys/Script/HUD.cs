@@ -76,7 +76,7 @@ public class HUD : MonoBehaviour
             case UiType.DevilCount:
                 break;
             case UiType.UserGold:
-                _thisText.text = _userInfoManager.userData.UserGold.ToString();
+                _thisText.text = _userInfoManager.userData.GetUserGold().ToString();
                 break;
             case UiType.UserHp:
                 _thisText.text = _userInfoManager.userData.UserHp.ToString();

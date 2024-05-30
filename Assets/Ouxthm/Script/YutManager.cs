@@ -168,7 +168,6 @@ public class YutManager : MonoBehaviour
         }
     }
 
-    [System.Obsolete]
     public void ThrowYut()
     {
         rand = Random.Range(0f, 1f);
@@ -198,6 +197,54 @@ public class YutManager : MonoBehaviour
             _moveDistance = 3;
         }
         else if(0.7f < rand && rand <= 0.85f)
+        {
+            _yutText.text = "À·";
+            SetParticleColor(3);
+            _yutText.colorGradientPreset = _textColors[3];
+            _yutSimulationPlayer.clip = _yutClip[cilpNum];
+            _moveDistance = 4;
+        }
+        else
+        {
+            _yutText.text = "¸ð";
+            SetParticleColor(4);
+            _yutText.colorGradientPreset = _textColors[4];
+            _yutSimulationPlayer.clip = _moClip[cilpNum];
+            _moveDistance = 5;
+        }
+        _yutSimulation.localScale = _playSize;
+        _yutSimulationPlayer.Play();
+        _audioManager.PlaySfx(AudioManager.Sfx.YutSounds);
+    }
+
+    public void ExactThrowYut(int i)
+    {
+        int cilpNum = Random.Range(0, 3);
+        if (i == 0)
+        {
+            _yutText.text = "µµ";
+            SetParticleColor(0);
+            _yutText.colorGradientPreset = _textColors[0];
+            _yutSimulationPlayer.clip = _doClip[cilpNum];
+            _moveDistance = 1;
+        }
+        else if (i == 1)
+        {
+            _yutText.text = "°³";
+            SetParticleColor(1);
+            _yutText.colorGradientPreset = _textColors[1];
+            _yutSimulationPlayer.clip = _gaeClip[cilpNum];
+            _moveDistance = 2;
+        }
+        else if (i == 2)
+        {
+            _yutText.text = "°É";
+            SetParticleColor(2);
+            _yutText.colorGradientPreset = _textColors[2];
+            _yutSimulationPlayer.clip = _geolClip[cilpNum];
+            _moveDistance = 3;
+        }
+        else if (i == 3)
         {
             _yutText.text = "À·";
             SetParticleColor(3);

@@ -314,13 +314,13 @@ public class ItemShop : MonoBehaviour
     public void BuyItem()
     {
         if (_selectItemIndex < 0) return;
-        if (_userInfo.userData.UserGold < _itemProducts[_selectItemIndex]._itemData._itemPrice)
+        if (_userInfo.userData.GetUserGold() < _itemProducts[_selectItemIndex]._itemData._itemPrice)
         {
             SoonsoonData.Instance.LogPopup.ShowLog("골드가 부족 합니다.");
             return;
         }
 
-        _userInfo.userData.UserGold -= _itemProducts[_selectItemIndex]._itemData._itemPrice;
+        _userInfo.userData.SetUserGold(-_itemProducts[_selectItemIndex]._itemData._itemPrice);
 
         // 추가 부분
         SoonsoonData.Instance.Artifact_Manager.SetArtifact(_itemProducts[_selectItemIndex]._itemData);

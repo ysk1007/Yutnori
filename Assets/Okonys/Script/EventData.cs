@@ -76,7 +76,7 @@ public class EventData : ScriptableObject
     {
         float chance = Random.value;
         bool isSucess = (chance < _eventSucessProbability) ? true : false ;
-        Debug.Log(isSucess + "," + chance);
+        SoonsoonData.Instance.LogPopup.ShowLog("실패 했습니다..");
         return isSucess;
     }
 }

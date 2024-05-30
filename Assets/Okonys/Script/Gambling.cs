@@ -33,14 +33,14 @@ public class Gambling : MonoBehaviour
     public void Mix(int gambleMoney)
     {
         if (_doPlay) return;
-        if (_infoManager.userData.UserGold < gambleMoney)
+        if (_infoManager.userData.GetUserGold() < gambleMoney)
         {
             SoonsoonData.Instance.LogPopup.ShowLog("골드가 부족 합니다.");
             return;
         }
 
         _doPlay = true;
-        _infoManager.userData.UserGold -= gambleMoney;
+        _infoManager.userData.SetUserGold(-gambleMoney);
         _gambleMoney = gambleMoney;
         _startButton.SetActive(false);
         _animator.SetTrigger("Start");
@@ -51,7 +51,7 @@ public class Gambling : MonoBehaviour
     {
         if (!_doPlay) return;
 
-        _infoManager.userData.UserGold += (_ballIndex == index) ? _gambleMoney * 3 : 0;
+        _infoManager.userData.SetUserGold((_ballIndex == index) ? _gambleMoney * 3 : 0);
         if (_ballIndex == index) SoonsoonData.Instance.LogPopup.ShowLog("승리!");
         else SoonsoonData.Instance.LogPopup.ShowLog("패배");
 

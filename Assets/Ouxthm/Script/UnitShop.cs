@@ -157,7 +157,7 @@ public class UnitShop : MonoBehaviour
     public void BuyProduct()
     {
         if (_selectProductIndex < 0) return;
-        if (_userInfo.userData.UserGold < _unitProducts[_selectProductIndex]._productPrice)
+        if (_userInfo.userData.GetUserGold() < _unitProducts[_selectProductIndex]._productPrice)
         {
             SoonsoonData.Instance.LogPopup.ShowLog("골드가 부족 합니다.");
             return;
@@ -167,7 +167,7 @@ public class UnitShop : MonoBehaviour
 
         if (!_inventoryManager.InventoryAdd(product)) return;
 
-        _userInfo.userData.UserGold -= _unitProducts[_selectProductIndex]._productPrice;
+        _userInfo.userData.SetUserGold(-_unitProducts[_selectProductIndex]._productPrice);
         _userInfo.userData.ShopUnits[_selectProductIndex] = 0;
         _unitProducts[_selectProductIndex]._isSell = true;
         _unitProducts[_selectProductIndex].transform.localScale = _sellSize;
@@ -184,12 +184,12 @@ public class UnitShop : MonoBehaviour
 
         if (_selectInventoryIndex < _inventoryManager._userSquad.Length)
         {
-            _userInfo.userData.UserGold += unitCard._productPrice;
+            _userInfo.userData.SetUserGold(unitCard._productPrice);
             _inventoryManager.SquadRemove(_selectInventoryIndex);
         }
         else
         {
-            _userInfo.userData.UserGold += unitCard._productPrice;
+            _userInfo.userData.SetUserGold(unitCard._productPrice);
             _inventoryManager.InventoryRemove(_selectInventoryIndex - _inventoryManager._userSquad.Length);
         }
 
@@ -206,12 +206,12 @@ public class UnitShop : MonoBehaviour
     }
     public void Reroll()
     {
-        if (_userInfo.userData.UserGold < _rerollPrice)
+        if (_userInfo.userData.GetUserGold() < _rerollPrice)
         {
             SoonsoonData.Instance.LogPopup.ShowLog("골드가 부족 합니다.");
             return;
         }
-        _userInfo.userData.UserGold -= _rerollPrice;
+        _userInfo.userData.SetUserGold(-_rerollPrice);
         newProduct();
     }
 

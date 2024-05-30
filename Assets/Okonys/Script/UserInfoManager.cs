@@ -45,7 +45,7 @@ public class UserData //유저 데이터 클래스
     public string UserName; //닉네임
     public string UserId; //고유 아이디
     public int UserHp; // 체력
-    public int UserGold; // 골드 재화
+    [SerializeField] private int UserGold; // 골드 재화
     public int SelectCharacter;
 
     // X : UnitID , Y : UnitRate
@@ -65,6 +65,17 @@ public class UserData //유저 데이터 클래스
     public int[] PlatesData; // 발판 종류
     public int CurrentPlateNum; // 현재 플레이어가 밟고 있는 발판 번호
     public int CurrentRoadNum; // 현재 플레이어의 진행 길
+
+    public void SetUserGold(int value)
+    {
+        UserInfoManager.Instance._canvasManager.GetGoldAnimation(value);
+        UserGold += value;
+    }
+
+    public int GetUserGold()
+    {
+        return UserGold;
+    }
 }
 
 [System.Serializable]
@@ -124,7 +135,7 @@ public class UserInfoManager : MonoBehaviour
     public Data data;
     public UserData userData;
     public OptionData optionData;
-
+    public CanvasManager _canvasManager;
 
 
     private void Awake()
