@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SynergyUi : MonoBehaviour
+public class SynergyUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public SynergyData _synergyData;
 
@@ -15,6 +16,7 @@ public class SynergyUi : MonoBehaviour
     public TextMeshProUGUI _typeText;
     public Image _iconSprite;
 
+    SynergyPopup _synergyPopup;
     LayoutElement _layoutElement;
 
     void Awake()
@@ -26,7 +28,7 @@ public class SynergyUi : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        _synergyPopup = SoonsoonData.Instance.SynergyPopup;
     }
 
     // Update is called once per frame
@@ -41,6 +43,7 @@ public class SynergyUi : MonoBehaviour
                 CountTextUpdate(CheckCount3(int.Parse(_curCountText.text)));
                 break;
             case 4:
+                CountTextUpdate(CheckCount4(int.Parse(_curCountText.text)));
                 break;
         }
     }
@@ -77,6 +80,30 @@ public class SynergyUi : MonoBehaviour
         }
     }
 
+    public int CheckCount4(int i)
+    {
+        if (i < _synergyData.RequiredNumber[0])
+        {
+            return 0;
+        }
+        else if (i >= _synergyData.RequiredNumber[0] && i < _synergyData.RequiredNumber[1])
+        {
+            return 1;
+        }
+        else if (i >= _synergyData.RequiredNumber[1] && i < _synergyData.RequiredNumber[2])
+        {
+            return 2;
+        }
+        else if (i >= _synergyData.RequiredNumber[2] && i < _synergyData.RequiredNumber[3])
+        {
+            return 3;
+        }
+        else
+        {
+            return 4;
+        }
+    }
+
     void CountTextUpdate(int index)
     {
         if (index == 0)
@@ -98,5 +125,18 @@ public class SynergyUi : MonoBehaviour
                 _countText[i].color = (index == i) ? _colors[0] : _colors[1];
             }
         }
+    }
+
+    // 마우스가 오브젝트 위에 올라갔을 때 호출되는 함수
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        _synergyPopup._synergyData = this._synergyData;
+        _synergyPopup.init();
+    }
+
+    // 마우스가 오브젝트에서 벗어났을 때 호출되는 함수
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _synergyPopup._synergyData = null;
     }
 }

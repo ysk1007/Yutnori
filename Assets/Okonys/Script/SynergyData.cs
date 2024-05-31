@@ -46,6 +46,9 @@ public class SynergyData : ScriptableObject
     [TextArea]
     public string SynergyDesc;
 
+    [TextArea]
+    public string BuffDesc;
+
     [Header(" # Synergy icon")]
     public Sprite icon;
 }

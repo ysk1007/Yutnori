@@ -26,6 +26,7 @@ public class Unit_AnimationAction : MonoBehaviour
         {
             case Unit.AttackType.Warrior:
             case Unit.AttackType.Assassin:
+            case Unit.AttackType.Merchant:
                 unit.SetAttack();    
                 break;
             case Unit.AttackType.Archer:
@@ -46,6 +47,7 @@ public class Unit_AnimationAction : MonoBehaviour
         {
             case Unit.AttackType.Warrior:
             case Unit.AttackType.Assassin:
+            case Unit.AttackType.Merchant:
                 unit.AttackSkill();
                 break;
             case Unit.AttackType.Archer:

@@ -76,6 +76,7 @@ public class Unit : MonoBehaviour
     public float _damageinflicted = 0; // 가한 데미지
 
     public bool _wizardPower = false;
+    public bool _merchantPower = false;
     public bool _ghostPower = false;
     public float _ghostTime = 0;
     public bool _ghostDieFlag = false;
@@ -95,6 +96,8 @@ public class Unit : MonoBehaviour
     public float _skillTimer;
     public float _ghostTimer;
 
+    UserInfoManager _userInfoManager;
+
     void Awake()
     {
         init();
@@ -106,6 +109,7 @@ public class Unit : MonoBehaviour
     {
         _spumPref = this.gameObject.GetComponent<SPUM_Prefabs>();
         _unit_SubSet = this.gameObject.GetComponentInChildren<Unit_SubSet>();
+        _userInfoManager = UserInfoManager.Instance;
     }
 
 
@@ -145,6 +149,7 @@ public class Unit : MonoBehaviour
 
         _target = null;
         _wizardPower = false;
+        _merchantPower = false;
         _ghostPower = false;
         _ghostTime = 0;
         _ghostDieFlag = false;
@@ -306,6 +311,7 @@ public class Unit : MonoBehaviour
         {
             case AttackType.Warrior:
             case AttackType.Assassin:
+            case AttackType.Merchant:
                 _spumPref.PlayAnimation(4);
                 break;
             case AttackType.Archer:
@@ -329,6 +335,7 @@ public class Unit : MonoBehaviour
         {
             case AttackType.Warrior:
             case AttackType.Assassin:
+            case AttackType.Merchant:
                 _spumPref.PlayAnimation(7);
                 break;
             case AttackType.Archer:
@@ -345,7 +352,8 @@ public class Unit : MonoBehaviour
     {
         float dmg = _unitAT * (_buffAT - _deBuffAT);
         bool critical = GetRandomBool();
-        dmg *= critical == true ? 2 : 1;
+        dmg *= critical ? 2 : 1;
+        dmg += (_merchantPower) ? dmg * (_userInfoManager.userData.GetUserGold()/10000) : 0; 
         if (target == null)
         {
             _target.SetDamage(this, dmg, critical);
@@ -455,6 +463,7 @@ public class Unit : MonoBehaviour
             case AttackType.Archer:
             case AttackType.Wizard:
             case AttackType.Healer:
+            case AttackType.Merchant:
                 SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Hit, null, this.transform.position, false, 1f);
                 break;
         }

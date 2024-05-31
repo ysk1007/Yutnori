@@ -128,4 +128,9 @@ public class BattleReward : MonoBehaviour
             }
         }
     }
+
+    public void SetBonusReward(int value)
+    {
+        _bonusReward = value;
+    }
 }

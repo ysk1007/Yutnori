@@ -14,7 +14,7 @@ public class UnitSynergy : MonoBehaviour
     public float interval; // 버프 간격
     public float timer; // 버프 타이머
     SynergyManager sm;
-
+    BattleReward _battleReward;
     void Awake()
     {
         Init();
@@ -23,6 +23,7 @@ public class UnitSynergy : MonoBehaviour
     void OnEnable()
     {
         sm = SoonsoonData.Instance.Synergy_Manager;
+        _battleReward = SoonsoonData.Instance.Battle_Reward;
         Init();
         ApplySynergy();
         if(_Type == Type.Start) SpecialSynergy();
@@ -68,6 +69,7 @@ public class UnitSynergy : MonoBehaviour
                 HealerSynergy();
                 break;
             case SynergyData.SynergyType.Merchant:
+                MerchantSynergy();
                 break;
             case SynergyData.SynergyType.Human:
                 HumanSynergy();
@@ -98,6 +100,7 @@ public class UnitSynergy : MonoBehaviour
                 HealerSpecialSynergy();
                 break;
             case SynergyData.SynergyType.Merchant:
+                MerchantSpecialSynergy();
                 break;
         }
     }
@@ -547,6 +550,64 @@ public class UnitSynergy : MonoBehaviour
                 break;
         }
     }
+
+    void MerchantSynergy()
+    {
+        interval = 0.0f;
+        switch (this.gameObject.tag)
+        {
+            case "P1":
+
+                if (sm._p1AttackTypeSynergyList[5] + sm._AttackTypeAddArtifact[5] >= synergyData.RequiredNumber[3])
+                {
+                    Debug.Log("상인 시너지 4 레벨");
+                    Level = 4;
+                    interval = synergyData.Interval[2];
+                }
+                else if (sm._p1AttackTypeSynergyList[5] + sm._AttackTypeAddArtifact[5] >= synergyData.RequiredNumber[2])
+                {
+                    Debug.Log("상인 시너지 3 레벨");
+                    Level = 3;
+                    interval = synergyData.Interval[2];
+                }
+                else if (sm._p1AttackTypeSynergyList[5] + sm._AttackTypeAddArtifact[5] >= synergyData.RequiredNumber[1])
+                {
+                    Debug.Log("상인 시너지 2 레벨");
+                    Level = 2;
+                    interval = synergyData.Interval[1];
+                }
+                else if (sm._p1AttackTypeSynergyList[5] + sm._AttackTypeAddArtifact[5] >= synergyData.RequiredNumber[0])
+                {
+                    Debug.Log("상인 시너지 1 레벨");
+                    Level = 1;
+                    interval = synergyData.Interval[0];
+                }
+
+                _battleReward.SetBonusReward(Level);
+
+                break;
+            case "P2":
+
+                break;
+        }
+    }
+
+    void MerchantSpecialSynergy()
+    {
+        switch (gameObject.tag)
+        {
+            case "P1":
+                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                {
+                    if (sm._p1UnitList[i]._attackType == AttackType.Merchant && sm._p1UnitList[i].gameObject.activeInHierarchy)
+                        sm._p1UnitList[i]._merchantPower = true;
+                }
+                break;
+            case "P2":
+                break;
+        }
+    }
+
 
     void HumanSynergy()
     {
