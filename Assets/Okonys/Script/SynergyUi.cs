@@ -131,7 +131,8 @@ public class SynergyUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void OnPointerEnter(PointerEventData eventData)
     {
         _synergyPopup._synergyData = this._synergyData;
-        _synergyPopup.init();
+        int curLevel = (_synergyData.RequiredNumber.Length > 3) ? CheckCount4(int.Parse(_curCountText.text)) : CheckCount3(int.Parse(_curCountText.text));
+        _synergyPopup.init(curLevel);
     }
 
     // 마우스가 오브젝트에서 벗어났을 때 호출되는 함수

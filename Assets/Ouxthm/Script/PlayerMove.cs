@@ -20,10 +20,13 @@ public class PlayerMove : MonoBehaviour
     EnemyPool _enemyPool;
     EventPanel _eventPanel;
     public RectTransform player;
+    public RectTransform boss;
     public bool _isMove = false;
     public bool _isMarket = false;
     [SerializeField] private Transform players;
+    [SerializeField] private Transform bosses;
     public SPUM_Prefabs _playerPref;
+    public SPUM_Prefabs _bossPref;
 
     public Transform plates;
     public List<RectTransform> platePos;
@@ -36,6 +39,13 @@ public class PlayerMove : MonoBehaviour
     public int currentIndex;
     public int nowPlateNum = 0;     // 현재 밟고 있는 길 번호
     public int nowRoadNum = 0; // 현재 진행 길
+
+    public bool bossAlive = false;
+    public bool bossMeet = false;
+    public int bossNum;
+    public int bossCurrentIndex;
+    public int bossPlateNum = 0;     // 현재 밟고 있는 길 번호
+    public int bossRoadNum = 0; // 현재 진행 길
 
     public int moveSpeed = 10;
     private void Awake()
@@ -59,13 +69,19 @@ public class PlayerMove : MonoBehaviour
         _unit_Manager = SoonsoonData.Instance.Unit_Manager;
         _eventPanel = SoonsoonData.Instance.Event_Panel;
 
+        // 플레이어 이동 말 할당
         players.GetChild(_userInfoManager.userData.SelectCharacter).gameObject.SetActive(true);
         player = players.GetChild(_userInfoManager.userData.SelectCharacter).gameObject.GetComponent<RectTransform>();
         _playerPref = player.GetComponent<SPUM_Prefabs>();
 
+        // 보스 데이터가 있으면 보스 말 출현
+        if(_userInfoManager.userData.isBossData)
+            BossAppearance();
+
         yutManager._plateList = plate;
         yutManager.SetPlate();
         UserPosSetting();
+
         MarketVisit();
     }
 
@@ -81,6 +97,30 @@ public class PlayerMove : MonoBehaviour
         RouteFind();
         Vector2 targetPosition = platePos[currentIndex].anchoredPosition; // 목표 위치를 설정합니다.
         player.anchoredPosition = targetPosition;
+    }
+
+    public void BossAppearance()
+    {
+        bossMeet = false;
+        bossAlive = true;
+        bossNum = 0;
+        // 보스 이동 말 할당
+        bosses.GetChild(bossNum).gameObject.SetActive(true);
+        boss = bosses.GetChild(bossNum).gameObject.GetComponent<RectTransform>();
+        _bossPref = boss.GetComponent<SPUM_Prefabs>();
+
+        BossPosSetting();
+    }
+
+    void BossPosSetting()
+    {
+        // 데이터 불러오기
+        bossPlateNum = _userInfoManager.userData.bossCurrentPlateNum;
+        bossRoadNum = _userInfoManager.userData.bossCurrentRoadNum;
+
+        BossRouteFind();
+        Vector2 targetPosition = platePos[bossCurrentIndex].anchoredPosition; // 목표 위치를 설정합니다.
+        boss.anchoredPosition = targetPosition;
     }
 
     public IEnumerator Move()
@@ -137,8 +177,83 @@ public class PlayerMove : MonoBehaviour
         _userInfoManager.UserDataSave();
 
         yield return new WaitForSeconds(0.5f);
-        _yutThrowBtn.gameObject.SetActive(true);
-        PlateEvent();
+
+        if (bossAlive)
+        {
+            StartCoroutine(BossMove());
+        }
+        else
+        {
+            _yutThrowBtn.gameObject.SetActive(true);
+            PlateEvent();
+        }
+    }
+
+    public IEnumerator BossMove()
+    {
+        _bossPref.PlayAnimation(1);
+        // 이동 거리만큼 반복
+        for (int i = 0; i < yutManager._moveDistance * 2; i++)
+        {
+            bossPlateNum++;
+
+            if (road[bossRoadNum].Count - 1 < bossPlateNum)
+            {
+                bossRoadNum = 0;
+                bossPlateNum = 0;
+            }
+
+            // 현재 경로의 다음 칸 인덱스를 가져옴
+            bossCurrentIndex = road[bossRoadNum][bossPlateNum];
+
+            Vector2 targetPosition = platePos[bossCurrentIndex].anchoredPosition; // 목표 위치를 설정합니다.
+            Vector2 direction = (targetPosition - boss.anchoredPosition).normalized;
+
+            _bossPref._anim.transform.localScale = (direction.x >= 0) ? new Vector3(-1, 1, 1) : Vector3.one;
+
+            while (Vector2.Distance(boss.anchoredPosition, targetPosition) > 0.1f)
+            {
+                boss.anchoredPosition = Vector2.MoveTowards(boss.anchoredPosition, targetPosition, moveSpeed * Time.deltaTime);
+                if (Vector2.Distance(boss.anchoredPosition, targetPosition) <= 0.1f)
+                {
+                    // 거의 도달했을 때, 플레이어의 위치를 목표 위치로 명시적으로 설정
+                    boss.anchoredPosition = targetPosition;
+                }
+                yield return null;
+            }
+
+            // 보스와 조우 했는지 확인
+            if (BossPlayerMeet())
+            {
+
+                yield return null;
+            }
+
+        }
+        _bossPref.PlayAnimation(0);
+        // 길 탐색
+        BossRouteFind();
+
+        // 현재 발판 번호 저장
+        /*_userInfoManager.userData.CurrentPlateNum = nowPlateNum;
+        _userInfoManager.userData.CurrentRoadNum = nowRoadNum;
+        _userInfoManager.userData.TurnCounter++;
+        _userInfoManager.UserDataSave();*/
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (bossMeet)
+        {
+            canvasManager.ShowUi();
+            _unit_Manager._p2unitID = _enemyPool.GetBossSquad(bossNum);
+            _unit_Manager.FieldReset();
+            _yutThrowBtn.gameObject.SetActive(true);
+        }
+        else
+        {
+            _yutThrowBtn.gameObject.SetActive(true);
+            PlateEvent();
+        }
     }
 
     public void MarketVisit()
@@ -154,6 +269,13 @@ public class PlayerMove : MonoBehaviour
     public void MarketExit()
     {
         _isMarket = false;
+    }
+
+    // 보스와 조우 했는지 확인
+    public bool BossPlayerMeet()
+    {
+        bossMeet = true;
+        return (currentIndex == bossCurrentIndex) ? true : false;
     }
 
     void RouteFind() // 진행 경로 찾기
@@ -175,6 +297,29 @@ public class PlayerMove : MonoBehaviour
             case 22:
                 nowRoadNum = 3;
                 nowPlateNum = 0;
+                break;
+        }
+    }
+
+    void BossRouteFind() // 진행 경로 찾기
+    {
+        // 현재 경로의 현재 칸 인덱스를 가져옴
+        bossCurrentIndex = road[bossRoadNum][bossPlateNum];
+        switch (bossCurrentIndex)
+        {
+            case 5:
+                bossRoadNum = 1;
+                bossPlateNum = 0;
+                break;
+
+            case 10:
+                bossRoadNum = 2;
+                bossPlateNum = 0;
+                break;
+
+            case 22:
+                bossRoadNum = 3;
+                bossPlateNum = 0;
                 break;
         }
     }

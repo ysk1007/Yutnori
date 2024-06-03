@@ -66,6 +66,11 @@ public class UserData //유저 데이터 클래스
     public int CurrentPlateNum; // 현재 플레이어가 밟고 있는 발판 번호
     public int CurrentRoadNum; // 현재 플레이어의 진행 길
 
+    public bool isBossData; // 보스 데이터의 유무
+    public int bossNum; // 보스 번호
+    public int bossCurrentPlateNum; // 현재 보스가 밟고 있는 발판 번호
+    public int bossCurrentRoadNum; // 현재 보스의 진행 길
+
     public void SetUserGold(int value)
     {
         UserInfoManager.Instance._canvasManager.GetGoldAnimation(value);
@@ -176,6 +181,12 @@ public class UserInfoManager : MonoBehaviour
         userData.PlatesData = new int[29];
         userData.CurrentPlateNum = 0;
         userData.CurrentRoadNum = 0;
+
+        userData.isBossData = false;
+        userData.bossNum = 0;
+        userData.bossCurrentPlateNum = 0;
+        userData.bossCurrentRoadNum = 0;
+
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
 
@@ -215,6 +226,12 @@ public class UserInfoManager : MonoBehaviour
         userData.PlatesData = new int[29];
         userData.CurrentPlateNum = 0;
         userData.CurrentRoadNum = 0;
+
+        userData.isBossData = false;
+        userData.bossNum = 0;
+        userData.bossCurrentPlateNum = 0;
+        userData.bossCurrentRoadNum = 0;
+
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
 

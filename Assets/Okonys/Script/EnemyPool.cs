@@ -17,12 +17,22 @@ public class EnemyPool : MonoBehaviour
 {
     [SerializeField] private int _gameLevel;
 
+    [Header(" # 일반전 적 스쿼드")]
     [SerializeField] private EnemySquad[] _enemySquad_Lv0;
     [SerializeField] private EnemySquad[] _enemySquad_Lv1;
     [SerializeField] private EnemySquad[] _enemySquad_Lv2;
     [SerializeField] private EnemySquad[] _enemySquad_Lv3;
     [SerializeField] private EnemySquad[] _enemySquad_Lv4;
 
+    [Header(" # 엘리트전 적 스쿼드")]
+    [SerializeField] private EnemySquad[] _eliteSquad_Lv0;
+    [SerializeField] private EnemySquad[] _eliteSquad_Lv1;
+    [SerializeField] private EnemySquad[] _eliteSquad_Lv2;
+    [SerializeField] private EnemySquad[] _eliteSquad_Lv3;
+    [SerializeField] private EnemySquad[] _eliteSquad_Lv4;
+
+    [Header(" # 보스전 적 스쿼드")]
+    [SerializeField] private EnemySquad[] _bossSquad;
 
     UserInfoManager _userInfoManager;
 
@@ -69,6 +79,11 @@ public class EnemyPool : MonoBehaviour
                 RandomNum = Random.Range(0, _enemySquad_Lv4.Length);
                 return _enemySquad_Lv4[RandomNum].GetSquad();
         }
+    }
+
+    public List<SlotClass> GetBossSquad(int index)
+    {
+        return _bossSquad[index].GetSquad();
     }
     
     void SetGameLevel()
