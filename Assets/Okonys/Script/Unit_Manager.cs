@@ -333,6 +333,19 @@ public class Unit_Manager : MonoBehaviour
     {
         _gamePause = true;
         SoonsoonData.Instance.LogPopup.ShowLog("승리");
+
+        _userInfoManager.userData.isEnemyData = false;
+        _userInfoManager.userData.EnemySquad = new Vector2[9];
+        _userInfoManager.UserDataSave();
+
+        // 보스전 보상
+        if (_playerMove.bossMeet)
+        {
+            _playerMove.BossDead();
+            _battleReward.NormalBattleReward();
+            return;
+        }
+
         switch (_playerMove.CurrentPlateType())
         {
             case Plate.PlateType.Enemy:
@@ -377,6 +390,8 @@ public class Unit_Manager : MonoBehaviour
         _p1unitDeploy.UnitDeployment();
         _p2unitDeploy.UnitDeployment();
 
+        EnemyUnitsSave();
+
         SoonsoonData.Instance.Missile_Manager.ResetMissile();
         SoonsoonData.Instance.Effect_Manager.ResetEffect();
         SoonsoonData.Instance.Skill_Manager.ResetSkill();
@@ -389,6 +404,8 @@ public class Unit_Manager : MonoBehaviour
 
         SoonsoonData.Instance.Synergy_Manager.CheckSynergy();
         SoonsoonData.Instance.Damage_Measure.MeasureReset();
+
+        _userInfoManager.UserDataSave();
     }
 
     public void UnitRelocation() // p1 유닛 재배치
@@ -451,6 +468,23 @@ public class Unit_Manager : MonoBehaviour
             }
 
             _p2unitID[i] = new SlotClass(Unit_pool._unitDatas[(int)_userInfoManager.userData.EnemySquad[i].x - 1], (int)_userInfoManager.userData.EnemySquad[i].y);
+        }
+    }
+
+    public void EnemyUnitsSave()
+    {
+        for (int i = 0; i < _p2unitID.Count; i++)
+        {
+            if (_p2unitID[i]?._unitData == null)
+            {
+                _userInfoManager.userData.EnemySquad[i] = Vector2.zero;
+                continue;
+            }
+
+            int UnitNumber = _p2unitID[i].GetUnitData().UnitID;
+            int UnitRate = _p2unitID[i].GetUnitRate();
+
+            _userInfoManager.userData.EnemySquad[i] = new Vector2(UnitNumber, UnitRate);
         }
     }
 }

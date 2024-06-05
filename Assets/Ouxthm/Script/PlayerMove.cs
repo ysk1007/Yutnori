@@ -42,12 +42,13 @@ public class PlayerMove : MonoBehaviour
 
     public bool bossAlive = false;
     public bool bossMeet = false;
-    public int bossNum;
+    public int _bossNum;
     public int bossCurrentIndex;
     public int bossPlateNum = 0;     // 현재 밟고 있는 길 번호
     public int bossRoadNum = 0; // 현재 진행 길
 
     public int moveSpeed = 10;
+
     private void Awake()
     {
         SoonsoonData.Instance.Player_Move = this;
@@ -74,15 +75,22 @@ public class PlayerMove : MonoBehaviour
         player = players.GetChild(_userInfoManager.userData.SelectCharacter).gameObject.GetComponent<RectTransform>();
         _playerPref = player.GetComponent<SPUM_Prefabs>();
 
-        // 보스 데이터가 있으면 보스 말 출현
-        if(_userInfoManager.userData.isBossData)
-            BossAppearance();
-
         yutManager._plateList = plate;
         yutManager.SetPlate();
+
         UserPosSetting();
+        // 보스 데이터가 있으면 보스 말 출현
+        BossPosSetting();
 
         MarketVisit();
+
+        BossPlayerMeet();
+
+        // 전투를 마치고 종료하지 않았다면 즉시 전투 이어하기
+        BattleContinue();
+
+        // 이벤트를 마치고 종료하지 않았다면 즉시 이벤트 이어하기
+        EventContinue();
     }
 
     private void Update()
@@ -101,19 +109,62 @@ public class PlayerMove : MonoBehaviour
 
     public void BossAppearance()
     {
-        bossMeet = false;
+        // 보스 데이터가 있으면 보스 말 출현
+        if (_userInfoManager.userData.isBossData)
+        {
+            BossPosSetting();
+        }
+        // 없다면 보스 생성
+        else
+        {
+            _enemyPool.SetGameLevel();
+            int GameLevel = _enemyPool.GetGameLevel();
+            Debug.Log(GameLevel);
+
+            switch (GameLevel)
+            {
+                case 0:
+                    return;
+                case 1:
+                    _bossNum = Random.Range(0, 2);
+                    break;
+                case 2:
+                    _bossNum = Random.Range(2, 4);
+                    break;
+                case 3:
+                    _bossNum = Random.Range(4, 6);
+                    break;
+                case 4:
+                    _bossNum = 6;
+                    break;
+            }
+
+            _userInfoManager.userData.isBossData = true;
+            _userInfoManager.userData.bossNum = _bossNum;
+            _userInfoManager.userData.bossCurrentPlateNum = 0;
+            _userInfoManager.userData.bossCurrentRoadNum = 3;
+            _userInfoManager.UserDataSave();
+
+            BossPosSetting();
+        }
+    }
+
+    void BossPosSetting()
+    {
+        if (!_userInfoManager.userData.isBossData)
+            return;
+
         bossAlive = true;
-        bossNum = 0;
+        bossMeet = false;
+
+        int bossNum = _userInfoManager.userData.bossNum;
+        _bossNum = bossNum;
+
         // 보스 이동 말 할당
         bosses.GetChild(bossNum).gameObject.SetActive(true);
         boss = bosses.GetChild(bossNum).gameObject.GetComponent<RectTransform>();
         _bossPref = boss.GetComponent<SPUM_Prefabs>();
 
-        BossPosSetting();
-    }
-
-    void BossPosSetting()
-    {
         // 데이터 불러오기
         bossPlateNum = _userInfoManager.userData.bossCurrentPlateNum;
         bossRoadNum = _userInfoManager.userData.bossCurrentRoadNum;
@@ -121,6 +172,26 @@ public class PlayerMove : MonoBehaviour
         BossRouteFind();
         Vector2 targetPosition = platePos[bossCurrentIndex].anchoredPosition; // 목표 위치를 설정합니다.
         boss.anchoredPosition = targetPosition;
+    }
+
+    public void BossDead()
+    {
+        // 보스 이동 말 할당
+        bosses.GetChild(_bossNum).gameObject.SetActive(false);
+        boss = null;
+        _bossPref = null;
+
+        _bossNum = 0;
+        bossAlive = false;
+        bossMeet = false;
+        bossPlateNum = 0;
+        bossRoadNum = 0;
+
+        _userInfoManager.userData.isBossData = false;
+        _userInfoManager.userData.bossNum = _bossNum;
+        _userInfoManager.userData.bossCurrentPlateNum = bossPlateNum;
+        _userInfoManager.userData.bossCurrentRoadNum = bossRoadNum;
+        _userInfoManager.UserDataSave();
     }
 
     public IEnumerator Move()
@@ -173,8 +244,6 @@ public class PlayerMove : MonoBehaviour
         // 현재 발판 번호 저장
         _userInfoManager.userData.CurrentPlateNum = nowPlateNum;
         _userInfoManager.userData.CurrentRoadNum = nowRoadNum;
-        _userInfoManager.userData.TurnCounter++;
-        _userInfoManager.UserDataSave();
 
         yield return new WaitForSeconds(0.5f);
 
@@ -225,8 +294,8 @@ public class PlayerMove : MonoBehaviour
             // 보스와 조우 했는지 확인
             if (BossPlayerMeet())
             {
-
-                yield return null;
+                bossMeet = true;
+                break;
             }
 
         }
@@ -235,17 +304,16 @@ public class PlayerMove : MonoBehaviour
         BossRouteFind();
 
         // 현재 발판 번호 저장
-        /*_userInfoManager.userData.CurrentPlateNum = nowPlateNum;
-        _userInfoManager.userData.CurrentRoadNum = nowRoadNum;
-        _userInfoManager.userData.TurnCounter++;
-        _userInfoManager.UserDataSave();*/
+        _userInfoManager.userData.bossCurrentPlateNum = bossPlateNum;
+        _userInfoManager.userData.bossCurrentRoadNum = bossRoadNum;
+        _userInfoManager.UserDataSave();
 
         yield return new WaitForSeconds(0.5f);
 
         if (bossMeet)
         {
             canvasManager.ShowUi();
-            _unit_Manager._p2unitID = _enemyPool.GetBossSquad(bossNum);
+            _unit_Manager._p2unitID = _enemyPool.GetBossSquad(_bossNum);
             _unit_Manager.FieldReset();
             _yutThrowBtn.gameObject.SetActive(true);
         }
@@ -271,10 +339,29 @@ public class PlayerMove : MonoBehaviour
         _isMarket = false;
     }
 
+    // 마지막 전투를 마치지 않았을 때
+    public void BattleContinue()
+    {
+        if (!_userInfoManager.userData.isEnemyData)
+            return;
+
+        canvasManager.ShowUi();
+        _unit_Manager.FieldReset();
+    }
+
+    // 마지막 이벤트를 마치지 않았을 때
+    public void EventContinue()
+    {
+        if (!_userInfoManager.userData.isEventData)
+            return;
+
+        canvasManager.FadeImage();
+        _eventPanel.CallEvent(_userInfoManager.userData.EventNum);
+    }
+
     // 보스와 조우 했는지 확인
     public bool BossPlayerMeet()
     {
-        bossMeet = true;
         return (currentIndex == bossCurrentIndex) ? true : false;
     }
 

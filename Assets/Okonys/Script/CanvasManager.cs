@@ -8,12 +8,14 @@ public class CanvasManager : MonoBehaviour
     public Animator _canvasAnimator;
     public Animator _goldTextAnimator;
     public TextMeshProUGUI _goldText;
+    public Animator _saveTextAnimator;
 
     public GameObject _uiCanvas;
     public GameObject _yutCanvas;
     public Transform _units;
 
     UserInfoManager _userInfoManager;
+    EnemyPool _enemyPool;
     private void Awake()
     {
         SoonsoonData.Instance.Canvas_Manager = this;
@@ -24,6 +26,7 @@ public class CanvasManager : MonoBehaviour
     void Start()
     {
         _userInfoManager._canvasManager = this;
+        _enemyPool = SoonsoonData.Instance.Enemy_Pool;
     }
 
     // Update is called once per frame
@@ -58,5 +61,10 @@ public class CanvasManager : MonoBehaviour
         _goldText.text = (value > 0) ? "+" + value.ToString() : value.ToString();
         _goldTextAnimator.SetTrigger("Show");
 
+    }
+
+    public void DataSaveText()
+    {
+        _saveTextAnimator.SetTrigger("Show");
     }
 }

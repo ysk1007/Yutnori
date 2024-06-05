@@ -32,6 +32,7 @@ public class EventPanel : MonoBehaviour
     CanvasManager _canvasManager;
     Unit_Manager _unitManager;
     InventoryManager _inventoryManager;
+    EnemyPool _enemyPool;
     UnitPool _unitPool;
 
     private void Awake()
@@ -55,6 +56,7 @@ public class EventPanel : MonoBehaviour
         _unitManager = SoonsoonData.Instance.Unit_Manager;
         _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
         _unitPool = SoonsoonData.Instance.Unit_pool;
+        _enemyPool = SoonsoonData.Instance.Enemy_Pool;
     }
 
     // Update is called once per frame
@@ -70,6 +72,22 @@ public class EventPanel : MonoBehaviour
         _currentEvent = events[eventNumber];
         _currentScene = 1;
         init();
+
+        _userInfoManager.userData.isEventData = true;
+        _userInfoManager.userData.EventNum = eventNumber;
+        _userInfoManager.UserDataSave();
+    }
+
+    public void CallEvent(int index)
+    {
+        _thisPopup.OnePopup();
+        _currentEvent = events[index];
+        _currentScene = 1;
+        init();
+
+        _userInfoManager.userData.isEventData = true;
+        _userInfoManager.userData.EventNum = index;
+        _userInfoManager.UserDataSave();
     }
 
     public EventData GetEventData()
@@ -165,6 +183,11 @@ public class EventPanel : MonoBehaviour
     {
         _canvasManager.FadeImage();
         _thisPopup.ZeroPopup();
+
+        _enemyPool.CallBoss();
+
+        _userInfoManager.userData.isEventData = false;
+        _userInfoManager.userData.EventNum = 0;
         _userInfoManager.UserDataSave();
     }
 
@@ -174,6 +197,7 @@ public class EventPanel : MonoBehaviour
         _canvasManager.ShowUi();
         _unitManager._p2unitID = _currentEvent._eventEnemy;
         _unitManager.FieldReset();
+        _userInfoManager.UserDataSave();
     }
 
     public void EventBattleRun()

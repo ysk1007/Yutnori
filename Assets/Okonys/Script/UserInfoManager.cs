@@ -51,7 +51,12 @@ public class UserData //유저 데이터 클래스
     // X : UnitID , Y : UnitRate
     public Vector2[] UserSquad; // 유저 유닛
     public Vector2[] UserInventory; // 유저 인벤토리
+
+    public bool isEnemyData; // 적 데이터 유무
     public Vector2[] EnemySquad; // 적 팀 유닛
+
+    public bool isEventData; // 이벤트 데이터 유무
+    public int EventNum; // 이벤트 번호
 
     public bool isShopArtifactDatas; // 상점 아티팩트 데이터 유무
     public int[] ShopArtifacts;
@@ -171,7 +176,13 @@ public class UserInfoManager : MonoBehaviour
         userData.UserHp = 100;
         userData.UserSquad = new Vector2[9];
         userData.UserInventory = new Vector2[12];
+
+        userData.isEnemyData = false;
         userData.EnemySquad = new Vector2[9];
+
+        userData.isEventData = false;
+        userData.EventNum = 0;
+
         userData.isShopArtifactDatas = false;
         userData.ShopArtifacts = new int[6];
         userData.ShopUnits = new int[5];
@@ -216,7 +227,13 @@ public class UserInfoManager : MonoBehaviour
         userData.UserSquad = new Vector2[9];
         userData.UserSquad[0] = new Vector2(index + 1, 0); 
         userData.UserInventory = new Vector2[12];
+
+        userData.isEnemyData = false;
         userData.EnemySquad = new Vector2[9];
+
+        userData.isEventData = false;
+        userData.EventNum = 0;
+
         userData.isShopArtifactDatas = false;
         userData.ShopArtifacts = new int[6];
         userData.ShopUnits = new int[5];
@@ -254,6 +271,8 @@ public class UserInfoManager : MonoBehaviour
 
     public void UserDataSave()
     {
+        if (_canvasManager) _canvasManager.DataSaveText();
+
         data.SetUserData(userData);
         ES3.Save(keyName, data);
     }

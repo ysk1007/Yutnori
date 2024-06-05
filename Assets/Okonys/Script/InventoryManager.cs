@@ -228,6 +228,7 @@ public class InventoryManager : MonoBehaviour
                 _Slots[i + _squadSlotHoloder.transform.childCount].transform.GetChild(0).GetComponent<Image>().enabled = false;
             }
         }
+        UserUnitsSave();
         SoonsoonData.Instance.Unit_Manager.UnitRelocation();
     }
 

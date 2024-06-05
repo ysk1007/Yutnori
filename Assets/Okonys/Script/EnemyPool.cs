@@ -35,6 +35,7 @@ public class EnemyPool : MonoBehaviour
     [SerializeField] private EnemySquad[] _bossSquad;
 
     UserInfoManager _userInfoManager;
+    PlayerMove _playerMove;
 
     private void Awake()
     {
@@ -45,19 +46,22 @@ public class EnemyPool : MonoBehaviour
     void Start()
     {
         _userInfoManager = UserInfoManager.Instance;
+        _playerMove = SoonsoonData.Instance.Player_Move;
         SetGameLevel();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        SetGameLevel();
     }
 
     public List<SlotClass> GetRandomEnemy()
     {
         SetGameLevel();
         int RandomNum;
+        _userInfoManager.userData.isEnemyData = true;
         switch (_gameLevel)
         {
             case 0:
@@ -83,13 +87,43 @@ public class EnemyPool : MonoBehaviour
 
     public List<SlotClass> GetBossSquad(int index)
     {
+        _userInfoManager.userData.isEnemyData = true;
         return _bossSquad[index].GetSquad();
     }
-    
-    void SetGameLevel()
+
+    public void SetGameLevel()
     {
-        _gameLevel = _userInfoManager.userData.TurnCounter / 10;
+        _gameLevel = _userInfoManager.userData.TurnCounter / 15;
         _userInfoManager.userData.GameLevel = _gameLevel;
+    }
+
+    public int GetGameLevel()
+    {
+        return _gameLevel;
+    }
+
+    public void CallBoss()
+    {
+        _userInfoManager.userData.TurnCounter++;
         _userInfoManager.UserDataSave();
+
+        if (_userInfoManager.userData.isBossData) return;
+
+        int gameTurn = _userInfoManager.userData.TurnCounter;
+        switch (gameTurn)
+        {
+            case 15:
+                _playerMove.BossAppearance();
+                break;
+            case 30:
+                _playerMove.BossAppearance();
+                break;
+            case 45:
+                _playerMove.BossAppearance();
+                break;
+            case 60:
+                _playerMove.BossAppearance();
+                break;
+        }
     }
 }
