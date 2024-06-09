@@ -2,13 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
 {
     public Animator _canvasAnimator;
+
     public Animator _goldTextAnimator;
     public TextMeshProUGUI _goldText;
+
     public Animator _saveTextAnimator;
+
+    public Animator _bossLabelAnimator;
+    public TextMeshProUGUI _bossNameText;
+    public Image _bossIcon;
 
     public GameObject _uiCanvas;
     public GameObject _yutCanvas;
@@ -66,5 +73,12 @@ public class CanvasManager : MonoBehaviour
     public void DataSaveText()
     {
         _saveTextAnimator.SetTrigger("Show");
+    }
+
+    public void BossCall(UnitData unit)
+    {
+        _bossIcon.sprite = unit.icon;
+        _bossNameText.text = "º¸½º\n" + unit.UnitName;
+        _bossLabelAnimator.SetTrigger("Show");
     }
 }

@@ -17,6 +17,7 @@ public class PlayerMove : MonoBehaviour
     CanvasManager canvasManager;
     UserInfoManager _userInfoManager;
     Unit_Manager _unit_Manager;
+    UnitPool _unitPool;
     EnemyPool _enemyPool;
     EventPanel _eventPanel;
     public RectTransform player;
@@ -63,8 +64,9 @@ public class PlayerMove : MonoBehaviour
 
     void Start()
     {
-        _enemyPool = SoonsoonData.Instance.Enemy_Pool;
         _userInfoManager = UserInfoManager.Instance;
+        _enemyPool = SoonsoonData.Instance.Enemy_Pool;
+        _unitPool = SoonsoonData.Instance.Unit_pool;
         yutManager = YutManager.instance;
         canvasManager = SoonsoonData.Instance.Canvas_Manager;
         _unit_Manager = SoonsoonData.Instance.Unit_Manager;
@@ -139,6 +141,7 @@ public class PlayerMove : MonoBehaviour
                     break;
             }
 
+            canvasManager.BossCall(_unitPool._bossDatas[_bossNum]);
             _userInfoManager.userData.isBossData = true;
             _userInfoManager.userData.bossNum = _bossNum;
             _userInfoManager.userData.bossCurrentPlateNum = 0;
