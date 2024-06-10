@@ -5,7 +5,10 @@ using UnityEngine;
 public class UnitPool : MonoBehaviour
 {
     public List<GameObject> _unitPrefabs = new List<GameObject>();
+    public List<GameObject> _objectPrefabs = new List<GameObject>();
+
     public List<UnitData> _unitDatas = new List<UnitData>();
+    public List<UnitData> _objectDatas = new List<UnitData>();
     public List<UnitData> _bossDatas = new List<UnitData>();
 
     public List<UnitData> _commonUnits = new List<UnitData>();

@@ -93,6 +93,9 @@ public class PlayerMove : MonoBehaviour
 
         // 이벤트를 마치고 종료하지 않았다면 즉시 이벤트 이어하기
         EventContinue();
+
+        // 현재 발판 타입 확인
+        CurrentPlateType();
     }
 
     private void Update()
@@ -232,6 +235,9 @@ public class PlayerMove : MonoBehaviour
 
             if (currentIndex == 0)
             {
+                // 상점 초기화
+                canvasManager._shop.ResetShop();
+
                 MarketVisit();
                 while (_isMarket)
                 {
@@ -333,8 +339,7 @@ public class PlayerMove : MonoBehaviour
 
         _isMarket = true;
         _playerPref.PlayAnimation(0);
-        _continueButton.SetActive(true);
-        _marketVisitButton.SetActive(true);
+        Invoke("PlateEvent", 0.2f);
     }
 
     public void MarketExit()
@@ -428,10 +433,20 @@ public class PlayerMove : MonoBehaviour
                 _eventPanel.RandomEvent();
                 break;
             case Plate.PlateType.Home:
+                _continueButton.SetActive(true);
+                _marketVisitButton.SetActive(true);
+                canvasManager.FadeImage();
+                canvasManager._shop.OpenShop();
                 break;
-            case Plate.PlateType.Boss:
+            case Plate.PlateType.Elite:
+                canvasManager.ShowUi();
+                _unit_Manager._p2unitID = _enemyPool.GetRandomElite();
+                _unit_Manager.FieldReset();
                 break;
             case Plate.PlateType.Chest:
+                canvasManager.ShowUi();
+                _unit_Manager._p2unitID = _enemyPool.GetChest();
+                _unit_Manager.FieldReset();
                 break;
         }
     }

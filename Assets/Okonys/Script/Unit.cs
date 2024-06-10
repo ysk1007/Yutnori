@@ -29,7 +29,8 @@ public class Unit : MonoBehaviour
         Wizard = 2,
         Assassin = 3,
         Healer = 4,
-        Merchant = 5
+        Merchant = 5,
+        Object = 6
     }
 
     public enum UnitType
@@ -118,6 +119,7 @@ public class Unit : MonoBehaviour
     void Update()
     {
         if (SoonsoonData.Instance.Unit_Manager._gamePause) return;
+        if (_attackType == AttackType.Object) return;
 
         CheckState();
         if (_unitState != UnitState.skill)
@@ -356,7 +358,7 @@ public class Unit : MonoBehaviour
         dmg += (_merchantPower) ? dmg * (_userInfoManager.userData.GetUserGold()/10000) : 0; 
         if (target == null)
         {
-            _target.SetDamage(this, dmg, critical);
+            _target?.SetDamage(this, dmg, critical);
         }
         else
         {

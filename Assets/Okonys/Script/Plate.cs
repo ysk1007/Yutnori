@@ -10,7 +10,7 @@ public class Plate : MonoBehaviour
         Enemy = 0,
         Random = 1,
         Home = 2,
-        Boss = 3,
+        Elite = 3,
         Chest = 4,
     }
 

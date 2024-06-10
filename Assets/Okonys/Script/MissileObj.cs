@@ -90,7 +90,7 @@ public class MissileObj : MonoBehaviour
         _owner = owner;
         _target = target;
 
-        _Tag = _target.tag;
+        _Tag = _target?.tag;
 
         _endPos = (Vector2)_target.transform.position + new Vector2(0, 0.25f);
         _timer = 0;

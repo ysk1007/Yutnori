@@ -157,7 +157,7 @@ public class YutManager : MonoBehaviour
                     _plateList[i].init();
                     break;
                 case 3:
-                    _plateList[i]._plateType = Plate.PlateType.Boss;
+                    _plateList[i]._plateType = Plate.PlateType.Elite;
                     _plateList[i].init();
                     break;
                 case 4:

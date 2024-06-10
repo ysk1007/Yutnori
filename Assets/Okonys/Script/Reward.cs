@@ -119,4 +119,9 @@ public class Reward : MonoBehaviour
         _icon.sprite = null;
         _text.text = null;
     }
+
+    public itemStock GetItemStock()
+    {
+        return _itemStock;
+    }
 }

@@ -247,7 +247,6 @@ public class SkillObj : MonoBehaviour
 
     void BuffProcess()
     {
-        Debug.Log("น๖วม");
         bool BuffType = (_skillType == SkillType.Debuff) ? true : false;
         switch (BuffType)
         {

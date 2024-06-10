@@ -71,6 +71,46 @@ public class BattleReward : MonoBehaviour
         _popup.OnePopup();
     }
 
+    public void ChestReward(float RemainHp)
+    {
+        RewardReset();
+
+        float totalDamage = 7777777f - RemainHp;
+
+        int selectedGrade = 0; // 레어
+
+        if (totalDamage > 100000)
+        {
+            selectedGrade = 2; // 에픽
+        }
+        else if (totalDamage > 10000)
+        {
+            selectedGrade = 1; // 전설
+        }
+
+        // 유물 보상
+        _rewardList[0].init(Reward.RewardType.artifact, null, null, null, _itemShop.ReturnChestItem(selectedGrade));
+
+        // 만약 유물을 받지 못 했다면 골드로 대체
+        if(_rewardList[0].GetItemStock() == null)
+        {
+            switch (selectedGrade)
+            {
+                case 0:
+                    _rewardList[0].init(Reward.RewardType.money, _moneyicon, "777");
+                    break;
+                case 1:
+                    _rewardList[0].init(Reward.RewardType.money, _moneyicon, "7777");
+                    break;
+                case 2:
+                    _rewardList[0].init(Reward.RewardType.money, _moneyicon, "77777");
+                    break;
+            }
+        }
+
+        _popup.OnePopup();
+    }
+
     int GoldReward()
     {
         float range = Random.Range(1f, 10f);

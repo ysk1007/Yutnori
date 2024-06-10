@@ -8,6 +8,7 @@ public class Shop : MonoBehaviour
     public Button[] btn = new Button[3];
     public GameObject[] ui = new GameObject[3];
     UnitShop _unitShop;
+    ItemShop _itemShop;
     Gambling _gambling;
 
     private void Awake()
@@ -45,6 +46,7 @@ public class Shop : MonoBehaviour
     private void Start()
     {
         _unitShop = SoonsoonData.Instance.UnitShop;
+        _itemShop = SoonsoonData.Instance.ItemShop;
     }
 
     public void OpenShop()
@@ -59,5 +61,11 @@ public class Shop : MonoBehaviour
 
         gameObject.transform.localScale = Vector3.zero;
         _unitShop._isOpenShop = false;
+    }
+
+    public void ResetShop()
+    {
+        _unitShop.newProduct();
+        _itemShop.newItem();
     }
 }

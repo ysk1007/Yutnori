@@ -9,10 +9,10 @@ public class UnitPopup : MonoBehaviour
     public Unit _unit;
     public UnitData _unitData;
     public Sprite[] _rateSprites;
+    public Sprite _nullSprite;
     public Image _rateSprite;
     public Image _unitIcon;
     public TextMeshProUGUI _unitName;
-    public TextMeshProUGUI _unitRate;
 
     public Slider _HpSlider;
     public Slider _CoolTimeSlider;
@@ -90,11 +90,21 @@ public class UnitPopup : MonoBehaviour
         _rateSprite.sprite = _rateSprites[_unit._unitRate.GetHashCode()];
         _unitIcon.sprite = _unitData.icon;
         _unitName.text = _unitData.UnitName;
-        _unitRate.text = "µî±Þ : " + ReturnRate(_unit._unitRate.GetHashCode());
-        _synergyIcon.sprite = _synergySprites[_unit._attackType.GetHashCode()];
-        _synergyText.text = ReturnSynergy(_unit._attackType.GetHashCode());
-        _typeIcon.sprite = _typeSprites[_unit._unitType.GetHashCode()];
-        _typeText.text = ReturnType(_unit._unitType.GetHashCode());
+
+        if(_unit._attackType == Unit.AttackType.Object)
+        {
+            _synergyIcon.sprite = _nullSprite;
+            _synergyText.text = null;
+            _typeIcon.sprite = _nullSprite;
+            _typeText.text = null;
+        }
+        else
+        {
+            _synergyIcon.sprite = _synergySprites[_unit._attackType.GetHashCode()];
+            _synergyText.text = ReturnSynergy(_unit._attackType.GetHashCode());
+            _typeIcon.sprite = _typeSprites[_unit._unitType.GetHashCode()];
+            _typeText.text = ReturnType(_unit._unitType.GetHashCode());
+        }
     }
 
     string ReturnSynergy(int i)
@@ -143,27 +153,6 @@ public class UnitPopup : MonoBehaviour
                 break;
             case 3:
                 ResultString = "¾Ç±Í";
-                break;
-            default:
-                ResultString = "null";
-                break;
-        }
-        return ResultString;
-    }
-
-    string ReturnRate(int i)
-    {
-        string ResultString;
-        switch (i)
-        {
-            case 0:
-                ResultString = "ÇÏ";
-                break;
-            case 1:
-                ResultString = "Áß";
-                break;
-            case 2:
-                ResultString = "»ó";
                 break;
             default:
                 ResultString = "null";

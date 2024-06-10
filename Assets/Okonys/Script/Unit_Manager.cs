@@ -33,6 +33,7 @@ public class Unit_Manager : MonoBehaviour
     InventoryManager im;
     BattleReward _battleReward;
     PlayerMove _playerMove;
+    CanvasManager _canvasManager;
 
     void Awake()
     {
@@ -49,6 +50,7 @@ public class Unit_Manager : MonoBehaviour
         im = SoonsoonData.Instance.Inventory_Manager;
         _playerMove = SoonsoonData.Instance.Player_Move;
         _battleReward = SoonsoonData.Instance.Battle_Reward;
+        _canvasManager = SoonsoonData.Instance.Canvas_Manager;
         UserUnitDataLoad();
     }
 
@@ -276,6 +278,29 @@ public class Unit_Manager : MonoBehaviour
         return returnList;
     }
 
+    // 상자 체력
+    public float GetChestHp()
+    {
+
+        List<Unit> tList = _p2UnitList;
+
+        float ChestHp = 0;
+
+        for (int i = 0; i < tList.Count; i++)
+        {
+            if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
+            {
+                if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
+                {
+                    ChestHp = tList[i].GetComponent<Unit>()._unitHp;
+                    tList[i].GetComponent<Unit>().SetDeath();
+                }
+            }
+
+        }
+        return ChestHp;
+    }
+
     // 모든 유닛이 죽었는지 확인하고 승패의 결과를 체크
     public void CheckGameResult(Unit unit)
     {
@@ -332,7 +357,7 @@ public class Unit_Manager : MonoBehaviour
     public void GameWin()
     {
         _gamePause = true;
-        SoonsoonData.Instance.LogPopup.ShowLog("승리");
+        _canvasManager.TimerStop();
 
         _userInfoManager.userData.isEnemyData = false;
         _userInfoManager.userData.EnemySquad = new Vector2[9];
@@ -349,17 +374,22 @@ public class Unit_Manager : MonoBehaviour
         switch (_playerMove.CurrentPlateType())
         {
             case Plate.PlateType.Enemy:
+                Debug.Log("노말 적 보상");
                 _battleReward.NormalBattleReward();
                 break;
             case Plate.PlateType.Random:
+                Debug.Log("랜덤 적 보상");
                 _battleReward.NormalBattleReward();
                 break;
             case Plate.PlateType.Home:
                 break;
-            case Plate.PlateType.Boss:
+            case Plate.PlateType.Elite:
+                Debug.Log("엘리트 적 보상");
                 _battleReward.NormalBattleReward();
                 break;
             case Plate.PlateType.Chest:
+                Debug.Log("상자 보상");
+                _battleReward.ChestReward(GetChestHp());
                 break;
             default:
                 break;
@@ -369,6 +399,7 @@ public class Unit_Manager : MonoBehaviour
     public void GameLose()
     {
         _gamePause = true;
+        _canvasManager.TimerStop();
         SoonsoonData.Instance.LogPopup.ShowLog("패배");
     }
 
@@ -380,6 +411,7 @@ public class Unit_Manager : MonoBehaviour
             _unitSynergy[i].SetActive(true);
         }
         SoonsoonData.Instance.Damage_Measure.MeasureStart();
+        _canvasManager.TimerStart();
     }
 
     public void FieldReset()
@@ -467,7 +499,9 @@ public class Unit_Manager : MonoBehaviour
                 continue;
             }
 
-            _p2unitID[i] = new SlotClass(Unit_pool._unitDatas[(int)_userInfoManager.userData.EnemySquad[i].x - 1], (int)_userInfoManager.userData.EnemySquad[i].y);
+            _p2unitID[i] = ((int)_userInfoManager.userData.EnemySquad[i].x < 100) ? 
+                new SlotClass(Unit_pool._unitDatas[(int)_userInfoManager.userData.EnemySquad[i].x - 1], (int)_userInfoManager.userData.EnemySquad[i].y)
+                : new SlotClass(Unit_pool._objectDatas[(int)_userInfoManager.userData.EnemySquad[i].x - 101], (int)_userInfoManager.userData.EnemySquad[i].y);
         }
     }
 

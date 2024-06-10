@@ -34,6 +34,9 @@ public class EnemyPool : MonoBehaviour
     [Header(" # 보스전 적 스쿼드")]
     [SerializeField] private EnemySquad[] _bossSquad;
 
+    [Header(" # 오브젝트")]
+    [SerializeField] private EnemySquad[] _objects;
+
     UserInfoManager _userInfoManager;
     PlayerMove _playerMove;
 
@@ -83,6 +86,40 @@ public class EnemyPool : MonoBehaviour
                 RandomNum = Random.Range(0, _enemySquad_Lv4.Length);
                 return _enemySquad_Lv4[RandomNum].GetSquad();
         }
+    }
+
+    public List<SlotClass> GetRandomElite()
+    {
+        SetGameLevel();
+        int RandomNum;
+        _userInfoManager.userData.isEnemyData = true;
+        switch (_gameLevel)
+        {
+            case 0:
+                RandomNum = Random.Range(0, _eliteSquad_Lv0.Length);
+                return _eliteSquad_Lv0[RandomNum].GetSquad();
+            case 1:
+                RandomNum = Random.Range(0, _eliteSquad_Lv1.Length);
+                return _eliteSquad_Lv1[RandomNum].GetSquad();
+            case 2:
+                RandomNum = Random.Range(0, _eliteSquad_Lv2.Length);
+                return _eliteSquad_Lv2[RandomNum].GetSquad();
+            case 3:
+                RandomNum = Random.Range(0, _eliteSquad_Lv3.Length);
+                return _eliteSquad_Lv3[RandomNum].GetSquad();
+            case 4:
+                RandomNum = Random.Range(0, _eliteSquad_Lv4.Length);
+                return _eliteSquad_Lv4[RandomNum].GetSquad();
+            default:
+                RandomNum = Random.Range(0, _eliteSquad_Lv4.Length);
+                return _eliteSquad_Lv4[RandomNum].GetSquad();
+        }
+    }
+
+    public List<SlotClass> GetChest()
+    {
+        _userInfoManager.userData.isEnemyData = true;
+        return _objects[0].GetSquad();
     }
 
     public List<SlotClass> GetBossSquad(int index)

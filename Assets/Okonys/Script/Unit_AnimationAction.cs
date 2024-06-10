@@ -16,6 +16,7 @@ public class Unit_AnimationAction : MonoBehaviour
 
     public void Update()
     {
+        if (unit._attackType == AttackType.Object) return;
         unit_animator.SetFloat("AttackSpeed",unit._unitAS * unit._buffAS);
     }
 

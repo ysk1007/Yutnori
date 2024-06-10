@@ -288,6 +288,52 @@ public class ItemShop : MonoBehaviour
         }
     }
 
+    public itemStock ReturnChestItem(int selectedGrade)
+    {
+        bool hasStock = false; // 재고가 있는지 여부를 나타내는 변수
+
+        // 모든 아이템의 재고 여부를 확인하여 재고가 있는 경우 hasStock을 true로 설정합니다.
+        foreach (var item in _itemStock)
+        {
+            if (item.GetItemRate())
+            {
+                hasStock = true;
+                break;
+            }
+        }
+
+        // 재고가 없으면 함수를 종료합니다.
+        if (!hasStock)
+        {
+            SoonsoonData.Instance.LogPopup.ShowLog("아이템이 모두 떨어졌어요!");
+            return null;
+        }
+
+        itemStock selectedStock = null;
+
+        switch (selectedGrade)
+        {
+            case 0: // 레어 등급
+                selectedStock = GetRandomStock(_itemStock.Where(item => _rareItems.Contains(item.GetItemData())).ToList());
+                break;
+            case 1: // 에픽 등급
+                selectedStock = GetRandomStock(_itemStock.Where(item => _epicItems.Contains(item.GetItemData())).ToList());
+                break;
+            case 2: // 전설 등급
+                selectedStock = GetRandomStock(_itemStock.Where(item => _legendaryitems.Contains(item.GetItemData())).ToList());
+                break;
+        }
+
+        if (selectedStock != null)
+        {
+            return selectedStock;
+        }
+        else
+        {
+            // 해당 등급의 재고가 없는 경우 null 반환
+            return null;
+        }
+    }
 
     void ItemSort() // 등급 별 정리
     {

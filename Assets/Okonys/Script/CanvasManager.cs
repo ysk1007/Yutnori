@@ -6,20 +6,22 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
 {
-    public Animator _canvasAnimator;
+    [SerializeField] private Animator _canvasAnimator;
 
-    public Animator _goldTextAnimator;
-    public TextMeshProUGUI _goldText;
+    [SerializeField] private Animator _goldTextAnimator;
+    [SerializeField] private TextMeshProUGUI _goldText;
 
-    public Animator _saveTextAnimator;
+    [SerializeField] private Animator _saveTextAnimator;
 
-    public Animator _bossLabelAnimator;
-    public TextMeshProUGUI _bossNameText;
-    public Image _bossIcon;
+    [SerializeField] private Animator _bossLabelAnimator;
+    [SerializeField] private TextMeshProUGUI _bossNameText;
+    [SerializeField] private Image _bossIcon;
 
-    public GameObject _uiCanvas;
-    public GameObject _yutCanvas;
-    public Transform _units;
+    public Shop _shop;
+    [SerializeField] private GameObject _uiCanvas;
+    [SerializeField] private GameObject _yutCanvas;
+    [SerializeField] private Transform _units;
+    [SerializeField] private Timer _timer;
 
     UserInfoManager _userInfoManager;
     EnemyPool _enemyPool;
@@ -47,6 +49,7 @@ public class CanvasManager : MonoBehaviour
         _canvasAnimator.SetTrigger("Show");
         _yutCanvas.SetActive(false);
         _units.transform.localScale = Vector3.one;
+        _timer.TimerReset();
     }
 
     public void FadeUi()
@@ -80,5 +83,15 @@ public class CanvasManager : MonoBehaviour
         _bossIcon.sprite = unit.icon;
         _bossNameText.text = "º¸½º\n" + unit.UnitName;
         _bossLabelAnimator.SetTrigger("Show");
+    }
+
+    public void TimerStart()
+    {
+        _timer.TimerStart();
+    }
+
+    public void TimerStop()
+    {
+        _timer.TimerStop();
     }
 }
