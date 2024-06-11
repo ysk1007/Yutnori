@@ -8,33 +8,39 @@ public class UnitPopup : MonoBehaviour
 {
     public Unit _unit;
     public UnitData _unitData;
-    public Sprite[] _rateSprites;
-    public Sprite _nullSprite;
-    public Image _rateSprite;
-    public Image _unitIcon;
-    public TextMeshProUGUI _unitName;
+    [SerializeField] private Sprite[] _rateSprites;
+    [SerializeField] private Sprite _nullSprite;
+    [SerializeField] private Image _rateSprite;
+    [SerializeField] private Image _unitIcon;
+    [SerializeField] private TextMeshProUGUI _unitName;
 
-    public Slider _HpSlider;
-    public Slider _CoolTimeSlider;
+    [SerializeField] private Slider _HpSlider;
+    [SerializeField] private Slider _CoolTimeSlider;
 
-    public TextMeshProUGUI _curHpText;
-    public TextMeshProUGUI _maxHpText;
-    public TextMeshProUGUI _curCTText;
-    public TextMeshProUGUI _maxCTText;
+    [SerializeField] private TextMeshProUGUI _curHpText;
+    [SerializeField] private TextMeshProUGUI _maxHpText;
+    [SerializeField] private TextMeshProUGUI _curCTText;
+    [SerializeField] private TextMeshProUGUI _maxCTText;
 
-    public Sprite[] _synergySprites;
-    public Image _synergyIcon;
-    public TextMeshProUGUI _synergyText;
+    [SerializeField] private Color[] _synergyColors;
+    [SerializeField] private Sprite[] _synergySprites;
+    [SerializeField] private Image _synergyBg;
+    [SerializeField] private Image _synergyIcon;
 
-    public Sprite[] _typeSprites;
-    public Image _typeIcon; 
-    public TextMeshProUGUI _typeText;
+    [SerializeField] private Color[] _typeColors;
+    [SerializeField] private Sprite[] _typeSprites;
+    [SerializeField] private Image _typeBg;
+    [SerializeField] private Image _typeIcon;
 
-    public TextMeshProUGUI _AT_text;
-    public TextMeshProUGUI _DF_text;
-    public TextMeshProUGUI _AS_text;
-    public TextMeshProUGUI _CC_text;
-    public TextMeshProUGUI _AR_text;
+    [SerializeField] private TextMeshProUGUI _AT_text;
+    [SerializeField] private TextMeshProUGUI _DF_text;
+    [SerializeField] private TextMeshProUGUI _AS_text;
+    [SerializeField] private TextMeshProUGUI _CC_text;
+    [SerializeField] private TextMeshProUGUI _AR_text;
+
+    [SerializeField] private Image _skillIcon;
+    [SerializeField] private TextMeshProUGUI _skillName;
+    [SerializeField] private TextMeshProUGUI _skillDesc;
 
     [SerializeField] private float posX;
     [SerializeField] private float posY;
@@ -86,24 +92,35 @@ public class UnitPopup : MonoBehaviour
     public void init()
     {
         if (!_unit) return;
+
+        // 유닛 부분
         _unitData = _unit._unitData;
         _rateSprite.sprite = _rateSprites[_unit._unitRate.GetHashCode()];
         _unitIcon.sprite = _unitData.icon;
         _unitName.text = _unitData.UnitName;
 
-        if(_unit._attackType == Unit.AttackType.Object)
+        // 스킬 부분
+        _skillIcon.sprite = _unitData._unitSkill.icon;
+        _skillName.text = _unitData._unitSkill.SkillName;
+        _skillDesc.text = _unitData._unitSkill.SkillDesc;
+
+        // 시너지, 타입 부분
+        if (_unit._attackType == Unit.AttackType.Object)
         {
+            _synergyBg.transform.localScale = Vector3.zero;
+            _typeBg.transform.localScale = Vector3.zero;
             _synergyIcon.sprite = _nullSprite;
-            _synergyText.text = null;
             _typeIcon.sprite = _nullSprite;
-            _typeText.text = null;
         }
         else
         {
+            _synergyBg.transform.localScale = Vector3.one;
+            _typeBg.transform.localScale = Vector3.one;
             _synergyIcon.sprite = _synergySprites[_unit._attackType.GetHashCode()];
-            _synergyText.text = ReturnSynergy(_unit._attackType.GetHashCode());
+            _synergyBg.color = _synergyColors[_unit._attackType.GetHashCode()];
+
             _typeIcon.sprite = _typeSprites[_unit._unitType.GetHashCode()];
-            _typeText.text = ReturnType(_unit._unitType.GetHashCode());
+            _typeBg.color = _typeColors[_unit._unitType.GetHashCode()];
         }
     }
 

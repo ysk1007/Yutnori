@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
 {
+    [SerializeField] private Popup _battleStartBtn;
+    [SerializeField] private Popup _battleEndBtn;
+    [SerializeField] private Animator _bebAnimator;
+
     [SerializeField] private Animator _canvasAnimator;
 
     [SerializeField] private Animator _goldTextAnimator;
@@ -50,6 +54,7 @@ public class CanvasManager : MonoBehaviour
         _yutCanvas.SetActive(false);
         _units.transform.localScale = Vector3.one;
         _timer.TimerReset();
+        Invoke("ShowBattleStartBtn", 1f);
     }
 
     public void FadeUi()
@@ -93,5 +98,16 @@ public class CanvasManager : MonoBehaviour
     public void TimerStop()
     {
         _timer.TimerStop();
+    }
+
+    public void ShowBattleEndBtn()
+    {
+        _battleEndBtn.OnePopup();
+        _bebAnimator.enabled = true;
+    }
+
+    public void ShowBattleStartBtn()
+    {
+        _battleStartBtn.OnePopup();
     }
 }

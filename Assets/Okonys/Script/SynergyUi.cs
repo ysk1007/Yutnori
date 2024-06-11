@@ -62,45 +62,53 @@ public class SynergyUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public int CheckCount3(int i)
     {
-        if (i < _synergyData.RequiredNumber[0])
+        if (i == 0)
         {
             return 0;
         }
-        else if (i >= _synergyData.RequiredNumber[0] && i < _synergyData.RequiredNumber[1])
+        else if (i < _synergyData.RequiredNumber[0])
         {
             return 1;
         }
-        else if (i >= _synergyData.RequiredNumber[1] && i < _synergyData.RequiredNumber[2])
+        else if (i >= _synergyData.RequiredNumber[0] && i < _synergyData.RequiredNumber[1])
         {
             return 2;
         }
-        else // i >= _synergyData.RequiredNumber[2]
+        else if (i >= _synergyData.RequiredNumber[1] && i < _synergyData.RequiredNumber[2])
         {
             return 3;
+        }
+        else // i >= _synergyData.RequiredNumber[2]
+        {
+            return 4;
         }
     }
 
     public int CheckCount4(int i)
     {
-        if (i < _synergyData.RequiredNumber[0])
+        if (i == 0)
         {
             return 0;
         }
-        else if (i >= _synergyData.RequiredNumber[0] && i < _synergyData.RequiredNumber[1])
+        else if (i < _synergyData.RequiredNumber[0])
         {
             return 1;
         }
-        else if (i >= _synergyData.RequiredNumber[1] && i < _synergyData.RequiredNumber[2])
+        else if (i >= _synergyData.RequiredNumber[0] && i < _synergyData.RequiredNumber[1])
         {
             return 2;
         }
-        else if (i >= _synergyData.RequiredNumber[2] && i < _synergyData.RequiredNumber[3])
+        else if (i >= _synergyData.RequiredNumber[1] && i < _synergyData.RequiredNumber[2])
         {
             return 3;
         }
-        else
+        else if (i >= _synergyData.RequiredNumber[2] && i < _synergyData.RequiredNumber[3])
         {
             return 4;
+        }
+        else
+        {
+            return 5;
         }
     }
 
@@ -119,7 +127,7 @@ public class SynergyUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         {
             _layoutElement.ignoreLayout = false;
             transform.localScale = Vector3.one;
-            index -= 1;
+            index -= 2;
             for (int i = 0; i < _countText.Length; i++)
             {
                 _countText[i].color = (index == i) ? _colors[0] : _colors[1];

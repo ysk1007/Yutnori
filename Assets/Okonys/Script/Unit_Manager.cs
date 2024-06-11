@@ -357,6 +357,7 @@ public class Unit_Manager : MonoBehaviour
     public void GameWin()
     {
         _gamePause = true;
+        _canvasManager.ShowBattleEndBtn();
         _canvasManager.TimerStop();
 
         _userInfoManager.userData.isEnemyData = false;
@@ -374,21 +375,17 @@ public class Unit_Manager : MonoBehaviour
         switch (_playerMove.CurrentPlateType())
         {
             case Plate.PlateType.Enemy:
-                Debug.Log("노말 적 보상");
                 _battleReward.NormalBattleReward();
                 break;
             case Plate.PlateType.Random:
-                Debug.Log("랜덤 적 보상");
                 _battleReward.NormalBattleReward();
                 break;
             case Plate.PlateType.Home:
                 break;
             case Plate.PlateType.Elite:
-                Debug.Log("엘리트 적 보상");
                 _battleReward.NormalBattleReward();
                 break;
             case Plate.PlateType.Chest:
-                Debug.Log("상자 보상");
                 _battleReward.ChestReward(GetChestHp());
                 break;
             default:
@@ -400,11 +397,18 @@ public class Unit_Manager : MonoBehaviour
     {
         _gamePause = true;
         _canvasManager.TimerStop();
+        _canvasManager.ShowBattleEndBtn();
         SoonsoonData.Instance.LogPopup.ShowLog("패배");
     }
 
     public void GameResume()
     {
+        if(UserPopulation < 1) 
+        { 
+            SoonsoonData.Instance.LogPopup.ShowLog("최소 한 명의 유닛이 필드에 있어야 합니다.");
+            return;
+        }
+
         _gamePause = false;
         for (int i = 0; i < _unitSynergy.Count; i++)
         {

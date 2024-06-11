@@ -55,7 +55,7 @@ public class SynergyPopup : MonoBehaviour
         for (int i = 0; i < _buffDesc.Length; i++)
         {
             _buffDesc[i].text = (i < _synergyData.RequiredNumber.Length) ? SynergyBuffDesc(_synergyData, i) : null;
-            _buffDesc[i].color = (curCount - 1 == i) ? _Colors[1] : _Colors[0];
+            _buffDesc[i].color = (curCount - 2 == i) ? _Colors[1] : _Colors[0];
         }
         //_buffDesc.text = SynergyBuffDesc(_synergyData);
     }
