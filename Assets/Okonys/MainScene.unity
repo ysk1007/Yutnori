@@ -4026,16 +4026,24 @@ MonoBehaviour:
       SelectCharacter: 0
       UserSquad: []
       UserInventory: []
+      isEnemyData: 0
       EnemySquad: []
+      isEventData: 0
+      EventNum: 0
       isShopArtifactDatas: 0
       ShopArtifacts: 
       ShopUnits: 
       UserArtifacts: 
       TurnCounter: 0
+      GameLevel: 0
       isPlateData: 0
       PlatesData: 
       CurrentPlateNum: 0
       CurrentRoadNum: 0
+      isBossData: 0
+      bossNum: 0
+      bossCurrentPlateNum: 0
+      bossCurrentRoadNum: 0
     optionData:
       _masterVolume: 0
       _bgmVolume: 0
@@ -4050,21 +4058,30 @@ MonoBehaviour:
     SelectCharacter: 0
     UserSquad: []
     UserInventory: []
+    isEnemyData: 0
     EnemySquad: []
+    isEventData: 0
+    EventNum: 0
     isShopArtifactDatas: 0
     ShopArtifacts: 
     ShopUnits: 
     UserArtifacts: 
     TurnCounter: 0
+    GameLevel: 0
     isPlateData: 0
     PlatesData: 
     CurrentPlateNum: 0
     CurrentRoadNum: 0
+    isBossData: 0
+    bossNum: 0
+    bossCurrentPlateNum: 0
+    bossCurrentRoadNum: 0
   optionData:
     _masterVolume: 0
     _bgmVolume: 0
     _sfxVolume: 0
     _voiceType: 0
+  _canvasManager: {fileID: 0}
 --- !u!4 &951270224
 Transform:
   m_ObjectHideFlags: 0
@@ -4472,6 +4489,7 @@ MonoBehaviour:
   - {fileID: 2529561111064341166, guid: af1a1d4e527703644ad71be8979c38fc, type: 3}
   - {fileID: 2529561111064341166, guid: c36306593dc52114a9c8cad43555a3ef, type: 3}
   - {fileID: 2529561111064341166, guid: 31326ae462ce06142b7290079d423e80, type: 3}
+  _objectPrefabs: []
   _unitDatas:
   - {fileID: 11400000, guid: df2f9bb04e996c944906f4f9d2d01b25, type: 2}
   - {fileID: 11400000, guid: ca8bca5a448890f44923a5eeed6a8194, type: 2}
@@ -4491,6 +4509,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d3e5eb60b112ded48bd587d6b3f05bb8, type: 2}
   - {fileID: 11400000, guid: 4bdc2478078847340bf310112a17f4dc, type: 2}
   - {fileID: 11400000, guid: 8ee941cdc79c7fd499be9284e138c8c4, type: 2}
+  _objectDatas: []
+  _bossDatas: []
   _commonUnits: []
   _uncommonUnits: []
   _rareUnits: []
@@ -6192,7 +6212,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1393089336}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1817788818}
+        m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
+        m_MethodName: GameExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1393089336
 MonoBehaviour:
   m_ObjectHideFlags: 0

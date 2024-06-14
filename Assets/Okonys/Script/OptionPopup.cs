@@ -109,7 +109,7 @@ public class OptionPopup : MonoBehaviour
 
     public void GoToMainScene()
     {
-        SceneManager.LoadScene(0);
+        LoadingSceneController.LoadScene("MainScene");
         _gotoMainBtn.SetActive(false);
     }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using TMPro;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
@@ -239,13 +240,22 @@ public class CharacterSelect : MonoBehaviour
     {
         _userInfoManager.GameDataCreate(_slectCharacter);
         _optionPopup.MainButtonEnable(true);
-        SceneManager.LoadScene(1);
+        LoadingSceneController.LoadScene("inGameScene");
     }
 
     public void ContinueGame()
     {
         if (!_userInfoManager.userData.isUserData) return;
-        SceneManager.LoadScene(1);
+        LoadingSceneController.LoadScene("inGameScene");
         _optionPopup.MainButtonEnable(true);
+    }
+
+    public void GameExit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }
