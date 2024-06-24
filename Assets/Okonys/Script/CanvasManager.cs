@@ -12,6 +12,9 @@ public class CanvasManager : MonoBehaviour
 
     [SerializeField] private Animator _canvasAnimator;
 
+    [SerializeField] private Animator _hpTextAnimator;
+    [SerializeField] private TextMeshProUGUI _hpText;
+
     [SerializeField] private Animator _goldTextAnimator;
     [SerializeField] private TextMeshProUGUI _goldText;
 
@@ -20,6 +23,12 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] private Animator _bossLabelAnimator;
     [SerializeField] private TextMeshProUGUI _bossNameText;
     [SerializeField] private Image _bossIcon;
+
+    [SerializeField] private Image _fadeImage;
+
+    [SerializeField] private Animator _gameOutAnimator;
+    [SerializeField] private Popup _gameOutPopup;
+    [SerializeField] private Animator _gameOutPopupAnimator;
 
     public Shop _shop;
     [SerializeField] private GameObject _uiCanvas;
@@ -73,9 +82,32 @@ public class CanvasManager : MonoBehaviour
     {
         if (value == 0) return;
 
-        _goldText.text = (value > 0) ? "+" + value.ToString() : value.ToString();
-        _goldTextAnimator.SetTrigger("Show");
+        if (value > 0)
+        {
+            _goldText.text = "+" + value.ToString();
+            _goldTextAnimator.SetTrigger("Get");
+        }
+        else
+        {
+            _goldText.text = value.ToString();
+            _goldTextAnimator.SetTrigger("Lose");
+        }
+    }
 
+    public void GetHpAnimation(int value)
+    {
+        if (value == 0) return;
+
+        if(value > 0)
+        {
+            _hpText.text = "+" + value.ToString();
+            _hpTextAnimator.SetTrigger("Get");
+        }
+        else
+        {
+            _hpText.text = value.ToString();
+            _hpTextAnimator.SetTrigger("Lose");
+        }
     }
 
     public void DataSaveText()
@@ -102,6 +134,8 @@ public class CanvasManager : MonoBehaviour
 
     public void ShowBattleEndBtn()
     {
+        if (_userInfoManager.userData.GetUserHp() <= 0) return;
+
         _battleEndBtn.OnePopup();
         _bebAnimator.enabled = true;
     }
@@ -109,5 +143,14 @@ public class CanvasManager : MonoBehaviour
     public void ShowBattleStartBtn()
     {
         _battleStartBtn.OnePopup();
+    }
+
+    public void GameEnd()
+    {
+        _gameOutAnimator.SetTrigger("Show");
+        _gameOutPopupAnimator.SetTrigger("Show");
+        _fadeImage.enabled = false;
+        _canvasAnimator.SetTrigger("Fade");
+        _gameOutPopup.OnePopup();
     }
 }

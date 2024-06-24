@@ -725,11 +725,11 @@ public class UnitSynergy : MonoBehaviour
                 List<Unit> p2humans = new List<Unit>();
 
 
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < sm._p2UnitList.Count; i++)
                 {
                     // 인간 찾기
-                    if (sm._p1UnitList[i]._unitType != UnitType.Human) continue;
-                    p2humans.Add(sm._p1UnitList[i]);
+                    if (sm._p2UnitList[i]._unitType != UnitType.Human) continue;
+                    p2humans.Add(sm._p2UnitList[i]);
                 }
 
                 int randomIndex2 = Random.Range(0, p2humans.Count);

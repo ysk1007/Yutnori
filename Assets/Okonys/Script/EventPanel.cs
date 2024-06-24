@@ -169,7 +169,7 @@ public class EventPanel : MonoBehaviour
 
     public void EventFail()
     {
-        _userInfoManager.userData.UserHp -= 25;
+        _userInfoManager.userData.SetUserHp(-25);
         EventContinue();
     }
 
@@ -215,7 +215,7 @@ public class EventPanel : MonoBehaviour
     public void EventGetSomething(int index)
     {
         _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
-        _userInfoManager.userData.UserHp += _currentEvent._hpValue[index];
+        _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
 
         if(_currentEvent._someUnit?[index] != null)
         {
@@ -241,7 +241,7 @@ public class EventPanel : MonoBehaviour
     public void EventLoseSomething(int index)
     {
         _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
-        _userInfoManager.userData.UserHp += _currentEvent._hpValue[index];
+        _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
 
         _inventoryManager.UnitRemove(_eventUnit[index]);
 
@@ -265,7 +265,7 @@ public class EventPanel : MonoBehaviour
     public void EventGetLose(int index)
     {
         _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
-        _userInfoManager.userData.UserHp += _currentEvent._hpValue[index];
+        _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
 
 
         if (_currentEvent._someUnit[index]?.GetUnitData()?.UnitName == "RandomGet")

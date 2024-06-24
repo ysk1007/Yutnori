@@ -79,7 +79,7 @@ public class HUD : MonoBehaviour
                 _thisText.text = _userInfoManager.userData.GetUserGold().ToString();
                 break;
             case UiType.UserHp:
-                _thisText.text = _userInfoManager.userData.UserHp.ToString();
+                _thisText.text = _userInfoManager.userData.GetUserHp().ToString();
                 break;
             case UiType.UserPopulation:
                 _thisText.text = _unitManager.UserPopulation.ToString();

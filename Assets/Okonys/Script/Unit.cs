@@ -236,7 +236,7 @@ public class Unit : MonoBehaviour
         if (_target == null)
         {
             _target = SoonsoonData.Instance.Unit_Manager.GetTraget(this);
-            if (_target != null) SetState(UnitState.run);
+            if (_target != null && !SoonsoonData.Instance.Unit_Manager._gamePause) SetState(UnitState.run);
             else SetState(UnitState.idle);
             _findTimer = 0;
         }
@@ -551,7 +551,7 @@ public class Unit : MonoBehaviour
                 break;
 
             case "P2":
-                SoonsoonData.Instance.Unit_Manager._p1UnitList.Remove(this);
+                SoonsoonData.Instance.Unit_Manager._p2UnitList.Remove(this);
                 break;
         }
         SetState(UnitState.death);
@@ -559,10 +559,11 @@ public class Unit : MonoBehaviour
 
     public void SetDeathDone()
     {
-        gameObject.SetActive(false);
-
         // À¯´ÖÀÌ Á×À»¶§ ½ÂÆÐ °á°ú¸¦ È®ÀÎ
         SoonsoonData.Instance.Unit_Manager.CheckGameResult(this);
+        if (this.tag == "P2") _userInfoManager.userData.totalKillEnemy++;
+
+        gameObject.SetActive(false);
     }
 
     public void SetDirection()

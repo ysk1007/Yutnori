@@ -44,7 +44,7 @@ public class UserData //유저 데이터 클래스
     public bool isUserData; // 데이터 유무
     public string UserName; //닉네임
     public string UserId; //고유 아이디
-    public int UserHp; // 체력
+    [SerializeField] private int UserHp; // 체력
     [SerializeField] private int UserGold; // 골드 재화
     public int SelectCharacter;
 
@@ -76,15 +76,41 @@ public class UserData //유저 데이터 클래스
     public int bossCurrentPlateNum; // 현재 보스가 밟고 있는 발판 번호
     public int bossCurrentRoadNum; // 현재 보스의 진행 길
 
+    public int totalKillEnemy;
+    public int totalKillBoss;
+    public int totalGetGold;
+    public int totalMapFinish;
+
     public void SetUserGold(int value)
     {
-        UserInfoManager.Instance._canvasManager.GetGoldAnimation(value);
+        if (value > 0) totalGetGold += value;
+
+        UserInfoManager.Instance._canvasManager?.GetGoldAnimation(value);
         UserGold += value;
     }
 
     public int GetUserGold()
     {
         return UserGold;
+    }
+
+    public void SetUserHp(int value)
+    {
+
+        UserInfoManager.Instance._canvasManager?.GetHpAnimation(value);
+        UserHp += value;
+        
+        if(UserHp <= 0)
+        {
+            UserHp = 0;
+            SoonsoonData.Instance.LogPopup.ShowLog("게임 종료");
+            UserInfoManager.Instance._canvasManager?.GameEnd();
+        }
+    }
+
+    public int GetUserHp()
+    {
+        return UserHp;
     }
 }
 
@@ -173,7 +199,7 @@ public class UserInfoManager : MonoBehaviour
     {
         UserData userData = new UserData();
         userData.isUserData = false;
-        userData.UserHp = 100;
+        userData.SetUserHp(100);
         userData.UserSquad = new Vector2[9];
         userData.UserInventory = new Vector2[12];
 
@@ -201,6 +227,11 @@ public class UserInfoManager : MonoBehaviour
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
 
+        userData.totalKillEnemy = 0;
+        userData.totalKillBoss = 0;
+        userData.totalGetGold = 0;
+        userData.totalMapFinish = 0;
+
         OptionData optionData = new OptionData();
         optionData.SetMasterVolume(0.5f);
         optionData.SetBgmVolume(0.5f);
@@ -222,7 +253,7 @@ public class UserInfoManager : MonoBehaviour
     {
         UserData userData = new UserData();
         userData.isUserData = true;
-        userData.UserHp = 100;
+        userData.SetUserHp(100);
         userData.SelectCharacter = index;
         userData.UserSquad = new Vector2[9];
         userData.UserSquad[0] = new Vector2(index + 1, 0); 
@@ -251,6 +282,11 @@ public class UserInfoManager : MonoBehaviour
 
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
+
+        userData.totalKillEnemy = 0;
+        userData.totalKillBoss = 0;
+        userData.totalGetGold = 0;
+        userData.totalMapFinish = 0;
 
         Data data = new Data();
         data.SetUserData(userData);

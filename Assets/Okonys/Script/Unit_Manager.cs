@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Unit;
 using static UnityEngine.UI.CanvasScaler;
 
 public class Unit_Manager : MonoBehaviour
@@ -30,6 +31,7 @@ public class Unit_Manager : MonoBehaviour
 
     UserInfoManager _userInfoManager;
     UnitPool Unit_pool;
+    EnemyPool _enemyPool;
     InventoryManager im;
     BattleReward _battleReward;
     PlayerMove _playerMove;
@@ -47,6 +49,7 @@ public class Unit_Manager : MonoBehaviour
     {
         _userInfoManager = UserInfoManager.Instance;
         Unit_pool = SoonsoonData.Instance.Unit_pool;
+        _enemyPool = SoonsoonData.Instance.Enemy_Pool;
         im = SoonsoonData.Instance.Inventory_Manager;
         _playerMove = SoonsoonData.Instance.Player_Move;
         _battleReward = SoonsoonData.Instance.Battle_Reward;
@@ -304,41 +307,22 @@ public class Unit_Manager : MonoBehaviour
     // 모든 유닛이 죽었는지 확인하고 승패의 결과를 체크
     public void CheckGameResult(Unit unit)
     {
+        Debug.Log("승패 결과 확인");
         List<Unit> tList = new List<Unit>();
         switch (unit.tag) // 유닛의 태그에 따라
         {
             case "P1": 
                 tList = _p1UnitList;
-                for (int i = 0; i < tList.Count; i++) // 죽은 유닛의 스쿼드를 전부 탐색하여
-                {
-                    if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
-                    {
-                        /*if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
-                        {
-                        }*/
-                        return; // 하나라도 생존해 있다면 return
-                    }
-                }
-
-                // P1의 유닛이 전부 사망
-                GameLose();
+                if(tList.Count == 0)
+                    // P1의 유닛이 전부 사망
+                    GameLose();
                 break; // 타겟 리스트 태그의 리스트로 할당
 
             case "P2": 
                 tList = _p2UnitList;
-                for (int i = 0; i < tList.Count; i++) // 죽은 유닛의 스쿼드를 전부 탐색하여
-                {
-                    if (tList[i].gameObject.activeInHierarchy) // 하이어라키 창에서 오브젝트 active 가 true 인가
-                    {
-                        /*if (tList[i]._unitState != Unit.UnitState.death) // 유닛이 죽은 상태가 아니면
-                        {
-                        }*/
-                        return; // 하나라도 생존해 있다면 return
-                    }
-                }
-
-                // P2의 유닛이 전부 사망
-                GameWin();
+                if (tList.Count == 0)
+                    // P2의 유닛이 전부 사망
+                    GameWin();
                 break;
         }
 
@@ -356,18 +340,15 @@ public class Unit_Manager : MonoBehaviour
 
     public void GameWin()
     {
-        _gamePause = true;
-        _canvasManager.ShowBattleEndBtn();
-        _canvasManager.TimerStop();
+        if (_gamePause) return;
 
-        _userInfoManager.userData.isEnemyData = false;
-        _userInfoManager.userData.EnemySquad = new Vector2[9];
-        _userInfoManager.UserDataSave();
+        BattleEndSetting(true);
 
         // 보스전 보상
         if (_playerMove.bossMeet)
         {
             _playerMove.BossDead();
+            _userInfoManager.userData.totalKillBoss++;
             _battleReward.NormalBattleReward();
             return;
         }
@@ -391,14 +372,74 @@ public class Unit_Manager : MonoBehaviour
             default:
                 break;
         }
+
+        _canvasManager.ShowBattleEndBtn();
     }
 
     public void GameLose()
     {
-        _gamePause = true;
-        _canvasManager.TimerStop();
-        _canvasManager.ShowBattleEndBtn();
+        if (_gamePause) return;
+
+        BattleEndSetting(false);
         SoonsoonData.Instance.LogPopup.ShowLog("패배");
+
+        // 보스전 패배
+        if (_playerMove.bossMeet)
+        {
+            _playerMove.BossDead();
+            LoseHp(_playerMove.bossMeet);
+        }
+        else
+        {
+            LoseHp(false);
+        }
+
+        _canvasManager.ShowBattleEndBtn();
+    }
+
+    public void LoseHp(bool bossBattle)
+    {
+        if (bossBattle)
+            _userInfoManager.userData.SetUserHp(-1 * (5 + (_enemyPool.GetGameLevel() * 10)));
+        else
+            _userInfoManager.userData.SetUserHp(-1 * (5 + (_enemyPool.GetGameLevel() * 5)));
+
+        _userInfoManager.UserDataSave();
+    }
+
+    void BattleEndSetting(bool isWin)
+    {
+        if (isWin)
+        {
+            // p1 유닛 모두 정지
+            for (int i = 0; i < _p1UnitList.Count; i++)
+            {
+                _p1UnitList[i]?.SetState(UnitState.idle);
+            }
+        }
+        else
+        {
+            // p1 유닛 모두 사망
+            for (int i = 0; i < _p1UnitList.Count; i++)
+            {
+                _p1UnitList[i]?.SetDeath();
+            }
+
+            // p2 유닛 모두 정지
+            for (int i = 0; i < _p2UnitList.Count; i++)
+            {
+                _p2UnitList[i]?.SetState(UnitState.idle);
+            }
+        }
+
+        _gamePause = true;
+
+        _canvasManager.TimerStop();
+
+        _userInfoManager.userData.isEnemyData = false;
+        _userInfoManager.userData.TurnCounter++;
+        _userInfoManager.userData.EnemySquad = new Vector2[9];
+        _userInfoManager.UserDataSave();
     }
 
     public void GameResume()
