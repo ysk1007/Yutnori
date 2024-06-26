@@ -444,6 +444,9 @@ public class Unit : MonoBehaviour
             case SkillData.SkillType.LongRange:
                 SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.LongRange, this, targets, _unitSkill.Duration, _unitSkill);
                 break;
+            case SkillData.SkillType.AreaSkill:
+                SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.AreaSkill, this, targets, _unitSkill.Duration, _unitSkill);
+                break;
             case SkillData.SkillType.Heal:
                 SoonsoonData.Instance.Skill_Manager.RunSkill(SkillObj.SkillType.Heal, this, targets, _unitSkill.Duration, _unitSkill) ;
                 break;

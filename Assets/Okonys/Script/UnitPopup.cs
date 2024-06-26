@@ -66,7 +66,6 @@ public class UnitPopup : MonoBehaviour
             // 레이가 어떤 오브젝트와 충돌했는지 확인
             if (Physics.Raycast(ray, out hit))
             {
-                // 충돌한 오브젝트의 색상 변경
                 Unit unit = hit.collider.GetComponent<Unit>();
                 if (unit != null)
                 {

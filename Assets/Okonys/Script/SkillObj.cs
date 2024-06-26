@@ -10,6 +10,7 @@ public class SkillObj : MonoBehaviour
     {
         ShortRange, // 근접 스킬
         LongRange, // 원거리 투사체 스킬
+        AreaSkill, // 설치 장판 스킬
         Buff, // 버프
         Debuff, // 디버프
         Heal, // 회복
@@ -31,9 +32,11 @@ public class SkillObj : MonoBehaviour
     public float _yPos;
     public float _yPosSave;
     public bool _homing;
-    public float _timer;
-    public float _timerForLim;
+    public float _count; // 데미지 횟수
+    public float _timer; // 오브젝트 타이머
+    public float _timerForLim; // 오브젝트 끝나는 시간
     public float _interval; // 간격
+    public float _intervalTimer; // 간격 타이머
     public string _Tag;
 
     public Unit _owner;
@@ -53,10 +56,11 @@ public class SkillObj : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_interval > 0)
+        if (_count > 0 && _intervalTimer > _interval)
         {
-            _interval--;
-            if (_skillType == SkillType.ShortRange || _skillType == SkillType.LongRange)
+            _intervalTimer = 0;
+            _count--;
+            if (_skillType == SkillType.ShortRange || _skillType == SkillType.LongRange || _skillType == SkillType.AreaSkill)
                 DoProcess();
         }
     }
@@ -73,10 +77,11 @@ public class SkillObj : MonoBehaviour
             else tObj.SetActive(true);
         }
 
-        _collider.size = new Vector3(_rangeX, _rangeY,3f);
+        _collider.size = new Vector3(_rangeX, _rangeY,0.2f);
         switch (_skillType)
         {
             case SkillType.ShortRange:
+            case SkillType.AreaSkill:
                 _homing = false;
                 _yPos = 0;
                 _yPosSave = _yPos;
@@ -108,7 +113,10 @@ public class SkillObj : MonoBehaviour
         _target.Clear();
         _target = target;
         _Tag = _target[0].tag;
+        _count = skillData.DamageCount;
+
         _interval = skillData.DamageInterval;
+        _intervalTimer = 0;
 
         _rangeX = skillData.xRange;
         _rangeY = skillData.yRange;
@@ -116,7 +124,13 @@ public class SkillObj : MonoBehaviour
         _timer = 0;
         _timerForLim = timer;
 
-        _startPos = transform.position;
+        if (type == SkillType.AreaSkill)
+        {
+            _startPos = (Vector2)_target[0].transform.position;
+            transform.position = _startPos;
+        }
+        else
+            _startPos = transform.position;
 
         if (type == SkillType.LongRange)
             _endPos = (Vector2)_target[0].transform.position + new Vector2(0, 0);
@@ -174,8 +188,12 @@ public class SkillObj : MonoBehaviour
                     SkillDone();
                 }
                 break;
+            case SkillType.AreaSkill:
+                if (_timer >= _timerForLim)
+                    SkillDone();
+                break;
             case SkillType.Heal:
-                if (_timer >= _timerForLim || _interval <= 0)
+                if (_timer >= _timerForLim || _count <= 0)
                     SkillDone();
                 else
                 {
@@ -188,7 +206,7 @@ public class SkillObj : MonoBehaviour
                     SkillDone();
                 else
                 {
-                    if (_interval <= 0)
+                    if (_count <= 0)
                         return;
                     BuffProcess();
                 }

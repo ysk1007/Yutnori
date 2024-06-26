@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4468ad70faa0df5489771b93656f02d9, type: 3}
   m_Name: S004_SquadHeal
   m_EditorClassIdentifier: 
-  SkillID: 4
+  SkillID: 0
   SkillName: "\uD300 \uD68C\uBCF5"
   skillType: 3
   targetType: 7
@@ -25,6 +25,9 @@ MonoBehaviour:
   xRange: 0
   yRange: 0
   Duration: 2
-  DamageInterval: 1
+  DamageCount: 1
+  DamageInterval: 0
+  SkillPos: {x: 0, y: 0}
+  Timing: 0
   SkillDesc: "\uBAA8\uB4E0 \uC544\uAD70\uC744 \uD68C\uBCF5 \uD569\uB2C8\uB2E4."
   icon: {fileID: 21300000, guid: f976422d151c609448d054db018f159b, type: 3}

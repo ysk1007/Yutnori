@@ -142,6 +142,7 @@ public class EnemyPool : MonoBehaviour
     public void CallBoss()
     {
         _userInfoManager.userData.TurnCounter++;
+        _userInfoManager.userData.isCounted = true;
         _userInfoManager.UserDataSave();
 
         if (_userInfoManager.userData.isBossData) return;

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4468ad70faa0df5489771b93656f02d9, type: 3}
   m_Name: S007_Debuff
   m_EditorClassIdentifier: 
-  SkillID: 7
+  SkillID: 0
   SkillName: "\uB514\uBC84\uD504"
-  skillType: 3
+  skillType: 4
   targetType: 8
   Damage: 0.5
   Recovery: 0
@@ -25,6 +25,9 @@ MonoBehaviour:
   xRange: 0
   yRange: 0
   Duration: 3
-  DamageInterval: 1
+  DamageCount: 1
+  DamageInterval: 0
+  SkillPos: {x: 0, y: 0}
+  Timing: 0
   SkillDesc: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uC57D\uD654\uB97C \uBD80\uC5EC \uD569\uB2C8\uB2E4."
   icon: {fileID: 21300000, guid: 73b0867bb4f3540489115a5121e88bc9, type: 3}

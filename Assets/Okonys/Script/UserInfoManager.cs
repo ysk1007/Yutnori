@@ -64,6 +64,7 @@ public class UserData //유저 데이터 클래스
     public List<int> UserArtifacts; // 유저 아티팩트
 
     public int TurnCounter; // 턴 카운트
+    public bool isCounted; // 카운트 했나 확인
     public int GameLevel; // 게임 레벨
 
     public bool isPlateData; // 발판 데이터의 유무
@@ -224,6 +225,7 @@ public class UserInfoManager : MonoBehaviour
         userData.bossCurrentPlateNum = 0;
         userData.bossCurrentRoadNum = 0;
 
+        userData.isCounted = false;
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
 
@@ -280,6 +282,7 @@ public class UserInfoManager : MonoBehaviour
         userData.bossCurrentPlateNum = 0;
         userData.bossCurrentRoadNum = 0;
 
+        userData.isCounted = false;
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
 

@@ -422,6 +422,7 @@ public class Unit_Manager : MonoBehaviour
             // p1 À¯´Ö ¸ðµÎ »ç¸Á
             for (int i = 0; i < _p1UnitList.Count; i++)
             {
+                _p1UnitList[i]?.SetState(UnitState.death);
                 _p1UnitList[i]?.SetDeath();
             }
 
@@ -437,7 +438,7 @@ public class Unit_Manager : MonoBehaviour
         _canvasManager.TimerStop();
 
         _userInfoManager.userData.isEnemyData = false;
-        _userInfoManager.userData.TurnCounter++;
+        _userInfoManager.userData.isCounted = false;
         _userInfoManager.userData.EnemySquad = new Vector2[9];
         _userInfoManager.UserDataSave();
     }

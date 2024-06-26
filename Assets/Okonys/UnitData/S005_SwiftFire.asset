@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4468ad70faa0df5489771b93656f02d9, type: 3}
   m_Name: S005_SwiftFire
   m_EditorClassIdentifier: 
-  SkillID: 5
+  SkillID: 0
   SkillName: "\uC18D\uC0AC"
-  skillType: 2
+  skillType: 3
   targetType: 1
   Damage: 0
   Recovery: 0
@@ -25,7 +25,10 @@ MonoBehaviour:
   xRange: 0
   yRange: 0
   Duration: 3
-  DamageInterval: 1
+  DamageCount: 1
+  DamageInterval: 0
+  SkillPos: {x: 0, y: 0}
+  Timing: 0
   SkillDesc: "\uC790\uC2E0\uC758 \uACF5\uACA9 \uC18D\uB3C4\uB97C \uC0C1\uC2B9\uC2DC\uCF1C
     \uBE60\uB974\uAC8C \uACF5\uACA9 \uD569\uB2C8\uB2E4."
   icon: {fileID: 21300000, guid: 099744b5504168948bfde503fbb0e766, type: 3}

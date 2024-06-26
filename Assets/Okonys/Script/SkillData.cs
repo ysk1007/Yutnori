@@ -9,6 +9,7 @@ public class SkillData : ScriptableObject
     {
         ShortRange, // 근접 스킬
         LongRange, // 원거리 투사체 스킬
+        AreaSkill, // 설치 장판 스킬
         Buff, // 버프
         Debuff, // 디버프
         Heal, // 회복
@@ -44,7 +45,10 @@ public class SkillData : ScriptableObject
     public float xRange; // x축 사거리
     public float yRange; // y축 사거리
     public float Duration; // 지속 시간
+    public float DamageCount; // 데미지 횟수
     public float DamageInterval; // 데미지 간격
+    public Vector2 SkillPos; // 스킬 위치 변경
+    public float Timing; // 스킬 데미지가 들어가는 타이밍
 
     [TextArea]
     public string SkillDesc;

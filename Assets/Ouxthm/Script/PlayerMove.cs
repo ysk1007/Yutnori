@@ -96,6 +96,12 @@ public class PlayerMove : MonoBehaviour
 
         // 현재 발판 타입 확인
         CurrentPlateType();
+
+        if (!_userInfoManager.userData.isCounted)
+        {
+            _userInfoManager.userData.isCounted = true;
+            _enemyPool.CallBoss();
+        }
     }
 
     private void Update()
