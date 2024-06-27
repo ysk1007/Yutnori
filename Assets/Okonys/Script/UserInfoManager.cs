@@ -12,6 +12,7 @@ public class Data
 {
     public UserData userData;
     public OptionData optionData;
+    public AchievementData achievementData;
 
     /*    public void SetUserData(UserData userData)
         {
@@ -27,6 +28,11 @@ public class Data
         this.optionData = optionData;
     }
 
+    public void SetAchievementData(AchievementData achievementData)
+    {
+        this.achievementData = achievementData;
+    }
+
     public UserData GetUserData()
     {
         return this.userData;
@@ -35,6 +41,11 @@ public class Data
     public OptionData GetOptionData()
     {
         return this.optionData;
+    }
+
+    public AchievementData GetAchievementData()
+    {
+        return this.achievementData;
     }
 }
 
@@ -116,7 +127,7 @@ public class UserData //유저 데이터 클래스
 }
 
 [System.Serializable]
-public class OptionData //유저 데이터 클래스
+public class OptionData // 옵션 데이터 클래스
 {
     [SerializeField] private float _masterVolume;
     [SerializeField] private float _bgmVolume;
@@ -161,6 +172,55 @@ public class OptionData //유저 데이터 클래스
     }
 }
 
+[System.Serializable]
+public class AchievementData // 업적 데이터 클래스
+{
+    [SerializeField] private int _gameClearCount;
+    [SerializeField] private int _infiniteModeBestScore;
+    [SerializeField] private bool _firstRun;
+    [SerializeField] private bool _firstBattle;
+
+    public int GetClearCount()
+    {
+        return _gameClearCount;
+    }
+
+    public void SetClearCount(int Count)
+    {
+        _gameClearCount = Count;
+    }
+
+    public int GetBestScore()
+    {
+        return _infiniteModeBestScore;
+    }
+
+    public void SetBestScore(int Score)
+    {
+        _infiniteModeBestScore = Score;
+    }
+
+    public bool isFirstRun()
+    {
+        return _firstRun;
+    }
+
+    public bool isFirstBattle()
+    {
+        return _firstBattle;
+    }
+
+    public void SetFirstRun(bool boolean)
+    {
+        _firstRun = boolean;
+    }
+
+    public void SetFirstBattle(bool boolean)
+    {
+        _firstBattle = boolean;
+    }
+}
+
 public class UserInfoManager : MonoBehaviour
 {
     public static UserInfoManager Instance;
@@ -172,6 +232,7 @@ public class UserInfoManager : MonoBehaviour
     public Data data;
     public UserData userData;
     public OptionData optionData;
+    public AchievementData achievementData;
     public CanvasManager _canvasManager;
 
 
@@ -225,7 +286,7 @@ public class UserInfoManager : MonoBehaviour
         userData.bossCurrentPlateNum = 0;
         userData.bossCurrentRoadNum = 0;
 
-        userData.isCounted = false;
+        userData.isCounted = true;
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
 
@@ -240,12 +301,20 @@ public class UserInfoManager : MonoBehaviour
         optionData.SetSfxVolume(0.5f);
         optionData.SetVoiceType(0);
 
+        AchievementData achievementData = new AchievementData();
+        achievementData.SetBestScore(0);
+        achievementData.SetClearCount(0);
+        achievementData.SetFirstBattle(false);
+        achievementData.SetFirstRun(false);
+
         Data data = new Data();
         data.SetUserData(userData);
         data.SetOptionData(optionData);
+        data.SetAchievementData(achievementData);
 
         this.userData = userData;
         this.optionData = optionData;
+        this.achievementData = achievementData;
         this.data = data;
 
         ES3.Save(keyName, data);
@@ -282,7 +351,7 @@ public class UserInfoManager : MonoBehaviour
         userData.bossCurrentPlateNum = 0;
         userData.bossCurrentRoadNum = 0;
 
-        userData.isCounted = false;
+        userData.isCounted = true;
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
 
