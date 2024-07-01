@@ -304,8 +304,8 @@ public class UserInfoManager : MonoBehaviour
         AchievementData achievementData = new AchievementData();
         achievementData.SetBestScore(0);
         achievementData.SetClearCount(0);
-        achievementData.SetFirstBattle(false);
-        achievementData.SetFirstRun(false);
+        achievementData.SetFirstBattle(true);
+        achievementData.SetFirstRun(true);
 
         Data data = new Data();
         data.SetUserData(userData);
@@ -363,7 +363,8 @@ public class UserInfoManager : MonoBehaviour
         Data data = new Data();
         data.SetUserData(userData);
         data.SetOptionData(this.optionData);
-
+        data.SetAchievementData(this.achievementData);
+        
         this.userData = userData;
         this.data = data;
 
@@ -391,6 +392,12 @@ public class UserInfoManager : MonoBehaviour
         ES3.Save(keyName, data);
     }
 
+    public void AchievementDataSave()
+    {
+        data.SetAchievementData(achievementData);
+        ES3.Save(keyName, data);
+    }
+
     public void DataLoad()
     {
         if (ES3.FileExists(fileName)) //파일 경로에 데이터 있을 경우
@@ -399,6 +406,7 @@ public class UserInfoManager : MonoBehaviour
             ES3.LoadInto(keyName, data); //로드
             userData = data.GetUserData();
             optionData = data.GetOptionData();
+            achievementData = data.GetAchievementData();
         }
         else
         {

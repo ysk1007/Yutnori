@@ -442,7 +442,6 @@ public class PlayerMove : MonoBehaviour
                 _continueButton.SetActive(true);
                 _marketVisitButton.SetActive(true);
                 canvasManager.FadeImage();
-                canvasManager._shop.OpenShop();
                 break;
             case Plate.PlateType.Elite:
                 canvasManager.ShowUi();
