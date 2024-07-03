@@ -447,7 +447,7 @@ public class Unit_Manager : MonoBehaviour
     {
         if(UserPopulation < 1) 
         { 
-            SoonsoonData.Instance.LogPopup.ShowLog("최소 한 명의 유닛이 필드에 있어야 합니다.");
+            SoonsoonData.Instance.LogPopup.ShowLog("최소 한 명의 유닛이 필드에 있어야 합니다!\n유닛을 끌어다 놓으세요.");
             return;
         }
 

@@ -6,6 +6,10 @@ public class TutorialHand : MonoBehaviour
 {
     [SerializeField] private RectTransform _imageToMove; // 이동할 이미지
     [SerializeField] private RectTransform _targetImage; // 목표 위치 이미지
+
+    [SerializeField] private RectTransform _shopVisitButton;
+    [SerializeField] private RectTransform _yutThrowButton;
+
     [SerializeField] private float _moveDuration = 1.0f; // 이동 시간
     public Popup _popup;
 
@@ -68,6 +72,20 @@ public class TutorialHand : MonoBehaviour
         }
         _popup.OnePopup();
         _targetImage = rect;
+        StartMoving();
+    }
+
+    public void ShopGuide()
+    {
+        _popup.OnePopup();
+        _targetImage = _shopVisitButton;
+        StartMoving();
+    }
+
+    public void ThrowGuide()
+    {
+        _popup.OnePopup();
+        _targetImage = _yutThrowButton;
         StartMoving();
     }
 }

@@ -80,6 +80,8 @@ public class PlayerMove : MonoBehaviour
         yutManager._plateList = plate;
         yutManager.SetPlate();
 
+        canvasManager._tutorialHand.ThrowGuide();
+
         UserPosSetting();
         // 보스 데이터가 있으면 보스 말 출현
         BossPosSetting();
@@ -441,7 +443,7 @@ public class PlayerMove : MonoBehaviour
             case Plate.PlateType.Home:
                 _continueButton.SetActive(true);
                 _marketVisitButton.SetActive(true);
-                canvasManager.FadeImage();
+                canvasManager._tutorialHand.ShopGuide();
                 break;
             case Plate.PlateType.Elite:
                 canvasManager.ShowUi();

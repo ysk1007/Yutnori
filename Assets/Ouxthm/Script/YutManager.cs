@@ -45,6 +45,7 @@ public class YutManager : MonoBehaviour
 
     AudioManager _audioManager;
     UserInfoManager _userInfoManager;
+    CanvasManager _canvasManager;
     private void Awake()
     {
         instance = this;
@@ -56,6 +57,7 @@ public class YutManager : MonoBehaviour
     {
         _userInfoManager = UserInfoManager.Instance;
         _audioManager = AudioManager.instance;
+        _canvasManager = SoonsoonData.Instance.Canvas_Manager;
     }
 
     // 윷 시뮬레이터가 끝나면 실행되는 메소드
@@ -170,6 +172,8 @@ public class YutManager : MonoBehaviour
 
     public void ThrowYut()
     {
+        _canvasManager._tutorialHand._popup.ZeroPopup();
+
         rand = Random.Range(0f, 1f);
         int cilpNum = Random.Range(0, 3);
         if(rand <= 0.2f)
@@ -219,6 +223,8 @@ public class YutManager : MonoBehaviour
 
     public void ExactThrowYut(int i)
     {
+        _canvasManager._tutorialHand._popup.ZeroPopup();
+
         int cilpNum = Random.Range(0, 3);
         if (i == 0)
         {

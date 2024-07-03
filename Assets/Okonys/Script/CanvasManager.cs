@@ -26,6 +26,8 @@ public class CanvasManager : MonoBehaviour
 
     [SerializeField] private Image _fadeImage;
 
+    public TutorialHand _tutorialHand;
+
     [SerializeField] private Animator _gameOutAnimator;
     [SerializeField] private Popup _gameOutPopup;
     [SerializeField] private Animator _gameOutPopupAnimator;
@@ -71,6 +73,7 @@ public class CanvasManager : MonoBehaviour
         _canvasAnimator.SetTrigger("Fade");
         _yutCanvas.SetActive(true);
         _units.transform.localScale = Vector3.zero;
+        _tutorialHand.ThrowGuide();
     }
 
     public void FadeImage()

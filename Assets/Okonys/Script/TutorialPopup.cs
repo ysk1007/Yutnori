@@ -21,6 +21,9 @@ public class TutorialPopup : MonoBehaviour
 
     [SerializeField] private GameObject _yutTutorial;
     [SerializeField] private Animator _yutTutorialAnimator;
+    [SerializeField] private Animator[] _yutAnimator;
+    [SerializeField] private TextMeshProUGUI _yutText;
+    [SerializeField] private TMP_ColorGradient[] _textColors;
 
     [SerializeField] private TextMeshProUGUI _textBox;
     [SerializeField] private TypewriterByCharacter _typeWriter;
@@ -37,8 +40,8 @@ public class TutorialPopup : MonoBehaviour
     [SerializeField] private bool _isFirstBattle;
     public bool _textShowed;
 
-    [SerializeField]
-    private int _currentDialogueIndex = 0;
+    [SerializeField] private int _currentDialogueIndex = 0;
+    [SerializeField] private int _yutIndex = 0;
 
     private void Awake()
     {
@@ -131,7 +134,59 @@ public class TutorialPopup : MonoBehaviour
             _yutTutorial.SetActive(false);
             return;
         }
-        _yutTutorial.SetActive(true);
-        _yutTutorialAnimator.SetTrigger("Show");
+
+        if (_yutTutorial.activeInHierarchy)
+        {
+            if (_yutIndex < 4)
+            {
+                _yutAnimator[_yutIndex].SetTrigger("Back");
+                GetYutText();
+                _yutIndex++;
+            }
+            else
+            {
+                for (int i = 0; i < _yutAnimator.Length; i++)
+                {
+                    _yutAnimator[i].SetTrigger("Front");
+                    GetYutText();
+                }
+            }
+        }
+
+        if (_currentDialogueIndex == 11)
+        {
+            _yutTutorial.SetActive(true);
+            _yutTutorialAnimator.SetTrigger("Show");
+        }
+    }
+
+    void GetYutText()
+    {
+        switch (_yutIndex)
+        {
+            case 0:
+                _yutText.text = "µµ";
+                _yutText.colorGradientPreset = _textColors[_yutIndex];
+                break;
+            case 1:
+                _yutText.text = "°³";
+                _yutText.colorGradientPreset = _textColors[_yutIndex];
+                break;
+            case 2:
+                _yutText.text = "°É";
+                _yutText.colorGradientPreset = _textColors[_yutIndex];
+                break;
+            case 3:
+                _yutText.text = "À·";
+                _yutText.colorGradientPreset = _textColors[_yutIndex];
+                break;
+            case 4:
+                _yutText.text = "¸ð";
+                _yutText.colorGradientPreset = _textColors[_yutIndex];
+                break;
+            default:
+                _yutText.text = null;
+                break;
+        }
     }
 }
