@@ -86,7 +86,11 @@ public class TutorialPopup : MonoBehaviour
         {
             case TutorialType.firstRun:
                 if (_currentDialogueIndex > _firstTutorialTexts.Length - 1)
+                {
+                    _userInfoManager.achievementData.SetFirstRun(false);
+                    _userInfoManager.AchievementDataSave();
                     _popup.ZeroPopup();
+                }
                 else
                 {
                     _typeWriter.ShowText(_firstTutorialTexts[_currentDialogueIndex]);

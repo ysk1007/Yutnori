@@ -32,14 +32,14 @@ public class Plate : MonoBehaviour
 
     public void init()
     {
+        if (_plateType == PlateType.Elite) return;
+
         _plateIcon.sprite = _yutManager._icons[_plateType.GetHashCode()];
-        _plateIcon.color = _yutManager._colors[_plateType.GetHashCode()];
     }
 
     public void init(int i)
     {
         _plateType = (i > 0) ? PlateType.Random : PlateType.Enemy;
         _plateIcon.sprite = _yutManager._icons[i];
-        _plateIcon.color = _yutManager._colors[i];
     }
 }

@@ -39,7 +39,6 @@ public class YutManager : MonoBehaviour
     public float _randomPlateProbability; // ·£´ı Ä­ÀÌ µîÀåÇÒ È®·ü
 
     public Sprite[] _icons;
-    public Color[] _colors;
 
     public Button btn;
 
