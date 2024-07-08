@@ -55,6 +55,7 @@ public class SoonsoonData
     public PlayerMove Player_Move;
     public EventPanel Event_Panel;
     public SynergyPopup SynergyPopup;
+    public TutorialPopup TutorialPopup;
 
     public SPUM_Manager _spumManager;
     public bool _gifAlphaTrigger; // for using gif trigger at Soonsoon Exporter.

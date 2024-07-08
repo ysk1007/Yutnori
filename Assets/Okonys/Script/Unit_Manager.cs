@@ -36,6 +36,7 @@ public class Unit_Manager : MonoBehaviour
     BattleReward _battleReward;
     PlayerMove _playerMove;
     CanvasManager _canvasManager;
+    TutorialPopup _tutorialPopup;
 
     void Awake()
     {
@@ -54,6 +55,8 @@ public class Unit_Manager : MonoBehaviour
         _playerMove = SoonsoonData.Instance.Player_Move;
         _battleReward = SoonsoonData.Instance.Battle_Reward;
         _canvasManager = SoonsoonData.Instance.Canvas_Manager;
+        _tutorialPopup = SoonsoonData.Instance.TutorialPopup;
+
         UserUnitDataLoad();
     }
 
@@ -407,6 +410,14 @@ public class Unit_Manager : MonoBehaviour
         _userInfoManager.UserDataSave();
     }
 
+    public int LoseHp()
+    {
+        if (_playerMove.bossMeet)
+            return (-1 * (5 + (_enemyPool.GetGameLevel() * 10)));
+        else
+            return (-1 * (5 + (_enemyPool.GetGameLevel() * 5)));
+    }
+
     void BattleEndSetting(bool isWin)
     {
         if (isWin)
@@ -462,6 +473,8 @@ public class Unit_Manager : MonoBehaviour
 
     public void FieldReset()
     {
+        _tutorialPopup.RunBattleTutorial();
+
         _p1UnitList.RemoveRange(0,_p1UnitList.Count);
         _p2UnitList.RemoveRange(0, _p2UnitList.Count);
         UnitDataUpdate();

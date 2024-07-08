@@ -32,6 +32,8 @@ public class TutorialPopup : MonoBehaviour
     [SerializeField] private RectTransform[] _firstTutorialRectTransform;
 
     [SerializeField][TextArea] private string[] _firstBattleTexts;
+    [SerializeField] private RectTransform[] _firstBattleRectTransform;
+    [SerializeField] private Animator _chatAnimator;
 
     UserInfoManager _userInfoManager;
     Popup _popup;
@@ -46,6 +48,7 @@ public class TutorialPopup : MonoBehaviour
     private void Awake()
     {
         _popup = GetComponent<Popup>();
+        SoonsoonData.Instance.TutorialPopup = this;
     }
 
     // Start is called before the first frame update
@@ -76,6 +79,11 @@ public class TutorialPopup : MonoBehaviour
     public void RunBattleTutorial()
     {
         if (!_isFirstBattle) return;
+        _popup.OnePopup();
+        _chatAnimator.SetTrigger("Show");
+        _tutorialType = TutorialType.firstBattle;
+        _currentDialogueIndex = 0;
+        _typeWriter.ShowText(_firstBattleTexts[_currentDialogueIndex]);
 
     }
 
@@ -101,7 +109,11 @@ public class TutorialPopup : MonoBehaviour
                 break;
             case TutorialType.firstBattle:
                 if (_currentDialogueIndex > _firstBattleTexts.Length - 1)
+                {
+                    _userInfoManager.achievementData.SetFirstBattle(false);
+                    _userInfoManager.AchievementDataSave();
                     _popup.ZeroPopup();
+                }
                 else
                 {
                     _typeWriter.ShowText(_firstBattleTexts[_currentDialogueIndex]);
@@ -115,7 +127,19 @@ public class TutorialPopup : MonoBehaviour
 
     public void SetTutorialHand()
     {
-        _tutorialHand.SetTargetImage(_firstTutorialRectTransform[_currentDialogueIndex]);
+        switch (_tutorialType)
+        {
+            case TutorialType.none:
+                break;
+            case TutorialType.firstRun:
+                _tutorialHand.SetTargetImage(_firstTutorialRectTransform[_currentDialogueIndex]);
+                break;
+            case TutorialType.firstBattle:
+                _tutorialHand.SetTargetImage(_firstBattleRectTransform[_currentDialogueIndex]);
+                break;
+            default:
+                break;
+        }
     }
 
     void SetPlateTutorial()

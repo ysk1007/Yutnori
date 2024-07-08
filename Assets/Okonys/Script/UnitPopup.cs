@@ -57,7 +57,7 @@ public class UnitPopup : MonoBehaviour
     void Update()
     {
         // 마우스 오른쪽 버튼 클릭 감지
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             // 마우스 위치에서 레이를 발사
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

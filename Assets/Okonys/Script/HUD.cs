@@ -21,6 +21,7 @@ public class HUD : MonoBehaviour
         UserPopulation = 12,
         MaxPopulation = 13,
         TurnCount = 14,
+        LoseHp = 15
     }
     public UiType _uiType = UiType.WarriorCount;
     private SynergyManager SM;
@@ -89,6 +90,9 @@ public class HUD : MonoBehaviour
                 break;
             case UiType.TurnCount:
                 _thisText.text = _userInfoManager.userData.TurnCounter.ToString()+"턴";
+                break;
+            case UiType.LoseHp:
+                _thisText.text = "패배 시 체력 " + _unitManager.LoseHp().ToString();
                 break;
             default:
                 break;
