@@ -23,7 +23,8 @@ public class UnitShop : MonoBehaviour
 
     public Color[] _synergyColor;
     public Color[] _typeColor;
-    public Color[] _rateColor;
+    public Sprite[] _rateImage;
+    public Color[] _cardColor;
 
     public Sprite[] _synergySprites;
     public Sprite[] _typeSprites;

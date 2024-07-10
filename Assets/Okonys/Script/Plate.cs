@@ -14,6 +14,7 @@ public class Plate : MonoBehaviour
         Chest = 4,
     }
 
+    [SerializeField] private Animator _plateAnimator;
     public Image _plateIcon;
     public PlateType _plateType;
     YutManager _yutManager;
@@ -40,6 +41,6 @@ public class Plate : MonoBehaviour
     public void init(int i)
     {
         _plateType = (i > 0) ? PlateType.Random : PlateType.Enemy;
-        _plateIcon.sprite = _yutManager._icons[i];
+        _plateAnimator.SetTrigger("Show");
     }
 }

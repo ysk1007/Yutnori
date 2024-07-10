@@ -246,6 +246,13 @@ public class PlayerMove : MonoBehaviour
                 // 상점 초기화
                 canvasManager._shop.ResetShop();
 
+                // 완주 보상
+                _userInfoManager.userData.SetUserGold(100);
+                _userInfoManager.userData.totalMapFinish++;
+
+                // 발판 초기화
+                yutManager.RandomPlate();
+
                 MarketVisit();
                 while (_isMarket)
                 {
@@ -271,6 +278,8 @@ public class PlayerMove : MonoBehaviour
         else
         {
             _yutThrowBtn.gameObject.SetActive(true);
+            if (currentIndex == 0)
+                yield break;
             PlateEvent();
         }
     }
@@ -337,6 +346,8 @@ public class PlayerMove : MonoBehaviour
         else
         {
             _yutThrowBtn.gameObject.SetActive(true);
+            if (currentIndex == 0)
+                yield break;
             PlateEvent();
         }
     }

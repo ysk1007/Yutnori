@@ -67,10 +67,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 5342fe5be3d40164a8c577f364026e5c, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 0
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 8944760799936231958}
   - component: {fileID: 5991547330391241611}
   - component: {fileID: 8145701268186965779}
+  - component: {fileID: 3595727819078055038}
   m_Layer: 5
   m_Name: Plate_4
   m_TagString: Untagged
@@ -136,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8c1442a8eee05844a8ec7a045e1e1f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _plateAnimator: {fileID: 3595727819078055038}
   _plateIcon: {fileID: 1323772661580414750}
   _plateType: 0
 --- !u!114 &8145701268186965779
@@ -168,3 +170,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &3595727819078055038
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7665122495305562035}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 87928be588ccfb54ea51ed309cc33f76, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

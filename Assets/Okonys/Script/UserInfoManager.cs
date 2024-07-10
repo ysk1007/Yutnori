@@ -115,7 +115,7 @@ public class UserData //유저 데이터 클래스
         if(UserHp <= 0)
         {
             UserHp = 0;
-            SoonsoonData.Instance.LogPopup.ShowLog("게임 종료");
+            //SoonsoonData.Instance.LogPopup.ShowLog("게임 종료");
             UserInfoManager.Instance._canvasManager?.GameEnd();
         }
     }

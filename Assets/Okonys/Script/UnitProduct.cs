@@ -74,89 +74,9 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         _unitName.text = _unitData.UnitName;
         _characterIcon.sprite = _unitData.icon;
 
-        switch (_unitData.AttackType)
-        {
-            case Unit.AttackType.Warrior:
-                _synergyIcon.sprite = _unitShop._synergySprites[0];
-                _synergyBg.color = _unitShop._synergyColor[0];
-                break;
-            case Unit.AttackType.Archer:
-                _synergyIcon.sprite = _unitShop._synergySprites[1];
-                _synergyBg.color = _unitShop._synergyColor[1];
-                break;
-            case Unit.AttackType.Wizard:
-                _synergyIcon.sprite = _unitShop._synergySprites[2];
-                _synergyBg.color = _unitShop._synergyColor[2];
-                break;
-            case Unit.AttackType.Assassin:
-                _synergyIcon.sprite = _unitShop._synergySprites[3];
-                _synergyBg.color = _unitShop._synergyColor[3];
-                break;
-            case Unit.AttackType.Healer:
-                _synergyIcon.sprite = _unitShop._synergySprites[4];
-                _synergyBg.color = _unitShop._synergyColor[4];
-                break;
-            case Unit.AttackType.Merchant:
-                _synergyIcon.sprite = _unitShop._synergySprites[5];
-                _synergyBg.color = _unitShop._synergyColor[5];
-                break;
-            default:
-                break;
-        }
-
-        switch (_unitData.UnitType)
-        {
-            case Unit.UnitType.Human:
-                _typeIcon.sprite = _unitShop._typeSprites[0];
-                _typeBg.color = _unitShop._typeColor[0];
-                break;
-            case Unit.UnitType.Ghost:
-                _typeIcon.sprite = _unitShop._typeSprites[1];
-                _typeBg.color = _unitShop._typeColor[1];
-                break;
-            case Unit.UnitType.Great:
-                break;
-            case Unit.UnitType.Devil:
-                break;
-            default:
-                break;
-        }
-
-        switch (_unitData._nobleRate)
-        {
-            case UnitData.nobleRate.common:
-                _productPrice = 1;
-                _productPriceTag.text = "1";
-                _unitRate.color = _unitShop._rateColor[0];
-                _productBg.color = _unitShop._rateColor[0];
-                break;
-            case UnitData.nobleRate.uncommon:
-                _productPrice = 2;
-                _productPriceTag.text = "2";
-                _unitRate.color = _unitShop._rateColor[1];
-                _productBg.color = _unitShop._rateColor[1];
-                break;
-            case UnitData.nobleRate.rare:
-                _productPrice = 3;
-                _productPriceTag.text = "3";
-                _unitRate.color = _unitShop._rateColor[2];
-                _productBg.color = _unitShop._rateColor[2];
-                break;
-            case UnitData.nobleRate.epic:
-                _productPrice = 4;
-                _productPriceTag.text = "4";
-                _unitRate.color = _unitShop._rateColor[3];
-                _productBg.color = _unitShop._rateColor[3];
-                break;
-            case UnitData.nobleRate.legendary:
-                _productPrice = 5;
-                _productPriceTag.text = "5";
-                _unitRate.color = _unitShop._rateColor[4];
-                _productBg.color = _unitShop._rateColor[4];
-                break;
-            default:
-                break;
-        }
+        SynergySetting(_unitData.AttackType.GetHashCode());
+        TypeSetting(_unitData.UnitType.GetHashCode());
+        ProductSetting(_unitData._nobleRate.GetHashCode());
     }
 
     private void UnitRate()
@@ -180,5 +100,28 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
             _productRate.sprite = _unitShop._rateSprites[2];
         }
+    }
+
+    // 시너지에 대한 이미지와 색깔 세팅
+    void SynergySetting(int i)
+    {
+        _synergyIcon.sprite = _unitShop._synergySprites[i];
+        _synergyBg.color = _unitShop._synergyColor[i];
+        _productBg.color = _unitShop._cardColor[i];
+    }
+
+    // 타입에 대한 이미지와 색깔 세팅
+    void TypeSetting(int i)
+    {
+        _typeIcon.sprite = _unitShop._typeSprites[i];
+        _typeBg.color = _unitShop._typeColor[i];
+    }
+
+    // 상품등급에 대한 이미지, 가격 세팅
+    void ProductSetting(int i)
+    {
+        _productPrice = i + 1;
+        _productPriceTag.text = (i + 1).ToString();
+        _unitRate.sprite = _unitShop._rateImage[i];
     }
 }
