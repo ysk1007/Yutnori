@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1505270239064475848}
   - component: {fileID: 6028603305796219843}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: mask_image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 5703635254399858564}
   - component: {fileID: 3859316625058337215}
   m_Layer: 0
-  m_Name: Image (1)
+  m_Name: back_icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.30980393, g: 0.41176474, b: 0.50980395, a: 1}
+  m_Color: {r: 0.30980393, g: 0.41176474, b: 0.50980395, a: 0.42745098}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -500,7 +500,7 @@ GameObject:
   - component: {fileID: 7060781790847327914}
   - component: {fileID: 6443610961295077733}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Desc_Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -647,7 +647,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC544.. \uC9D1\uC5D0 \uAC00\uACE0\uC2F6\uB2E4.."
+  m_text: "\uC720\uB2DB \uC124\uBA85"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3a4dd1ab98696a0408d14f5f564555e5, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: d72f7ceb636567045af48b81ae757d2d, type: 2}
@@ -998,6 +998,7 @@ MonoBehaviour:
   _productRate: {fileID: 2572815082563622997}
   _productPriceTag: {fileID: 1944268332616874275}
   _unitName: {fileID: 4032495263355312170}
+  _unitDesc: {fileID: 6249238253625691865}
 --- !u!114 &1243113736639924775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1070,7 +1071,7 @@ GameObject:
   - component: {fileID: 5152358084489515232}
   - component: {fileID: 6309645893359749118}
   m_Layer: 5
-  m_Name: product
+  m_Name: icon_frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1756,7 +1757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8632075, b: 0.3160377, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

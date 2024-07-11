@@ -173,97 +173,86 @@ public class YutManager : MonoBehaviour
     {
         _canvasManager._tutorialHand._popup.ZeroPopup();
 
+        // 출발 지점에서 던졌으면 완주 보상 초기화
+        if (playerMv.currentIndex == 0)
+            _userInfoManager.userData.AlreadyFinished = false;
+
         rand = Random.Range(0f, 1f);
         int cilpNum = Random.Range(0, 3);
         if(rand <= 0.2f)
         {
             _yutText.text = "도";
-            SetParticleColor(0);
-            _yutText.colorGradientPreset = _textColors[0];
+            YutSimulationSetting(0);
             _yutSimulationPlayer.clip = _doClip[cilpNum];
-            _moveDistance = 1;
         }
         else if(0.2f < rand && rand <= 0.5f)
         {
             _yutText.text = "개";
-            SetParticleColor(1);
-            _yutText.colorGradientPreset = _textColors[1];
+            YutSimulationSetting(1);
             _yutSimulationPlayer.clip = _gaeClip[cilpNum];
-            _moveDistance = 2;
         }
         else if(0.5f < rand && rand <= 0.7f)
         {
             _yutText.text = "걸";
-            SetParticleColor(2);
-            _yutText.colorGradientPreset = _textColors[2];
+            YutSimulationSetting(2);
             _yutSimulationPlayer.clip = _geolClip[cilpNum];
-            _moveDistance = 3;
         }
         else if(0.7f < rand && rand <= 0.85f)
         {
             _yutText.text = "윷";
-            SetParticleColor(3);
-            _yutText.colorGradientPreset = _textColors[3];
+            YutSimulationSetting(3);
             _yutSimulationPlayer.clip = _yutClip[cilpNum];
-            _moveDistance = 4;
         }
         else
         {
             _yutText.text = "모";
-            SetParticleColor(4);
-            _yutText.colorGradientPreset = _textColors[4];
+            YutSimulationSetting(4);
             _yutSimulationPlayer.clip = _moClip[cilpNum];
-            _moveDistance = 5;
         }
         _yutSimulation.localScale = _playSize;
         _yutSimulationPlayer.Play();
         _audioManager.PlaySfx(AudioManager.Sfx.YutSounds);
     }
 
+    // 정확한 던지기
     public void ExactThrowYut(int i)
     {
         _canvasManager._tutorialHand._popup.ZeroPopup();
 
+        // 출발 지점에서 던졌으면 완주 보상 초기화
+        if (playerMv.currentIndex == 0)
+            _userInfoManager.userData.AlreadyFinished = false;
+
         int cilpNum = Random.Range(0, 3);
-        if (i == 0)
+        if (i == 1)
         {
             _yutText.text = "도";
-            SetParticleColor(0);
-            _yutText.colorGradientPreset = _textColors[0];
+            YutSimulationSetting(0);
             _yutSimulationPlayer.clip = _doClip[cilpNum];
-            _moveDistance = 1;
-        }
-        else if (i == 1)
-        {
-            _yutText.text = "개";
-            SetParticleColor(1);
-            _yutText.colorGradientPreset = _textColors[1];
-            _yutSimulationPlayer.clip = _gaeClip[cilpNum];
-            _moveDistance = 2;
         }
         else if (i == 2)
         {
-            _yutText.text = "걸";
-            SetParticleColor(2);
-            _yutText.colorGradientPreset = _textColors[2];
-            _yutSimulationPlayer.clip = _geolClip[cilpNum];
-            _moveDistance = 3;
+            _yutText.text = "개";
+            YutSimulationSetting(1);
+            _yutSimulationPlayer.clip = _gaeClip[cilpNum];
         }
         else if (i == 3)
         {
+            _yutText.text = "걸";
+            YutSimulationSetting(2);
+            _yutSimulationPlayer.clip = _geolClip[cilpNum];
+        }
+        else if (i == 4)
+        {
             _yutText.text = "윷";
-            SetParticleColor(3);
-            _yutText.colorGradientPreset = _textColors[3];
+            YutSimulationSetting(3);
             _yutSimulationPlayer.clip = _yutClip[cilpNum];
-            _moveDistance = 4;
         }
         else
         {
             _yutText.text = "모";
-            SetParticleColor(4);
-            _yutText.colorGradientPreset = _textColors[4];
+            YutSimulationSetting(4);
             _yutSimulationPlayer.clip = _moClip[cilpNum];
-            _moveDistance = 5;
         }
         _yutSimulation.localScale = _playSize;
         _yutSimulationPlayer.Play();
@@ -280,5 +269,14 @@ public class YutManager : MonoBehaviour
     {
         _particleChild.startColor = _particleColorChild[index];
         _particleParent.startColor = _particleColorParent[index];
+    }
+
+    void YutSimulationSetting(int i)
+    {
+        SetParticleColor(i);
+        _yutText.colorGradientPreset = _textColors[i];
+        _moveDistance = i+1;
+        _userInfoManager.userData.LastYutMove = _moveDistance;
+        _userInfoManager.UserDataSave();
     }
 }

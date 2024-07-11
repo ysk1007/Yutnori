@@ -80,8 +80,6 @@ public class PlayerMove : MonoBehaviour
         yutManager._plateList = plate;
         yutManager.SetPlate();
 
-        canvasManager._tutorialHand.ThrowGuide();
-
         UserPosSetting();
         // 보스 데이터가 있으면 보스 말 출현
         BossPosSetting();
@@ -98,6 +96,17 @@ public class PlayerMove : MonoBehaviour
 
         // 현재 발판 타입 확인
         CurrentPlateType();
+
+        // 이동하지 않고 게임을 종료 했다면
+        if (_userInfoManager.userData.LastYutMove > 0)
+        {
+            yutManager.ExactThrowYut(_userInfoManager.userData.LastYutMove);
+            _yutThrowBtn.gameObject.SetActive(false);
+        }
+
+        // 아니라면 윷 가이드
+        else
+            canvasManager._tutorialHand.ThrowGuide();
 
         if (!_userInfoManager.userData.isCounted)
         {
@@ -243,15 +252,21 @@ public class PlayerMove : MonoBehaviour
 
             if (currentIndex == 0)
             {
-                // 상점 초기화
-                canvasManager._shop.ResetShop();
+                // 완주 보상을 받은적이 없음
+                if (!_userInfoManager.userData.AlreadyFinished)
+                {
+                    // 상점 초기화
+                    canvasManager._shop.ResetShop();
 
-                // 완주 보상
-                _userInfoManager.userData.SetUserGold(100);
-                _userInfoManager.userData.totalMapFinish++;
+                    // 완주 보상
+                    _userInfoManager.userData.SetUserGold(100);
+                    _userInfoManager.userData.totalMapFinish++;
 
-                // 발판 초기화
-                yutManager.RandomPlate();
+                    // 발판 초기화
+                    yutManager.RandomPlate();
+                    _userInfoManager.userData.AlreadyFinished = true;
+                    _userInfoManager.UserDataSave();
+                }
 
                 MarketVisit();
                 while (_isMarket)
@@ -268,6 +283,7 @@ public class PlayerMove : MonoBehaviour
         // 현재 발판 번호 저장
         _userInfoManager.userData.CurrentPlateNum = nowPlateNum;
         _userInfoManager.userData.CurrentRoadNum = nowRoadNum;
+        _userInfoManager.userData.LastYutMove = 0;
 
         yield return new WaitForSeconds(0.5f);
 

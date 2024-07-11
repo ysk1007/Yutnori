@@ -83,6 +83,9 @@ public class UserData //유저 데이터 클래스
     public int CurrentPlateNum; // 현재 플레이어가 밟고 있는 발판 번호
     public int CurrentRoadNum; // 현재 플레이어의 진행 길
 
+    public int LastYutMove; // 마지막으로 뽑은 윷
+    public bool AlreadyFinished; // 이미 완주 했는지 유무 (중복 보상 막기 위함)
+
     public bool isBossData; // 보스 데이터의 유무
     public int bossNum; // 보스 번호
     public int bossCurrentPlateNum; // 현재 보스가 밟고 있는 발판 번호
@@ -290,6 +293,9 @@ public class UserInfoManager : MonoBehaviour
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
 
+        userData.LastYutMove = 0;
+        userData.AlreadyFinished = false;
+
         userData.totalKillEnemy = 0;
         userData.totalKillBoss = 0;
         userData.totalGetGold = 0;
@@ -354,6 +360,9 @@ public class UserInfoManager : MonoBehaviour
         userData.isCounted = true;
         userData.TurnCounter = 1;
         userData.GameLevel = 0;
+
+        userData.LastYutMove = 0;
+        userData.AlreadyFinished = false;
 
         userData.totalKillEnemy = 0;
         userData.totalKillBoss = 0;

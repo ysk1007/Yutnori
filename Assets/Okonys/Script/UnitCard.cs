@@ -30,6 +30,7 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public TextMeshProUGUI _productPriceTag;
     public TextMeshProUGUI _unitName;
+    public TextMeshProUGUI _unitDesc;
 
     Vector3 _originalSize = new Vector3(0.7f, 0.7f, 1f);
     Vector3 _SelectSize = new Vector3(0.9f, 0.9f, 1f);
@@ -78,6 +79,7 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _nobleRate = _unitData._nobleRate;
         _unitName.text = _unitData.UnitName;
         _characterIcon.sprite = _unitData.icon;
+        _unitDesc.text = _unitData.UnitDesc;
 
         SynergySetting(_unitData.AttackType.GetHashCode());
         TypeSetting(_unitData.UnitType.GetHashCode());
