@@ -37,6 +37,8 @@ public class SkillObj : MonoBehaviour
     public float _timerForLim; // 오브젝트 끝나는 시간
     public float _interval; // 간격
     public float _intervalTimer; // 간격 타이머
+    public bool _stunCheck;
+    public float _stunTime;
     public string _Tag;
 
     public Unit _owner;
@@ -120,6 +122,9 @@ public class SkillObj : MonoBehaviour
 
         _rangeX = skillData.xRange;
         _rangeY = skillData.yRange;
+
+        _stunCheck = skillData.StunCheck;
+        _stunTime = skillData.StunTime;
 
         _timer = 0;
         _timerForLim = timer;
@@ -247,6 +252,8 @@ public class SkillObj : MonoBehaviour
             if (collider.gameObject.CompareTag(_Tag))
             {
                 _owner.SetAttack(_damage, collider.gameObject.GetComponent<Unit>());
+                if (_stunCheck)
+                    collider.gameObject.GetComponent<Unit>().SetStun(_stunTime);
                 int val = _skillID + 5;
                 EffectType num = (EffectType)val;
                 SoonsoonData.Instance.Effect_Manager.SetEffect(num, null, _target[0].transform.position, false, 1.5f);
@@ -260,6 +267,8 @@ public class SkillObj : MonoBehaviour
         foreach (var unit in _target)
         {
             unit.SetHeal(unit, value);
+            if (_stunCheck)
+                unit.SetStun(_stunTime);
         }
     }
 
@@ -273,6 +282,8 @@ public class SkillObj : MonoBehaviour
                 {
                     SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Debuff, unit, unit.transform.position, true, _timerForLim);
                     unit.UnitBuff(_recovery, _damage, _speed, _defense, _critical, _shield, _timerForLim, BuffType);
+                    if (_stunCheck)
+                        unit.SetStun(_stunTime);
                 }
                 break;
             case false:
@@ -280,6 +291,8 @@ public class SkillObj : MonoBehaviour
                 {
                     SoonsoonData.Instance.Effect_Manager.SetEffect(EffectObj.EffectType.Buff, unit, unit.transform.position, true, _timerForLim);
                     unit.UnitBuff(_recovery, _damage, _speed, _defense, _critical, _shield, _timerForLim, BuffType);
+                    if (_stunCheck)
+                        unit.SetStun(_stunTime);
                 }
                 break;
         }

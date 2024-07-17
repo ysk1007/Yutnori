@@ -47,6 +47,8 @@ public class SkillData : ScriptableObject
     public float Duration; // 지속 시간
     public float DamageCount; // 데미지 횟수
     public float DamageInterval; // 데미지 간격
+    public bool StunCheck; // 기절 여부
+    public float StunTime; // 기절 시간
     public Vector2 SkillPos; // 스킬 위치 변경
     public float Timing; // 스킬 데미지가 들어가는 타이밍
 

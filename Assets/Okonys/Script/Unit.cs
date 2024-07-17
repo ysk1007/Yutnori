@@ -95,6 +95,9 @@ public class Unit : MonoBehaviour
     public float _findTimer;
     public float _attackTimer;
     public float _skillTimer;
+
+    public bool _isStun;
+    public float _stunTimer;
     public float _ghostTimer;
 
     UserInfoManager _userInfoManager;
@@ -120,9 +123,10 @@ public class Unit : MonoBehaviour
     {
         if (SoonsoonData.Instance.Unit_Manager._gamePause) return;
         if (_attackType == AttackType.Object) return;
+        if (_isStun) Stun();
 
         CheckState();
-        if (_unitState != UnitState.skill)
+        if (_unitState != UnitState.skill && !_isStun)
             _skillTimer += Time.deltaTime;
 
         if (_ghostDieFlag)
@@ -159,6 +163,7 @@ public class Unit : MonoBehaviour
         _findTimer = 0;
         _attackTimer = 0;
         _skillTimer = 0;
+        _stunTimer = 0;
         _ghostTimer = 0;
 }
 
@@ -195,6 +200,7 @@ public class Unit : MonoBehaviour
                 CheckAttack();
                 break;
             case UnitState.stun:
+                Stun();
                 break;
             case UnitState.skill:
                 CheckSkill();
@@ -220,6 +226,7 @@ public class Unit : MonoBehaviour
                 break;
             case UnitState.stun:
                 _spumPref.PlayAnimation(3);
+                Stun();
                 break;
             case UnitState.skill:
                 _spumPref.PlayAnimation(7);
@@ -250,6 +257,28 @@ public class Unit : MonoBehaviour
         _dirVec = _tempDis.normalized;
         SetDirection();
         transform.position += (Vector3)_dirVec * _unitMS * Time.deltaTime;
+    }
+
+    public void SetStun(float time)
+    {
+        _isStun = true;
+        _stunTimer += time;
+        SetState(UnitState.stun);
+    }
+
+    void Stun()
+    {
+        if (!_isStun) return;
+
+        _stunTimer -= Time.deltaTime;
+        if (_stunTimer <= 0)
+        {
+            _isStun = false;
+            _stunTimer = 0;
+
+            SetState(UnitState.run);
+            CheckState();
+        }
     }
 
     bool CheckDistance() // 공격 사거리 체크
