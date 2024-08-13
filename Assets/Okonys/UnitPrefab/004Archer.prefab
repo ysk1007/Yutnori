@@ -1239,7 +1239,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 19
-  m_Sprite: {fileID: 21300000, guid: 088be45d61b3a3548a4c8ccf06e0bd48, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 236be7a7c27511842a9a9b1e747c6287, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1587,7 +1587,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 21
-  m_Sprite: {fileID: 932970160, guid: 8c98e4c054e9a604fa37c8019a99d86a, type: 3}
+  m_Sprite: {fileID: 932970160, guid: e54685dfa4f6f9d4294882d593c0abf4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2487,7 +2487,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: 9d630c7c16615334e8e40576c2aad22e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 93d954d51940bc94c8c3b74d1a02b2f3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2902,7 +2902,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -19
-  m_Sprite: {fileID: 230207088, guid: 8c98e4c054e9a604fa37c8019a99d86a, type: 3}
+  m_Sprite: {fileID: 230207088, guid: e54685dfa4f6f9d4294882d593c0abf4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3252,7 +3252,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 11
-  m_Sprite: {fileID: 21300000, guid: fc299ec20cb32ce4cae4d3c71ffc83ad, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1500a8370cafd26458ff7d976c536c8c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3653,7 +3653,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -1484740220, guid: 8c98e4c054e9a604fa37c8019a99d86a, type: 3}
+  m_Sprite: {fileID: -1484740220, guid: e54685dfa4f6f9d4294882d593c0abf4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4372,6 +4372,8 @@ MonoBehaviour:
   _findTimer: 0
   _attackTimer: 0
   _skillTimer: 0
+  _isStun: 0
+  _stunTimer: 0
   _ghostTimer: 0
 --- !u!135 &3757363629739997609
 SphereCollider:
