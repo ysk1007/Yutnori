@@ -2796,6 +2796,7 @@ GameObject:
   - component: {fileID: 2247649871589045074}
   - component: {fileID: 379928834195407230}
   - component: {fileID: 1660716576711570365}
+  - component: {fileID: 2120356811321109103}
   m_Layer: 0
   m_Name: HorseRoot
   m_TagString: Untagged
@@ -2868,7 +2869,7 @@ Animator:
   m_GameObject: {fileID: 4277342008370525270}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c2fc0aafc4ba14749a6cc196ffeb52b8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6afdac86022b42e44b0cca967407cd11, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2879,6 +2880,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2120356811321109103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4277342008370525270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee8184c5ffb3a6a4a8317abcadd17d8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 0}
+  unit_animator: {fileID: 0}
+  _horseUnit: 1
 --- !u!1 &4308677131575208745
 GameObject:
   m_ObjectHideFlags: 0
@@ -4121,6 +4137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spumPref: {fileID: 0}
+  _horseType: 0
   _unit_SubSet: {fileID: 0}
   _fieldindex: 0
   _unitState: 0
@@ -4155,7 +4172,7 @@ MonoBehaviour:
   _ghostPower: 0
   _ghostTime: 0
   _ghostDieFlag: 0
-  _buffPool: {fileID: 0}
+  _buffPool: {fileID: 278610123140697467}
   BuffList: []
   _unitSkill: {fileID: 11400000, guid: 68fc5b18823131a41a78090a7ccaac67, type: 2}
   _dirVec: {x: 0, y: 0}

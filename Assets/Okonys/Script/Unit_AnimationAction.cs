@@ -7,11 +7,13 @@ public class Unit_AnimationAction : MonoBehaviour
 {
     public Unit unit;
     public Animator unit_animator;
+    public bool _horseUnit;
 
     private void Awake()
     {
         unit = this.gameObject.GetComponentInParent<Unit>();
         unit_animator = this.gameObject.GetComponent<Animator>();
+        unit._horseType = _horseUnit;
     }
 
     public void Update()

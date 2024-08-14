@@ -7,6 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class Unit : MonoBehaviour
 {
     public SPUM_Prefabs _spumPref;
+    public bool _horseType;
     public Unit_SubSet _unit_SubSet;
 
     // À¯´Ö »óÅÂ
@@ -216,23 +217,29 @@ public class Unit : MonoBehaviour
         switch (_unitState)
         {
             case UnitState.idle:
-                _spumPref.PlayAnimation(0);
+                if (_horseType) _spumPref.PlayAnimation("0");
+                else _spumPref.PlayAnimation(0);
                 break;
             case UnitState.run:
-                _spumPref.PlayAnimation(1);
+                if (_horseType) _spumPref.PlayAnimation("1");
+                else _spumPref.PlayAnimation(1);
                 break;
             case UnitState.attack:
-                _spumPref.PlayAnimation(0);
+                if (_horseType) _spumPref.PlayAnimation("0");
+                else _spumPref.PlayAnimation(0);
                 break;
             case UnitState.stun:
-                _spumPref.PlayAnimation(3);
+                if (_horseType) _spumPref.PlayAnimation("3");
+                else _spumPref.PlayAnimation(3);
                 Stun();
                 break;
             case UnitState.skill:
-                _spumPref.PlayAnimation(7);
+                if (_horseType) _spumPref.PlayAnimation("5");
+                else _spumPref.PlayAnimation(7);
                 break;
             case UnitState.death:
-                _spumPref.PlayAnimation(2);
+                if (_horseType) _spumPref.PlayAnimation("4");
+                else _spumPref.PlayAnimation(2);
                 break;
         }
     }
@@ -343,14 +350,17 @@ public class Unit : MonoBehaviour
             case AttackType.Warrior:
             case AttackType.Assassin:
             case AttackType.Merchant:
-                _spumPref.PlayAnimation(4);
+                if (_horseType) _spumPref.PlayAnimation("2");
+                else _spumPref.PlayAnimation(4);
                 break;
             case AttackType.Archer:
-                _spumPref.PlayAnimation(5);
+                if (_horseType) _spumPref.PlayAnimation("2");
+                else _spumPref.PlayAnimation(5);
                 break;
             case AttackType.Wizard:
             case AttackType.Healer:
-                _spumPref.PlayAnimation(6);
+                if (_horseType) _spumPref.PlayAnimation("2");
+                else _spumPref.PlayAnimation(6);
                 break;
         }
 
@@ -367,14 +377,17 @@ public class Unit : MonoBehaviour
             case AttackType.Warrior:
             case AttackType.Assassin:
             case AttackType.Merchant:
-                _spumPref.PlayAnimation(7);
+                if (_horseType) _spumPref.PlayAnimation("5");
+                else _spumPref.PlayAnimation(7);
                 break;
             case AttackType.Archer:
-                _spumPref.PlayAnimation(8);
+                if (_horseType) _spumPref.PlayAnimation("5");
+                else _spumPref.PlayAnimation(8);
                 break;
             case AttackType.Wizard:
             case AttackType.Healer:
-                _spumPref.PlayAnimation(9);
+                if (_horseType) _spumPref.PlayAnimation("5");
+                else _spumPref.PlayAnimation(9);
                 break;
         }
     }
