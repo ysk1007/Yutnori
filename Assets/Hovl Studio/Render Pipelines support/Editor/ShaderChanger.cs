@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-
 namespace HovlStudio
 {
 
@@ -129,35 +128,10 @@ namespace HovlStudio
 
         private void ImportPipelinePackage()
         {
-#if UNITY_2019_2
-        switch (pipeline)
-            {
-                case 1:
-                    string[] unityPackagesURP = AssetDatabase.FindAssets("Unity 2019.2+ URPHS");
-                    foreach (var guid in unityPackagesURP)
-                    {
-                        AssetDatabase.ImportPackage(AssetDatabase.GUIDToAssetPath(guid), false);
-                    }
-                    AssetDatabase.importPackageCompleted += OnImportPackageCompleted;
-                    break;
-                case 2:
-                    string[] unityPackagesHD = AssetDatabase.FindAssets("Unity 2019.2+ HDRPHS");
-                    foreach (var guid in unityPackagesHD)
-                    {
-                        AssetDatabase.ImportPackage(AssetDatabase.GUIDToAssetPath(guid), false);
-                    }
-                    AssetDatabase.importPackageCompleted += OnImportPackageCompleted;
-                    break;
-                default:
-                    Debug.Log("You didn't choose pipeline");
-                    break;
-            }
-#endif
-#if (UNITY_2019_3_OR_NEWER && UNITY_2019)
             switch (pipeline)
             {
                 case 1:
-                    string[] unityPackagesURP = AssetDatabase.FindAssets("Unity 2019.3+ URPHS");
+                    string[] unityPackagesURP = AssetDatabase.FindAssets("Unity 2021+ URPHS");
                     foreach (var guid in unityPackagesURP)
                     {
                         AssetDatabase.ImportPackage(AssetDatabase.GUIDToAssetPath(guid), false);
@@ -165,31 +139,7 @@ namespace HovlStudio
                     AssetDatabase.importPackageCompleted += OnImportPackageCompleted;
                     break;
                 case 2:
-                    string[] unityPackagesHD = AssetDatabase.FindAssets("Unity 2019.3+ HDRPHS");
-                    foreach (var guid in unityPackagesHD)
-                    {
-                        AssetDatabase.ImportPackage(AssetDatabase.GUIDToAssetPath(guid), false);
-                    }
-                    AssetDatabase.importPackageCompleted += OnImportPackageCompleted;
-                    break;
-                default:
-                    Debug.Log("You didn't choose pipeline");
-                    break;
-            }
-#endif
-#if UNITY_2020_1_OR_NEWER
-            switch (pipeline)
-            {
-                case 1:
-                    string[] unityPackagesURP = AssetDatabase.FindAssets("Unity 2020+ URPHS");
-                    foreach (var guid in unityPackagesURP)
-                    {
-                        AssetDatabase.ImportPackage(AssetDatabase.GUIDToAssetPath(guid), false);
-                    }
-                    AssetDatabase.importPackageCompleted += OnImportPackageCompleted;
-                    break;
-                case 2:
-                    string[] unityPackagesHD = AssetDatabase.FindAssets("Unity 2020+ HDRPHS");
+                    string[] unityPackagesHD = AssetDatabase.FindAssets("Unity 2021+ HDRPHS");
                     foreach (var guid in unityPackagesHD)
                     {
                         AssetDatabase.ImportPackage(AssetDatabase.GUIDToAssetPath(guid), false);
@@ -197,7 +147,7 @@ namespace HovlStudio
                     AssetDatabase.importPackageCompleted += OnImportPackageCompleted;
                     break;
                 case 3:
-                    string[] unityPackagesURP2D = AssetDatabase.FindAssets("Solves transparent problem Unity 2020+ URPHS");
+                    string[] unityPackagesURP2D = AssetDatabase.FindAssets("Solves transparent problem Unity 2021+ URPHS");
                     foreach (var guid in unityPackagesURP2D)
                     {
                         AssetDatabase.ImportPackage(AssetDatabase.GUIDToAssetPath(guid), false);
@@ -208,7 +158,6 @@ namespace HovlStudio
                     Debug.Log("You didn't choose pipeline");
                     break;
             }
-#endif
         }
 
         private static void OnImportPackageCompleted(string packagename)
@@ -242,7 +191,7 @@ namespace HovlStudio
                         material.shader = LightGlow_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_Lit_CenterGlow") != null)
                 {
                     if (material.shader == Lit_CenterGlow || material.shader == Lit_CenterGlow_HDRP)
@@ -250,195 +199,94 @@ namespace HovlStudio
                         material.shader = Lit_CenterGlow_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_Blend_TwoSides") != null)
                 {
                     if (material.shader == Blend_TwoSides || material.shader == Blend_TwoSides_HDRP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null || material.HasProperty("_Cutoff"))
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            float Cutoff = material.GetFloat("_Cutoff");
-                            material.shader = Blend_TwoSides_URP;
-                            if (material.HasProperty("_MaskClipValue"))
-                                material.SetFloat("_MaskClipValue", Cutoff);
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                        }
-                        else
-                            material.shader = Blend_TwoSides_URP;
+                        material.shader = Blend_TwoSides_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_Blend_Normals") != null)
                 {
                     if (material.shader == Blend_Normals || material.shader == Blend_Normals_HDRP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            material.shader = Blend_Normals_URP;
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                        }
-                        else
-                            material.shader = Blend_Normals_URP;
+                        material.shader = Blend_Normals_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_Ice") != null)
                 {
                     if (material.shader == Ice || material.shader == Ice_HDRP)
                     {
-                        if (material.GetTexture("_MainTex") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            material.shader = Ice_URP;
-                            if (material.HasProperty("_Tiling"))
-                                material.SetVector("_Tiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                        }
-                        else
-                            material.shader = Ice_URP;
+                        material.shader = Ice_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_ParallaxIce") != null)
                 {
                     if (material.shader == ParallaxIce || material.shader == ParallaxIce_HDRP)
                     {
                         if (material.GetTexture("_Emission") != null)
                         {
-                            Vector2 MainScale = material.GetTextureScale("_Emission");
-                            Vector2 MainOffset = material.GetTextureOffset("_Emission");
                             material.shader = ParallaxIce_URP;
-                            if (material.HasProperty("_EmissionTiling"))
-                                material.SetVector("_EmissionTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
                         }
                         else
                             material.shader = ParallaxIce_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_Distortion") != null)
                 {
                     if (material.shader == Distortion || material.shader == Distortion_HDRP)
                     {
                         material.SetFloat("_ZWrite", 0);
                         material.shader = Distortion_URP;
+                        material.SetFloat("_QueueControl", 1);
                         material.renderQueue = 2750;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_Add_CG") != null)
                 {
                     if (material.shader == Add_CG || material.shader == Add_CG_HDRP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_Flow") != null || material.GetTexture("_Mask") != null)
+                        if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
+                        material.shader = Add_CG_URP;       
+                        if (material.HasProperty("_CullMode"))
                         {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 FlowScale = material.GetTextureScale("_Flow");
-                            Vector2 FlowOffset = material.GetTextureOffset("_Flow");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
-                            material.shader = Add_CG_URP;
-                            if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_FlowTiling"))
-                                material.SetVector("_FlowTiling", new Vector4(FlowScale[0], FlowScale[1], FlowOffset[0], FlowOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
+                            var cull = material.GetFloat("_CullMode");
+                            material.SetFloat("_Cull", cull);
                         }
-                        else
-                            material.shader = Add_CG_URP;
                         Debug.Log("Shaders changed successfully");
                     }
                 }
                 else Debug.Log("First import shaders!");
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_Blend_CG") != null)
                 {
                     if (material.shader == Blend_CG || material.shader == Blend_CG_HDRP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_Flow") != null || material.GetTexture("_Mask") != null)
+                        if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
+                        material.shader = Blend_CG_URP;
+                        if (material.HasProperty("_CullMode"))
                         {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 FlowScale = material.GetTextureScale("_Flow");
-                            Vector2 FlowOffset = material.GetTextureOffset("_Flow");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
-                            material.shader = Blend_CG_URP;
-                            if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_FlowTiling"))
-                                material.SetVector("_FlowTiling", new Vector4(FlowScale[0], FlowScale[1], FlowOffset[0], FlowOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
+                            var cull = material.GetFloat("_CullMode");
+                            material.SetFloat("_Cull", cull);
                         }
-                        else
-                            material.shader = Blend_CG_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_BlendDistort") != null)
                 {
                     if (material.shader == BlendDistort || material.shader == BlendDistort_HDRP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_Flow") != null || material.GetTexture("_Mask") != null || material.GetTexture("_NormalMap") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 FlowScale = material.GetTextureScale("_Flow");
-                            Vector2 FlowOffset = material.GetTextureOffset("_Flow");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
-                            Vector2 NormalScale = material.GetTextureScale("_NormalMap");
-                            Vector2 NormalOffset = material.GetTextureOffset("_NormalMap");
                             material.shader = BlendDistort_URP;
                             if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_FlowTiling"))
-                                material.SetVector("_FlowTiling", new Vector4(FlowScale[0], FlowScale[1], FlowOffset[0], FlowOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
-                            if (material.HasProperty("_NormalMapTiling"))
-                                material.SetVector("_NormalMapTiling", new Vector4(NormalScale[0], NormalScale[1], NormalOffset[0], NormalOffset[1]));
-                        }
-                        else
-                            material.shader = BlendDistort_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_VolumeLaser") != null)
                 {
                     if (material.shader == VolumeLaser || material.shader == VolumeLaser_HDRP)
@@ -446,7 +294,7 @@ namespace HovlStudio
                         material.shader = VolumeLaser_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_Explosion") != null)
                 {
                     if (material.shader == Explosion || material.shader == Explosion_HDRP)
@@ -454,93 +302,34 @@ namespace HovlStudio
                         material.shader = Explosion_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_SwordSlash") != null)
                 {
                     if (material.shader == SwordSlash || material.shader == SwordSlash_HDRP)
                     {
-                        if (material.GetTexture("_MainTexture") != null || material.GetTexture("_EmissionTex") != null
-                            || material.GetTexture("_Dissolve") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTexture");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTexture");
-                            Vector2 EmissionTexScale = material.GetTextureScale("_EmissionTex");
-                            Vector2 EmissionTexOffset = material.GetTextureOffset("_EmissionTex");
-                            Vector2 DissolveScale = material.GetTextureScale("_Dissolve");
-                            Vector2 DissolveOffset = material.GetTextureOffset("_Dissolve");
+
                             material.shader = SwordSlash_URP;
                             if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
-                            if (material.HasProperty("_MainTextureTiling"))
-                                material.SetVector("_MainTextureTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_EmissionTexTiling"))
-                                material.SetVector("_EmissionTexTiling", new Vector4(EmissionTexScale[0], EmissionTexScale[1], EmissionTexOffset[0], EmissionTexOffset[1]));
-                            if (material.HasProperty("_DissolveTiling"))
-                                material.SetVector("_DissolveTiling", new Vector4(DissolveScale[0], DissolveScale[1], DissolveOffset[0], DissolveOffset[1]));
-                        }
-                        else
-                            material.shader = SwordSlash_URP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_ShockWave") != null)
                 {
                     if (material.shader == ShockWave || material.shader == ShockWave_HDRP)
                     {
-                        if (material.GetTexture("_MainTexture") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_Flow") != null || material.GetTexture("_Mask") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTexture");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTexture");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 FlowScale = material.GetTextureScale("_Flow");
-                            Vector2 FlowOffset = material.GetTextureOffset("_Flow");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
                             material.shader = ShockWave_URP;
                             if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_FlowTiling"))
-                                material.SetVector("_FlowTiling", new Vector4(FlowScale[0], FlowScale[1], FlowOffset[0], FlowOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
-                        }
-                        else
-                            material.shader = ShockWave_URP;
+
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/URP_SoftNoise") != null)
                 {
                     if (material.shader == SoftNoise || material.shader == SoftNoise_HDRP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_OpacityTex") != null || material.GetTexture("_Mask") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 OpacityTexScale = material.GetTextureScale("_OpacityTex");
-                            Vector2 OpacityTexOffset = material.GetTextureOffset("_OpacityTex");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
                             material.shader = SoftNoise_URP;
                             if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_OpacityTexTiling"))
-                                material.SetVector("_OpacityTexTiling", new Vector4(OpacityTexScale[0], OpacityTexScale[1], OpacityTexOffset[0], OpacityTexOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
-                        }
-                        else
-                            material.shader = SoftNoise_URP;
+
                     }
                 }
             }
@@ -558,7 +347,7 @@ namespace HovlStudio
                         material.shader = LightGlow;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/Lit_CenterGlow") != null)
                 {
                     if (material.shader == Lit_CenterGlow_URP || material.shader == Lit_CenterGlow_HDRP)
@@ -566,89 +355,39 @@ namespace HovlStudio
                         material.shader = Lit_CenterGlow;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/Blend_TwoSides") != null)
                 {
                     if (material.shader == Blend_TwoSides_URP || material.shader == Blend_TwoSides_HDRP)
                     {
-                        if (material.HasProperty("_MainTexTiling") && material.HasProperty("_NoiseTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_MainTexTiling");
-                            Vector4 NoiseTiling = material.GetVector("_NoiseTiling");
-                            material.shader = Blend_TwoSides;
-                            if (material.GetTexture("_MainTex") != null && material.GetTexture("_Noise") != null)
-                            {
-                                material.SetTextureScale("_MainTex", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTex", new Vector2(MainTiling[2], MainTiling[3]));
-                                material.SetTextureScale("_Noise", new Vector2(NoiseTiling[0], NoiseTiling[1]));
-                                material.SetTextureOffset("_Noise", new Vector2(NoiseTiling[2], NoiseTiling[3]));
-                            }
-                        }
-                        else
                             material.shader = Blend_TwoSides;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/Blend_Normals") != null)
                 {
                     if (material.shader == Blend_Normals_URP || material.shader == Blend_Normals_HDRP)
                     {
-                        if (material.HasProperty("_MainTexTiling") && material.HasProperty("_NoiseTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_MainTexTiling");
-                            Vector4 NoiseTiling = material.GetVector("_NoiseTiling");
-                            material.shader = Blend_Normals;
-                            if (material.GetTexture("_MainTex") != null && material.GetTexture("_Noise") != null)
-                            {
-                                material.SetTextureScale("_MainTex", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTex", new Vector2(MainTiling[2], MainTiling[3]));
-                                material.SetTextureScale("_Noise", new Vector2(NoiseTiling[0], NoiseTiling[1]));
-                                material.SetTextureOffset("_Noise", new Vector2(NoiseTiling[2], NoiseTiling[3]));
-                            }
-                        }
-                        else
                             material.shader = Blend_Normals;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/Ice") != null)
                 {
                     if (material.shader == Ice_URP || material.shader == Ice_HDRP)
                     {
-                        if (material.HasProperty("_Tiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_Tiling");
-                            material.shader = Ice;
-                            if (material.GetTexture("_MainTex") != null)
-                            {
-                                material.SetTextureScale("_MainTex", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTex", new Vector2(MainTiling[2], MainTiling[3]));
-                            }
-                        }
-                        else
                             material.shader = Ice;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Opaque/ParallaxIce") != null)
                 {
                     if (material.shader == ParallaxIce_URP || material.shader == ParallaxIce_HDRP)
                     {
-                        if (material.HasProperty("_EmissionTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_EmissionTiling");
-                            material.shader = ParallaxIce;
-                            if (material.GetTexture("_Emission") != null)
-                            {
-                                material.SetTextureScale("_Emission", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_Emission", new Vector2(MainTiling[2], MainTiling[3]));
-                            }
-                        }
-                        else
                             material.shader = ParallaxIce;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/Distortion") != null)
                 {
                     if (material.shader == Distortion_URP || material.shader == Distortion_HDRP)
@@ -657,99 +396,33 @@ namespace HovlStudio
                         material.renderQueue = 2750;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/Add_CenterGlow") != null)
                 {
                     if (material.shader == Add_CG_URP || material.shader == Add_CG_HDRP)
                     {
-                        if (material.HasProperty("_MainTexTiling") && material.HasProperty("_NoiseTiling")
-                            && material.HasProperty("_FlowTiling") && material.HasProperty("_MaskTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_MainTexTiling");
-                            Vector4 NoiseTiling = material.GetVector("_NoiseTiling");
-                            Vector4 FlowTiling = material.GetVector("_FlowTiling");
-                            Vector4 MaskTiling = material.GetVector("_MaskTiling");
-                            material.shader = Add_CG;
-                            if (material.GetTexture("_MainTex") != null && material.GetTexture("_Noise") != null)
-                            {
-                                material.SetTextureScale("_MainTex", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTex", new Vector2(MainTiling[2], MainTiling[3]));
-                                material.SetTextureScale("_Noise", new Vector2(NoiseTiling[0], NoiseTiling[1]));
-                                material.SetTextureOffset("_Noise", new Vector2(NoiseTiling[2], NoiseTiling[3]));
-                                material.SetTextureScale("_Flow", new Vector2(FlowTiling[0], FlowTiling[1]));
-                                material.SetTextureOffset("_Flow", new Vector2(FlowTiling[2], FlowTiling[3]));
-                                material.SetTextureScale("_Mask", new Vector2(MaskTiling[0], MaskTiling[1]));
-                                material.SetTextureOffset("_Mask", new Vector2(MaskTiling[2], MaskTiling[3]));
-                            }
-                        }
-                        else
-                            material.shader = Add_CG;
+                        material.shader = Add_CG;
                         Debug.Log("Shaders changed successfully");
                     }
                 }
                 else Debug.Log("First import shaders!");
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/Blend_CenterGlow") != null)
                 {
                     if (material.shader == Blend_CG_URP || material.shader == Blend_CG_HDRP)
                     {
-                        if (material.HasProperty("_MainTexTiling") && material.HasProperty("_NoiseTiling")
-                            && material.HasProperty("_FlowTiling") && material.HasProperty("_MaskTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_MainTexTiling");
-                            Vector4 NoiseTiling = material.GetVector("_NoiseTiling");
-                            Vector4 FlowTiling = material.GetVector("_FlowTiling");
-                            Vector4 MaskTiling = material.GetVector("_MaskTiling");
-                            material.shader = Blend_CG;
-                            if (material.GetTexture("_MainTex") != null && material.GetTexture("_Noise") != null)
-                            {
-                                material.SetTextureScale("_MainTex", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTex", new Vector2(MainTiling[2], MainTiling[3]));
-                                material.SetTextureScale("_Noise", new Vector2(NoiseTiling[0], NoiseTiling[1]));
-                                material.SetTextureOffset("_Noise", new Vector2(NoiseTiling[2], NoiseTiling[3]));
-                                material.SetTextureScale("_Flow", new Vector2(FlowTiling[0], FlowTiling[1]));
-                                material.SetTextureOffset("_Flow", new Vector2(FlowTiling[2], FlowTiling[3]));
-                                material.SetTextureScale("_Mask", new Vector2(MaskTiling[0], MaskTiling[1]));
-                                material.SetTextureOffset("_Mask", new Vector2(MaskTiling[2], MaskTiling[3]));
-                            }
-                        }
-                        else
-                            material.shader = Blend_CG;
+                        material.shader = Blend_CG;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/BlendDistort") != null)
                 {
                     if (material.shader == BlendDistort_URP || material.shader == BlendDistort_HDRP)
                     {
-                        if (material.HasProperty("_MainTexTiling") && material.HasProperty("_NoiseTiling")
-                            && material.HasProperty("_FlowTiling") && material.HasProperty("_MaskTiling") && material.HasProperty("_NormalMapTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_MainTexTiling");
-                            Vector4 NoiseTiling = material.GetVector("_NoiseTiling");
-                            Vector4 FlowTiling = material.GetVector("_FlowTiling");
-                            Vector4 MaskTiling = material.GetVector("_MaskTiling");
-                            Vector4 NormalTiling = material.GetVector("_NormalMapTiling");
-                            material.shader = BlendDistort;
-                            if (material.GetTexture("_MainTex") != null && material.GetTexture("_Noise") != null)
-                            {
-                                material.SetTextureScale("_MainTex", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTex", new Vector2(MainTiling[2], MainTiling[3]));
-                                material.SetTextureScale("_Noise", new Vector2(NoiseTiling[0], NoiseTiling[1]));
-                                material.SetTextureOffset("_Noise", new Vector2(NoiseTiling[2], NoiseTiling[3]));
-                                material.SetTextureScale("_Flow", new Vector2(FlowTiling[0], FlowTiling[1]));
-                                material.SetTextureOffset("_Flow", new Vector2(FlowTiling[2], FlowTiling[3]));
-                                material.SetTextureScale("_Mask", new Vector2(MaskTiling[0], MaskTiling[1]));
-                                material.SetTextureOffset("_Mask", new Vector2(MaskTiling[2], MaskTiling[3]));
-                                material.SetTextureScale("_NormalMap", new Vector2(NormalTiling[0], NormalTiling[1]));
-                                material.SetTextureOffset("_NormalMap", new Vector2(NormalTiling[2], NormalTiling[3]));
-                            }
-                        }
-                        else
-                            material.shader = BlendDistort;
+                        material.shader = BlendDistort;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/VolumeLaser") != null)
                 {
                     if (material.shader == VolumeLaser_URP || material.shader == VolumeLaser_HDRP)
@@ -757,7 +430,7 @@ namespace HovlStudio
                         material.shader = VolumeLaser;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/Explosion") != null)
                 {
                     if (material.shader == Explosion_URP || material.shader == Explosion_HDRP)
@@ -765,87 +438,28 @@ namespace HovlStudio
                         material.shader = Explosion;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/SwordSlash") != null)
                 {
                     if (material.shader == SwordSlash_URP || material.shader == SwordSlash_HDRP)
                     {
-                        if (material.HasProperty("_MainTextureTiling") && material.HasProperty("_EmissionTexTiling") && material.HasProperty("_DissovleTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_MainTextureTiling");
-                            Vector4 EmissionTiling = material.GetVector("_EmissionTexTiling");
-                            Vector4 DissolveTiling = material.GetVector("_DissovleTiling");
-                            material.shader = SwordSlash;
-                            if (material.GetTexture("_MainTex") != null && material.GetTexture("_Noise") != null)
-                            {
-                                material.SetTextureScale("_MainTex", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTex", new Vector2(MainTiling[2], MainTiling[3]));
-                                material.SetTextureScale("_Noise", new Vector2(EmissionTiling[0], EmissionTiling[1]));
-                                material.SetTextureOffset("_Noise", new Vector2(EmissionTiling[2], EmissionTiling[3]));
-                                material.SetTextureScale("_Flow", new Vector2(DissolveTiling[0], DissolveTiling[1]));
-                                material.SetTextureOffset("_Flow", new Vector2(DissolveTiling[2], DissolveTiling[3]));
-                            }
-                        }
-                        else
-                            material.shader = SwordSlash;
+                        material.shader = SwordSlash;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/ShockWave") != null)
                 {
                     if (material.shader == ShockWave_URP || material.shader == ShockWave_HDRP)
                     {
-                        if (material.HasProperty("_MainTexTiling") && material.HasProperty("_NoiseTiling")
-                            && material.HasProperty("_FlowTiling") && material.HasProperty("_MaskTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_MainTexTiling");
-                            Vector4 NoiseTiling = material.GetVector("_NoiseTiling");
-                            Vector4 FlowTiling = material.GetVector("_FlowTiling");
-                            Vector4 MaskTiling = material.GetVector("_MaskTiling");
-                            material.shader = ShockWave;
-                            if (material.GetTexture("_MainTexture") != null && material.GetTexture("_Noise") != null)
-                            {
-                                material.SetTextureScale("_MainTexture", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTexture", new Vector2(MainTiling[2], MainTiling[3]));
-                                material.SetTextureScale("_Noise", new Vector2(NoiseTiling[0], NoiseTiling[1]));
-                                material.SetTextureOffset("_Noise", new Vector2(NoiseTiling[2], NoiseTiling[3]));
-                                material.SetTextureScale("_Flow", new Vector2(FlowTiling[0], FlowTiling[1]));
-                                material.SetTextureOffset("_Flow", new Vector2(FlowTiling[2], FlowTiling[3]));
-                                material.SetTextureScale("_Mask", new Vector2(MaskTiling[0], MaskTiling[1]));
-                                material.SetTextureOffset("_Mask", new Vector2(MaskTiling[2], MaskTiling[3]));
-                            }
-                        }
-                        else
-                            material.shader = ShockWave;
+                        material.shader = ShockWave;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Hovl/Particles/SoftNoise") != null)
                 {
                     if (material.shader == SoftNoise_URP || material.shader == SoftNoise_HDRP)
                     {
-                        if (material.HasProperty("_MainTexTiling") && material.HasProperty("_NoiseTiling")
-                            && material.HasProperty("_OpacityTexTiling") && material.HasProperty("_MaskTiling"))
-                        {
-                            Vector4 MainTiling = material.GetVector("_MainTexTiling");
-                            Vector4 NoiseTiling = material.GetVector("_NoiseTiling");
-                            Vector4 OpacityTexTiling = material.GetVector("_OpacityTexTiling");
-                            Vector4 MaskTiling = material.GetVector("_MaskTiling");
-                            material.shader = SoftNoise;
-                            if (material.GetTexture("_MainTex") != null && material.GetTexture("_Noise") != null)
-                            {
-                                material.SetTextureScale("_MainTex", new Vector2(MainTiling[0], MainTiling[1]));
-                                material.SetTextureOffset("_MainTex", new Vector2(MainTiling[2], MainTiling[3]));
-                                material.SetTextureScale("_Noise", new Vector2(NoiseTiling[0], NoiseTiling[1]));
-                                material.SetTextureOffset("_Noise", new Vector2(NoiseTiling[2], NoiseTiling[3]));
-                                material.SetTextureScale("_OpacityTex", new Vector2(OpacityTexTiling[0], OpacityTexTiling[1]));
-                                material.SetTextureOffset("_OpacityTex", new Vector2(OpacityTexTiling[2], OpacityTexTiling[3]));
-                                material.SetTextureScale("_Mask", new Vector2(MaskTiling[0], MaskTiling[1]));
-                                material.SetTextureOffset("_Mask", new Vector2(MaskTiling[2], MaskTiling[3]));
-                            }
-                        }
-                        else
-                            material.shader = SoftNoise;
+                        material.shader = SoftNoise;
                     }
                 }
             }
@@ -862,7 +476,7 @@ namespace HovlStudio
                         material.shader = LightGlow_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_Lit_CenterGlow") != null)
                 {
                     if (material.shader == Lit_CenterGlow || material.shader == Lit_CenterGlow_URP)
@@ -870,83 +484,39 @@ namespace HovlStudio
                         material.shader = Lit_CenterGlow_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_Blend_TwoSides") != null)
                 {
                     if (material.shader == Blend_TwoSides || material.shader == Blend_TwoSides_URP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            material.shader = Blend_TwoSides_HDRP;
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                        }
-                        else
-                            material.shader = Blend_TwoSides_HDRP;
+                        material.shader = Blend_TwoSides_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_Blend_Normals") != null)
                 {
                     if (material.shader == Blend_Normals || material.shader == Blend_Normals_URP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            material.shader = Blend_Normals_HDRP;
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                        }
-                        else
-                            material.shader = Blend_Normals_HDRP;
+                        material.shader = Blend_Normals_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_Ice") != null)
                 {
                     if (material.shader == Ice || material.shader == Ice_URP)
                     {
-                        if (material.GetTexture("_MainTex") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            material.shader = Ice_HDRP;
-                            if (material.HasProperty("_Tiling"))
-                                material.SetVector("_Tiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                        }
-                        else
-                            material.shader = Ice_HDRP;
+                        material.shader = Ice_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_ParallaxIce") != null)
                 {
                     if (material.shader == ParallaxIce || material.shader == ParallaxIce_URP)
                     {
-                        if (material.GetTexture("_Emission") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_Emission");
-                            Vector2 MainOffset = material.GetTextureOffset("_Emission");
-                            material.shader = ParallaxIce_HDRP;
-                            if (material.HasProperty("_EmissionTiling"))
-                                material.SetVector("_EmissionTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                        }
-                        else
-                            material.shader = ParallaxIce_HDRP;
+                        material.shader = ParallaxIce_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_Distortion") != null)
                 {
                     if (material.shader == Distortion || material.shader == Distortion_URP)
@@ -956,122 +526,67 @@ namespace HovlStudio
                         material.renderQueue = 2750;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_Add_CG") != null)
                 {
                     if (material.shader == Add_CG || material.shader == Add_CG_URP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_Flow") != null || material.GetTexture("_Mask") != null)
+                        if (material.HasProperty("_CullMode"))
                         {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 FlowScale = material.GetTextureScale("_Flow");
-                            Vector2 FlowOffset = material.GetTextureOffset("_Flow");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
-                            material.SetFloat("_StencilRef", 0);
-                            material.SetFloat("_AlphaDstBlend", 1);
-                            material.SetFloat("_DstBlend", 1);
-                            material.SetFloat("_ZWrite", 0);
-                            material.SetFloat("_SrcBlend", 1);
-                            material.EnableKeyword("_BLENDMODE_ADD _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT");
-                            material.SetShaderPassEnabled("TransparentBackface", false);
-                            material.SetOverrideTag("RenderType", "Transparent");
-                            material.SetFloat("_CullModeForward", 0);
-                            material.shader = Add_CG_HDRP;
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_FlowTiling"))
-                                material.SetVector("_FlowTiling", new Vector4(FlowScale[0], FlowScale[1], FlowOffset[0], FlowOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
+                            var cull = material.GetFloat("_CullMode");
+                            if (cull == 0)
+                                material.SetFloat("_DoubleSidedEnable", 1);
+                            else
+                                material.SetFloat("_DoubleSidedEnable", 0);
                         }
-                        else
-                            material.shader = Add_CG_HDRP;
+                        material.SetFloat("_StencilRef", 0);
+                        material.SetFloat("_AlphaDstBlend", 1);
+                        material.SetFloat("_DstBlend", 1);
+                        material.SetFloat("_ZWrite", 0);
+                        material.SetFloat("_SrcBlend", 1);
+                        material.EnableKeyword("_BLENDMODE_ADD _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT");
+                        material.SetShaderPassEnabled("TransparentBackface", false);
+                        material.SetOverrideTag("RenderType", "Transparent");
+                        material.SetFloat("_CullModeForward", 0);
+                        material.shader = Add_CG_HDRP;
                         Debug.Log("Shaders changed successfully");
                     }
                 }
                 else Debug.Log("First import shaders!");
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_Blend_CG") != null)
                 {
                     if (material.shader == Blend_CG || material.shader == Blend_CG_URP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_Flow") != null || material.GetTexture("_Mask") != null)
+                        if (material.HasProperty("_CullMode"))
                         {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 FlowScale = material.GetTextureScale("_Flow");
-                            Vector2 FlowOffset = material.GetTextureOffset("_Flow");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
-                            material.SetFloat("_ZWrite", 0);
-                            material.SetFloat("_StencilRef", 0);
-                            material.SetShaderPassEnabled("TransparentBackface", false);
-                            material.SetOverrideTag("RenderType", "Transparent");
-                            material.SetFloat("_AlphaDstBlend", 10);
-                            material.SetFloat("_DstBlend", 10);
-                            material.SetFloat("_SrcBlend", 1);
-                            material.EnableKeyword("_BLENDMODE_ALPHA _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT");
-                            if (material.HasProperty("_CullModeForward")) material.SetFloat("_CullModeForward", 0);
-                            material.shader = Blend_CG_HDRP;
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_FlowTiling"))
-                                material.SetVector("_FlowTiling", new Vector4(FlowScale[0], FlowScale[1], FlowOffset[0], FlowOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
+                            var cull = material.GetFloat("_CullMode");
+                            if (cull == 0)
+                                material.SetFloat("_DoubleSidedEnable", 1);
+                            else
+                                material.SetFloat("_DoubleSidedEnable", 0);
                         }
-                        else
-                            material.shader = Blend_CG_HDRP;
+                        material.SetFloat("_ZWrite", 0);
+                        material.SetFloat("_StencilRef", 0);
+                        material.SetShaderPassEnabled("TransparentBackface", false);
+                        material.SetOverrideTag("RenderType", "Transparent");
+                        material.SetFloat("_AlphaDstBlend", 10);
+                        material.SetFloat("_DstBlend", 10);
+                        material.SetFloat("_SrcBlend", 1);
+                        material.EnableKeyword("_BLENDMODE_ALPHA _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT");
+                        if (material.HasProperty("_CullModeForward")) material.SetFloat("_CullModeForward", 0);
+                        material.shader = Blend_CG_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_BlendDistort") != null)
                 {
                     if (material.shader == BlendDistort || material.shader == BlendDistort_URP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_Flow") != null || material.GetTexture("_Mask") != null || material.GetTexture("_NormalMap") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 FlowScale = material.GetTextureScale("_Flow");
-                            Vector2 FlowOffset = material.GetTextureOffset("_Flow");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
-                            Vector2 NormalScale = material.GetTextureScale("_NormalMap");
-                            Vector2 NormalOffset = material.GetTextureOffset("_NormalMap");
-                            material.shader = BlendDistort_HDRP;
-                            if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_FlowTiling"))
-                                material.SetVector("_FlowTiling", new Vector4(FlowScale[0], FlowScale[1], FlowOffset[0], FlowOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
-                            if (material.HasProperty("_NormalMapTiling"))
-                                material.SetVector("_NormalMapTiling", new Vector4(NormalScale[0], NormalScale[1], NormalOffset[0], NormalOffset[1]));
-                        }
-                        else
-                            material.shader = BlendDistort_HDRP;
+                        material.shader = BlendDistort_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_VolumeLaser") != null)
                 {
                     if (material.shader == VolumeLaser || material.shader == VolumeLaser_URP)
@@ -1079,7 +594,7 @@ namespace HovlStudio
                         material.shader = VolumeLaser_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_Explosion") != null)
                 {
                     if (material.shader == Explosion || material.shader == Explosion_URP)
@@ -1096,20 +611,11 @@ namespace HovlStudio
                         material.shader = Explosion_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_SwordSlash") != null)
                 {
                     if (material.shader == SwordSlash || material.shader == SwordSlash_URP)
                     {
-                        if (material.GetTexture("_MainTexture") != null || material.GetTexture("_EmissionTex") != null
-                            || material.GetTexture("_Dissolve") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTexture");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTexture");
-                            Vector2 EmissionTexScale = material.GetTextureScale("_EmissionTex");
-                            Vector2 EmissionTexOffset = material.GetTextureOffset("_EmissionTex");
-                            Vector2 DissolveScale = material.GetTextureScale("_Dissolve");
-                            Vector2 DissolveOffset = material.GetTextureOffset("_Dissolve");
                             material.SetFloat("_ZWrite", 0);
                             material.SetFloat("_StencilRef", 0);
                             material.SetShaderPassEnabled("TransparentBackface", false);
@@ -1120,33 +626,13 @@ namespace HovlStudio
                             material.EnableKeyword("_BLENDMODE_ALPHA _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT");
                             material.shader = SwordSlash_HDRP;
                             if (material.HasProperty("_ZWrite")) material.SetFloat("_ZWrite", 0);
-                            if (material.HasProperty("_MainTextureTiling"))
-                                material.SetVector("_MainTextureTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_EmissionTexTiling"))
-                                material.SetVector("_EmissionTexTiling", new Vector4(EmissionTexScale[0], EmissionTexScale[1], EmissionTexOffset[0], EmissionTexOffset[1]));
-                            if (material.HasProperty("_DissolveTiling"))
-                                material.SetVector("_DissolveTiling", new Vector4(DissolveScale[0], DissolveScale[1], DissolveOffset[0], DissolveOffset[1]));
-                        }
-                        else
-                            material.shader = SwordSlash_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_ShockWave") != null)
                 {
                     if (material.shader == ShockWave || material.shader == ShockWave_URP)
                     {
-                        if (material.GetTexture("_MainTexture") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_Flow") != null || material.GetTexture("_Mask") != null)
-                        {
-                            Vector2 MainScale = material.GetTextureScale("_MainTexture");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTexture");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 FlowScale = material.GetTextureScale("_Flow");
-                            Vector2 FlowOffset = material.GetTextureOffset("_Flow");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
                             material.SetFloat("_StencilRef", 0);
                             material.SetFloat("_AlphaDstBlend", 1);
                             material.SetFloat("_DstBlend", 1);
@@ -1157,47 +643,22 @@ namespace HovlStudio
                             material.SetOverrideTag("RenderType", "Transparent");
                             material.SetFloat("_CullModeForward", 0);
                             material.shader = ShockWave_HDRP;
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_FlowTiling"))
-                                material.SetVector("_FlowTiling", new Vector4(FlowScale[0], FlowScale[1], FlowOffset[0], FlowOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
-                        }
-                        else
-                            material.shader = ShockWave_HDRP;
                     }
                 }
-                /*----------------------------------------------------------------------------------------------------*/
+
                 if (Shader.Find("Shader Graphs/HDRP_SoftNoise") != null)
                 {
                     if (material.shader == SoftNoise || material.shader == SoftNoise_URP)
                     {
-                        if (material.GetTexture("_MainTex") != null || material.GetTexture("_Noise") != null
-                            || material.GetTexture("_OpacityTex") != null || material.GetTexture("_Mask") != null)
+                        if (material.HasProperty("_CullMode"))
                         {
-                            Vector2 MainScale = material.GetTextureScale("_MainTex");
-                            Vector2 MainOffset = material.GetTextureOffset("_MainTex");
-                            Vector2 NoiseScale = material.GetTextureScale("_Noise");
-                            Vector2 NoiseOffset = material.GetTextureOffset("_Noise");
-                            Vector2 OpacityTexScale = material.GetTextureScale("_OpacityTex");
-                            Vector2 OpacityTexOffset = material.GetTextureOffset("_OpacityTex");
-                            Vector2 MaskScale = material.GetTextureScale("_Mask");
-                            Vector2 MaskOffset = material.GetTextureOffset("_Mask");
-                            material.shader = SoftNoise_HDRP;
-                            if (material.HasProperty("_MainTexTiling"))
-                                material.SetVector("_MainTexTiling", new Vector4(MainScale[0], MainScale[1], MainOffset[0], MainOffset[1]));
-                            if (material.HasProperty("_NoiseTiling"))
-                                material.SetVector("_NoiseTiling", new Vector4(NoiseScale[0], NoiseScale[1], NoiseOffset[0], NoiseOffset[1]));
-                            if (material.HasProperty("_OpacityTexTiling"))
-                                material.SetVector("_OpacityTexTiling", new Vector4(OpacityTexScale[0], OpacityTexScale[1], OpacityTexOffset[0], OpacityTexOffset[1]));
-                            if (material.HasProperty("_MaskTiling"))
-                                material.SetVector("_MaskTiling", new Vector4(MaskScale[0], MaskScale[1], MaskOffset[0], MaskOffset[1]));
+                            var cull = material.GetFloat("_CullMode");
+                            if (cull == 0)
+                                material.SetFloat("_DoubleSidedEnable", 1);
+                            else
+                                material.SetFloat("_DoubleSidedEnable", 0);
                         }
-                        else
-                            material.shader = SoftNoise_HDRP;
+                        material.shader = SoftNoise_HDRP;
                     }
                 }
             }

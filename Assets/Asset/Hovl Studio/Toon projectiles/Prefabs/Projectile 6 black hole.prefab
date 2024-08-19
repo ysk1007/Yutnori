@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 108007601741742706}
   - component: {fileID: 54548785167277834}
   - component: {fileID: 135212983001450162}
+  - component: {fileID: 5627387359393175372}
   m_Layer: 0
   m_Name: Projectile 6 black hole
   m_TagString: Untagged
@@ -4835,6 +4836,7 @@ MonoBehaviour:
   rotationOffset: {x: 0, y: 0, z: 0}
   hit: {fileID: 1498152551406518, guid: d6ebe1b9125e36747b5aaed57e503724, type: 3}
   flash: {fileID: 1344824185198126, guid: 4ab34b8edd399b3499e3bfb5dff80b4d, type: 3}
+  useFlash: 0
   rb: {fileID: 54548785167277834}
   ps: {fileID: 198408868521670962}
   sc: {fileID: 135212983001450162}
@@ -5004,6 +5006,26 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.15
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5627387359393175372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224549118569052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1396238382972568
 GameObject:
   m_ObjectHideFlags: 0

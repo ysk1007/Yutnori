@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 199509227785772348}
   - component: {fileID: 135521883611116180}
   - component: {fileID: 108212708603584814}
+  - component: {fileID: 7137458491291610597}
   m_Layer: 0
   m_Name: Projectile 1 magic
   m_TagString: Untagged
@@ -4834,6 +4835,7 @@ MonoBehaviour:
   rotationOffset: {x: 0, y: 0, z: 0}
   hit: {fileID: 1242051555635342, guid: 8b78bf871862d08409f84a0bac02efdd, type: 3}
   flash: {fileID: 1762171864188014, guid: 4ab48a9a03327fb4ca76018592f4626d, type: 3}
+  useFlash: 0
   rb: {fileID: 54723350441956278}
   ps: {fileID: 198277538348117068}
   sc: {fileID: 135521883611116180}
@@ -5005,6 +5007,26 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &7137458491291610597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213529451062198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1267732140592724
 GameObject:
   m_ObjectHideFlags: 0
