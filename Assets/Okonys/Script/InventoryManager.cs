@@ -232,9 +232,136 @@ public class InventoryManager : MonoBehaviour
         SoonsoonData.Instance.Unit_Manager.UnitRelocation();
     }
 
+    public bool UnitMerge(SlotClass slot)
+    {
+        int _MergeCount = 0;
+        List<int> _SquadIndex = new List<int>();
+        List<int> _InventoryIndex = new List<int>();
+
+        for (int i = 0; i < _userSquad.Length; i++)
+        {
+            if (_userSquad[i]?._unitData == null) continue;
+
+            if (_userSquad[i]?._unitData == slot._unitData &&
+                _userSquad[i]?._unitRate == slot._unitRate) // 똑같은 유닛이 있고 등급이 같으면
+            {
+                _MergeCount++;
+                _SquadIndex.Add(i);
+
+                if(_MergeCount == 2)
+                {
+                    _userSquad[_SquadIndex[0]]._unitRate++;
+                    SquadRemove(_SquadIndex[1]);
+                    UnitMergePlus(_userSquad[_SquadIndex[0]]);
+                    return true;
+                }
+            }
+        }
+
+        for (int i = 0; i < _userInventory.Length; i++)
+        {
+            if (_userInventory[i]?._unitData == null) continue;
+
+            if (_userInventory[i]?._unitData == slot._unitData &&
+                _userInventory[i]?._unitRate == slot._unitRate) // 똑같은 유닛이 있고 등급이 같으면
+            {
+                _MergeCount++;
+                _InventoryIndex.Add(i);
+                if (_MergeCount == 2)
+                {
+                    if(_SquadIndex.Count > 0)
+                    {
+                        _userSquad[_SquadIndex[0]]._unitRate++;
+                        InventoryRemove(_InventoryIndex[0]);
+                        UnitMergePlus(_userSquad[_SquadIndex[0]]);
+                        return true;
+                    }
+                    else
+                    {
+                        _userInventory[_InventoryIndex[0]]._unitRate++;
+                        InventoryRemove(_InventoryIndex[1]);
+                        UnitMergePlus(_userInventory[_InventoryIndex[0]]);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void UnitMergePlus(SlotClass slot)
+    {
+        if (slot._unitRate == 2) return;
+
+        int _MergeCount = 0;
+        List<int> _SquadIndex = new List<int>();
+        List<int> _InventoryIndex = new List<int>();
+
+        for (int i = 0; i < _userSquad.Length; i++)
+        {
+            if (_userSquad[i]?._unitData == null ) continue;
+
+            if (_userSquad[i]?._unitData == slot._unitData &&
+                _userSquad[i]?._unitRate == slot._unitRate) // 똑같은 유닛이 있고 등급이 같으면
+            {
+                _MergeCount++;
+                _SquadIndex.Add(i);
+
+                if (_MergeCount == 3)
+                {
+                    _userSquad[_SquadIndex[0]]._unitRate++;
+                    SquadRemove(_SquadIndex[1]);
+                    SquadRemove(_SquadIndex[2]);
+                }
+            }
+        }
+
+        for (int i = 0; i < _userInventory.Length; i++)
+        {
+            if (_userInventory[i]?._unitData == null) continue;
+
+            if (_userInventory[i]?._unitData == slot._unitData &&
+                _userInventory[i]?._unitRate == slot._unitRate) // 똑같은 유닛이 있고 등급이 같으면
+            {
+                _MergeCount++;
+                _InventoryIndex.Add(i);
+                if (_MergeCount == 3)
+                {
+                    if (_SquadIndex.Count > 1)
+                    {
+                        _userSquad[_SquadIndex[0]]._unitRate++;
+                        SquadRemove(_SquadIndex[1]);
+                        InventoryRemove(_InventoryIndex[0]);
+                    }
+                    else if (_SquadIndex.Count > 0)
+                    {
+                        _userSquad[_SquadIndex[0]]._unitRate++;
+                        InventoryRemove(_InventoryIndex[1]);
+                        InventoryRemove(_InventoryIndex[2]);
+                    }
+                    else
+                    {
+                        _userInventory[_InventoryIndex[0]]._unitRate++;
+                        InventoryRemove(_InventoryIndex[1]);
+                        InventoryRemove(_InventoryIndex[2]);
+                    }
+                }
+            }
+        }
+    }
+
     public bool InventoryAdd(SlotClass slot)
     {
         bool _sucess = false;
+
+        if (UnitMerge(slot))
+        {
+            SoonsoonData.Instance.LogPopup.ShowLog(slot._unitData.UnitName + "의 등급이 상승했습니다.");
+            RefreshUi();
+            _sucess = true;
+            return _sucess;
+        }
 
         for (int i = 0; i < _userInventory.Length; i++)
         {

@@ -40,6 +40,7 @@ public class Unit : MonoBehaviour
         Ghost = 1,
         Great = 2,
         Devil = 3,
+        God = 4,
     }
 
     public int _fieldindex;

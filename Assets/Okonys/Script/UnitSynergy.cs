@@ -14,6 +14,7 @@ public class UnitSynergy : MonoBehaviour
     public float interval; // 버프 간격
     public float timer; // 버프 타이머
     SynergyManager sm;
+    Unit_Manager um;
     BattleReward _battleReward;
     void Awake()
     {
@@ -23,6 +24,7 @@ public class UnitSynergy : MonoBehaviour
     void OnEnable()
     {
         sm = SoonsoonData.Instance.Synergy_Manager;
+        um = SoonsoonData.Instance.Unit_Manager;
         _battleReward = SoonsoonData.Instance.Battle_Reward;
         Init();
         ApplySynergy();
@@ -139,18 +141,18 @@ public class UnitSynergy : MonoBehaviour
                     interval = synergyData.Interval[0];
                 }
 
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
                     Debug.Log("시너지 버프");
-                    sm._p1UnitList[i]._unitMaxHp += BuffHP;
-                    sm._p1UnitList[i]._unitHp += BuffHP;
+                    um._p1UnitList[i]._unitMaxHp += BuffHP;
+                    um._p1UnitList[i]._unitHp += BuffHP;
                 }
 
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
                     // 워리어만 버프
-                    if (sm._p1UnitList[i]._attackType != AttackType.Warrior) continue;
-                    sm._p1UnitList[i]._unitDF += BuffDF;
+                    if (um._p1UnitList[i]._attackType != AttackType.Warrior) continue;
+                    um._p1UnitList[i]._unitDF += BuffDF;
                 }
 
                 break;
@@ -180,17 +182,17 @@ public class UnitSynergy : MonoBehaviour
                     interval = synergyData.Interval[0];
                 }
 
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
-                    sm._p2UnitList[i]._unitMaxHp += BuffHP;
-                    sm._p2UnitList[i]._unitHp += BuffHP;
+                    um._p2UnitList[i]._unitMaxHp += BuffHP;
+                    um._p2UnitList[i]._unitHp += BuffHP;
                 }
 
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
                     // 워리어만 버프
-                    if (sm._p2UnitList[i]._attackType != AttackType.Warrior) continue;
-                    sm._p2UnitList[i]._unitDF += BuffDF;
+                    if (um._p2UnitList[i]._attackType != AttackType.Warrior) continue;
+                    um._p2UnitList[i]._unitDF += BuffDF;
                 }
                 break;
         }
@@ -202,15 +204,15 @@ public class UnitSynergy : MonoBehaviour
         switch (gameObject.tag)
         {
             case "P1":
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
-                    sm._p1UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level - 1], synergyData.Duration[Level - 1], false);
+                    um._p1UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level - 1], synergyData.Duration[Level - 1], false);
                 }
                 break;
             case "P2":
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
-                    sm._p2UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level - 1], synergyData.Duration[Level - 1], false);
+                    um._p2UnitList[i].UnitBuff(0, 0, 0, 0, 0, synergyData.Shield[Level - 1], synergyData.Duration[Level - 1], false);
                 }
                 break;
         }
@@ -246,11 +248,11 @@ public class UnitSynergy : MonoBehaviour
                     interval = synergyData.Interval[0];
                 }
 
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
                     // 아처만 버프
-                    if (sm._p1UnitList[i]._attackType != AttackType.Archer) continue;
-                    sm._p1UnitList[i]._unitAS += Buff;
+                    if (um._p1UnitList[i]._attackType != AttackType.Archer) continue;
+                    um._p1UnitList[i]._unitAS += Buff;
                 }
                 break;
             case "P2":
@@ -276,11 +278,11 @@ public class UnitSynergy : MonoBehaviour
                     interval = synergyData.Interval[0];
                 }
 
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
                     // 아처만 버프
-                    if (sm._p2UnitList[i]._attackType != AttackType.Archer) continue;
-                    sm._p2UnitList[i]._unitAS += Buff;
+                    if (um._p2UnitList[i]._attackType != AttackType.Archer) continue;
+                    um._p2UnitList[i]._unitAS += Buff;
                 }
                 break;
         }
@@ -292,15 +294,15 @@ public class UnitSynergy : MonoBehaviour
         switch (gameObject.tag)
         {
             case "P1":
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
-                    sm._p1UnitList[i].UnitBuff(0, 0, synergyData.Speed[Level], 0, 0, 0, synergyData.Duration[Level], false);
+                    um._p1UnitList[i].UnitBuff(0, 0, synergyData.Speed[Level], 0, 0, 0, synergyData.Duration[Level], false);
                 }
                 break;
             case "P2":
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
-                    sm._p2UnitList[i].UnitBuff(0, 0, synergyData.Speed[Level], 0, 0, 0, synergyData.Duration[Level], false);
+                    um._p2UnitList[i].UnitBuff(0, 0, synergyData.Speed[Level], 0, 0, 0, synergyData.Duration[Level], false);
                 }
                 break;
         }
@@ -331,12 +333,12 @@ public class UnitSynergy : MonoBehaviour
                     Buff = synergyData.CoolTime[0];
                 }
 
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
                     // 마법사만 버프
-                    if (sm._p1UnitList[i]._attackType != AttackType.Wizard || !sm._p1UnitList[i].gameObject.activeInHierarchy) continue;
-                    sm._p1UnitList[i]._unitCT -= sm._p1UnitList[i]._unitCT * Buff;
-                    sm._p1UnitList[i]._unit_SubSet.CT_Update();
+                    if (um._p1UnitList[i]._attackType != AttackType.Wizard || !um._p1UnitList[i].gameObject.activeInHierarchy) continue;
+                    um._p1UnitList[i]._unitCT -= um._p1UnitList[i]._unitCT * Buff;
+                    um._p1UnitList[i]._unit_SubSet.CT_Update();
                 }
                 break;
             case "P2":
@@ -359,12 +361,12 @@ public class UnitSynergy : MonoBehaviour
                     Buff = synergyData.CoolTime[0];
                 }
 
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
                     // 마법사만 버프
-                    if (sm._p2UnitList[i]._attackType != AttackType.Wizard || !sm._p2UnitList[i].gameObject.activeInHierarchy) continue;
-                    sm._p2UnitList[i]._unitCT -= sm._p2UnitList[i]._unitCT * Buff;
-                    sm._p2UnitList[i]._unit_SubSet.CT_Update();
+                    if (um._p2UnitList[i]._attackType != AttackType.Wizard || !um._p2UnitList[i].gameObject.activeInHierarchy) continue;
+                    um._p2UnitList[i]._unitCT -= um._p2UnitList[i]._unitCT * Buff;
+                    um._p2UnitList[i]._unit_SubSet.CT_Update();
                 }
                 break;
         }
@@ -377,15 +379,15 @@ public class UnitSynergy : MonoBehaviour
         switch (gameObject.tag)
         {
             case "P1":
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
-                    sm._p1UnitList[i]._wizardPower = true;
+                    um._p1UnitList[i]._wizardPower = true;
                 }
                 break;
             case "P2":
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
-                    sm._p2UnitList[i]._wizardPower = true;
+                    um._p2UnitList[i]._wizardPower = true;
                 }
                 break;
         }
@@ -424,12 +426,12 @@ public class UnitSynergy : MonoBehaviour
                     interval = synergyData.Interval[0];
                 }
 
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
                     // 시너지 버프
-                    if (sm._p1UnitList[i]._attackType != AttackType.Assassin) continue;
-                    sm._p1UnitList[i]._unitAT += BuffAT;
-                    sm._p1UnitList[i]._unitCC += BuffCC;
+                    if (um._p1UnitList[i]._attackType != AttackType.Assassin) continue;
+                    um._p1UnitList[i]._unitAT += BuffAT;
+                    um._p1UnitList[i]._unitCC += BuffCC;
                 }
                 break;
             case "P2":
@@ -458,11 +460,11 @@ public class UnitSynergy : MonoBehaviour
                     interval = synergyData.Interval[0];
                 }
 
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
-                    if (sm._p2UnitList[i]._attackType != AttackType.Assassin) return;
-                    sm._p2UnitList[i]._unitAT += BuffAT;
-                    sm._p2UnitList[i]._unitCC += BuffCC;
+                    if (um._p2UnitList[i]._attackType != AttackType.Assassin) return;
+                    um._p2UnitList[i]._unitAT += BuffAT;
+                    um._p2UnitList[i]._unitCC += BuffCC;
                 }
                 break;
         }
@@ -473,15 +475,15 @@ public class UnitSynergy : MonoBehaviour
         switch (gameObject.tag)
         {
             case "P1":
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
-                    if (sm._p1UnitList[i]._attackType == AttackType.Assassin && sm._p1UnitList[i].gameObject.activeInHierarchy) sm._p1UnitList[i].SetDash();
+                    if (um._p1UnitList[i]._attackType == AttackType.Assassin && um._p1UnitList[i].gameObject.activeInHierarchy) um._p1UnitList[i].SetDash();
                 }
                 break;
             case "P2":
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
-                    if (sm._p2UnitList[i]._attackType == AttackType.Assassin && sm._p2UnitList[i].gameObject.activeInHierarchy) sm._p2UnitList[i].SetDash();
+                    if (um._p2UnitList[i]._attackType == AttackType.Assassin && um._p2UnitList[i].gameObject.activeInHierarchy) um._p2UnitList[i].SetDash();
                 }
                 break;
         }
@@ -543,10 +545,10 @@ public class UnitSynergy : MonoBehaviour
         switch (gameObject.tag)
         {
             case "P1":
-                Heal(sm._p1UnitList[0]);
+                Heal(um._p1UnitList[0]);
                 break;
             case "P2":
-                Heal(sm._p2UnitList[0]);
+                Heal(um._p2UnitList[0]);
                 break;
         }
     }
@@ -597,10 +599,10 @@ public class UnitSynergy : MonoBehaviour
         switch (gameObject.tag)
         {
             case "P1":
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
-                    if (sm._p1UnitList[i]._attackType == AttackType.Merchant && sm._p1UnitList[i].gameObject.activeInHierarchy)
-                        sm._p1UnitList[i]._merchantPower = true;
+                    if (um._p1UnitList[i]._attackType == AttackType.Merchant && um._p1UnitList[i].gameObject.activeInHierarchy)
+                        um._p1UnitList[i]._merchantPower = true;
                 }
                 break;
             case "P2":
@@ -663,11 +665,11 @@ public class UnitSynergy : MonoBehaviour
                 List<Unit> p1humans = new List<Unit>();
 
 
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
                     // 인간 찾기
-                    if (sm._p1UnitList[i]._unitType != UnitType.Human) continue;
-                    p1humans.Add(sm._p1UnitList[i]);
+                    if (um._p1UnitList[i]._unitType != UnitType.Human) continue;
+                    p1humans.Add(um._p1UnitList[i]);
                 }
 
                 int randomIndex1 = Random.Range(0, p1humans.Count);
@@ -725,11 +727,11 @@ public class UnitSynergy : MonoBehaviour
                 List<Unit> p2humans = new List<Unit>();
 
 
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
                     // 인간 찾기
-                    if (sm._p2UnitList[i]._unitType != UnitType.Human) continue;
-                    p2humans.Add(sm._p2UnitList[i]);
+                    if (um._p2UnitList[i]._unitType != UnitType.Human) continue;
+                    p2humans.Add(um._p2UnitList[i]);
                 }
 
                 int randomIndex2 = Random.Range(0, p2humans.Count);
@@ -773,11 +775,11 @@ public class UnitSynergy : MonoBehaviour
                 // 아군 요괴가 적 인간 보다 적다면
                 if (sm._p1UnitTypeSynergyList[1] <= sm._p2UnitTypeSynergyList[0]) break;
 
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
                     // 시너지 버프
-                    if (sm._p1UnitList[i]._unitType != UnitType.Ghost) continue;
-                    sm._p1UnitList[i]._unitAT += BuffAT;
+                    if (um._p1UnitList[i]._unitType != UnitType.Ghost) continue;
+                    um._p1UnitList[i]._unitAT += BuffAT;
                 }
                 break;
             case "P2":
@@ -803,10 +805,10 @@ public class UnitSynergy : MonoBehaviour
                 // 아군 요괴가 적 인간 보다 적다면
                 if (sm._p2UnitTypeSynergyList[1] <= sm._p1UnitTypeSynergyList[0]) break;
 
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
-                    if (sm._p2UnitList[i]._unitType != UnitType.Ghost) return;
-                    sm._p2UnitList[i]._unitAT += BuffAT;
+                    if (um._p2UnitList[i]._unitType != UnitType.Ghost) return;
+                    um._p2UnitList[i]._unitAT += BuffAT;
                 }
                 break;
         }
@@ -819,19 +821,19 @@ public class UnitSynergy : MonoBehaviour
         switch (gameObject.tag)
         {
             case "P1":
-                for (int i = 0; i < sm._p1UnitList.Count; i++)
+                for (int i = 0; i < um._p1UnitList.Count; i++)
                 {
-                    sm._p1UnitList[i]._ghostPower = true;
-                    sm._p1UnitList[i]._ghostTime = synergyData.Duration[Level];
-                    sm._p1UnitList[i]._ghostTimer = synergyData.Duration[Level];
+                    um._p1UnitList[i]._ghostPower = true;
+                    um._p1UnitList[i]._ghostTime = synergyData.Duration[Level];
+                    um._p1UnitList[i]._ghostTimer = synergyData.Duration[Level];
                 }
                 break;
             case "P2":
-                for (int i = 0; i < sm._p2UnitList.Count; i++)
+                for (int i = 0; i < um._p2UnitList.Count; i++)
                 {
-                    sm._p2UnitList[i]._ghostPower = true;
-                    sm._p2UnitList[i]._ghostTime = synergyData.Duration[Level];
-                    sm._p2UnitList[i]._ghostTimer = synergyData.Duration[Level];
+                    um._p2UnitList[i]._ghostPower = true;
+                    um._p2UnitList[i]._ghostTime = synergyData.Duration[Level];
+                    um._p2UnitList[i]._ghostTimer = synergyData.Duration[Level];
                 }
                 break;
         }

@@ -83,7 +83,11 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void UnitRate()
     {
-        float randomNumber = Random.value; // 0부터 1 사이의 랜덤 값
+        _rateType = RateType.lower;
+        if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
+        _productRate.sprite = _unitShop._rateSprites[0];
+
+        /*float randomNumber = Random.value; // 0부터 1 사이의 랜덤 값
         if (randomNumber < 0.667f) // 66.7%
         {
             _rateType = RateType.lower;
@@ -101,7 +105,7 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             _rateType = RateType.upper;
             if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
             _productRate.sprite = _unitShop._rateSprites[2];
-        }
+        }*/
     }
 
     // 시너지에 대한 이미지와 색깔 세팅

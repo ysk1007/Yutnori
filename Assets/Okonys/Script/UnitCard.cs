@@ -36,15 +36,19 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     Vector3 _SelectSize = new Vector3(0.9f, 0.9f, 1f);
 
     UnitShop _unitShop;
+    InventoryManager _inventoryManager;
     // Start is called before the first frame update
     void Start()
     {
         _unitShop = SoonsoonData.Instance.UnitShop;
+        _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
     }
 
     void OnEnable()
     {
         if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
+        if (!_inventoryManager) _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
+        init();
     }
 
     // Update is called once per frame
@@ -107,5 +111,11 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _productPrice = i+1;
         _productPriceTag.text = (i+1).ToString();
         _unitRate.sprite = _unitShop._rateImage[i];
+        if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
+        if (!_inventoryManager) _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
+        _productRate.sprite = 
+            (_unitIndex < _inventoryManager._userSquad.Length) ? 
+            _unitShop._rateSprites[_inventoryManager._userSquad[_unitIndex]._unitRate] : 
+            _unitShop._rateSprites[_inventoryManager._userInventory[_unitIndex - _inventoryManager._userSquad.Length]._unitRate];
     }
 }
