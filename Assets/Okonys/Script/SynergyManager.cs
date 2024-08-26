@@ -14,7 +14,7 @@ public class SynergyManager : MonoBehaviour
     // ¾ÆÆ¼ÆÑÆ®·Î ¾ò´Â Ãß°¡ ½Ã³ÊÁö
     public int[] _AttackTypeAddArtifact = new int[0];
 
-    [Header("0 ÀÎ°£ 1 ¿ä±« 2 À§ÀÎ 3 ¾Ç±Í")]
+    [Header("0 ÀÎ°£ 1 ¿ä±« 2 À§ÀÎ 3 ¾Ç±Í 4 »ç½Å¼ö")]
     public int[] _p1UnitTypeSynergyList = new int[0];
     public int[] _p2UnitTypeSynergyList = new int[0];
 
@@ -129,6 +129,9 @@ public class SynergyManager : MonoBehaviour
                 case Unit.UnitType.Devil:
                     _p1UnitTypeSynergyList[3]++;
                     break;
+                case Unit.UnitType.God:
+                    _p1UnitTypeSynergyList[4]++;
+                    break;
                 default:
                     break;
             }
@@ -175,6 +178,9 @@ public class SynergyManager : MonoBehaviour
                     break;
                 case Unit.UnitType.Devil:
                     _p2UnitTypeSynergyList[3]++;
+                    break;
+                case Unit.UnitType.God:
+                    _p2UnitTypeSynergyList[4]++;
                     break;
                 default:
                     break;

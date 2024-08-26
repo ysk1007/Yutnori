@@ -37,6 +37,8 @@ public class SkillObj : MonoBehaviour
     public float _timerForLim; // 오브젝트 끝나는 시간
     public float _interval; // 간격
     public float _intervalTimer; // 간격 타이머
+    public float _timing; // 데미지가 들어가기 시작하는 타이밍
+    public float _timingTimer; // 타이밍 타이머
     public bool _stunCheck;
     public float _stunTime;
     public string _Tag;
@@ -46,6 +48,7 @@ public class SkillObj : MonoBehaviour
 
     public Vector2 _startPos;
     public Vector2 _endPos;
+    public Vector3 _colliderCenter;
 
     public BoxCollider _collider;
 
@@ -58,6 +61,9 @@ public class SkillObj : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_target[0]._unitState != UnitState.death)
+            this.transform.rotation = (_owner.transform.position.x > _target[0].transform.position.x) ? this.transform.rotation = Quaternion.Euler(0, 180, 0) : this.transform.rotation = Quaternion.Euler(0, 0, 0);
+
         if (_count > 0 && _intervalTimer > _interval)
         {
             _intervalTimer = 0;
@@ -80,6 +86,7 @@ public class SkillObj : MonoBehaviour
         }
 
         _collider.size = new Vector3(_rangeX, _rangeY,0.2f);
+        _collider.center = _colliderCenter;
         switch (_skillType)
         {
             case SkillType.ShortRange:
@@ -87,7 +94,10 @@ public class SkillObj : MonoBehaviour
                 _homing = false;
                 _yPos = 0;
                 _yPosSave = _yPos;
-                if (_owner.transform.position.x > _target[0].transform.position.x) this.transform.localScale = new Vector3(-1, 1, 1);
+
+                /*// 뒤집기
+                if (_owner.transform.position.x > _target[0].transform.position.x) this.transform.localScale = new Vector3(-1, 1, 1);*/
+
                 break;
             case SkillType.LongRange:
                 _homing = true;
@@ -120,8 +130,13 @@ public class SkillObj : MonoBehaviour
         _interval = skillData.DamageInterval;
         _intervalTimer = 0;
 
+        _timing = skillData.Timing;
+        _timingTimer = 0;
+
         _rangeX = skillData.xRange;
         _rangeY = skillData.yRange;
+
+        _colliderCenter = skillData.ColliderPos;
 
         _stunCheck = skillData.StunCheck;
         _stunTime = skillData.StunTime;
@@ -142,7 +157,7 @@ public class SkillObj : MonoBehaviour
         else
             _endPos = _startPos;
 
-        this.transform.localScale = new Vector3(1, 1, 1);
+        //this.transform.localScale = new Vector3(1, 1, 1);
         SoonsoonData.Instance.Skill_Manager._poolListUse.Add(this);
         SetInit();
 

@@ -164,6 +164,22 @@ public class SynergyPopup : MonoBehaviour
 
                 break;
 
+            case SynergyData.SynergyType.Great:
+                // ({0}) 공격력 +{1}%
+                Desc = string.Format(_synergyData.BuffDesc,
+                    _synergyData.RequiredNumber[index],
+                    _synergyData.Damage[index] * 100f);
+                break;
+
+            case SynergyData.SynergyType.Devil:
+                // ({0}) 공격력 +{1}%
+                Desc = string.Format(_synergyData.BuffDesc,
+                    _synergyData.RequiredNumber[index],
+                    _synergyData.Damage[index] * 100f);
+                break;
+
+            case SynergyData.SynergyType.God:
+                break;
         }
         return Desc;
     }

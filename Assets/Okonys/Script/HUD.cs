@@ -22,7 +22,8 @@ public class HUD : MonoBehaviour
         MaxPopulation = 13,
         TurnCount = 14,
         LoseHp = 15,
-        Price = 16
+        Price = 16,
+        GodCount,
     }
     public UiType _uiType = UiType.WarriorCount;
     private SynergyManager SM;
@@ -74,8 +75,13 @@ public class HUD : MonoBehaviour
                 _thisText.text = SM._p1UnitTypeSynergyList[1].ToString();
                 break;
             case UiType.GreatCount:
+                _thisText.text = SM._p1UnitTypeSynergyList[2].ToString();
                 break;
             case UiType.DevilCount:
+                _thisText.text = SM._p1UnitTypeSynergyList[3].ToString();
+                break;
+            case UiType.GodCount:
+                _thisText.text = SM._p1UnitTypeSynergyList[4].ToString();
                 break;
             case UiType.UserGold:
                 _thisText.text = _userInfoManager.userData.GetUserGold().ToString();

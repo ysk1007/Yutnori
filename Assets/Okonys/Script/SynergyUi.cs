@@ -38,6 +38,7 @@ public class SynergyUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         switch (_synergyData.RequiredNumber.Length)
         {
             case 1:
+                CountTextUpdate(CheckCount1(int.Parse(_curCountText.text)));
                 break;
             case 3:
                 CountTextUpdate(CheckCount3(int.Parse(_curCountText.text)));
@@ -58,6 +59,22 @@ public class SynergyUi : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
         _typeText.text = _synergyData.synergyName;
         _iconSprite.sprite = _synergyData.icon;
+    }
+
+    public int CheckCount1(int i)
+    {
+        if (i == 0)
+        {
+            return 0;
+        }
+        else if (i < _synergyData.RequiredNumber[0])
+        {
+            return 1;
+        }
+        else
+        {
+            return 2;
+        }
     }
 
     public int CheckCount3(int i)

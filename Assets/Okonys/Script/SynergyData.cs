@@ -17,6 +17,7 @@ public class SynergyData : ScriptableObject
         Ghost = 7, 
         Great = 8,
         Devil = 9,
+        God = 10,
     }
 
     public enum Type

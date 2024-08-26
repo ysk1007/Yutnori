@@ -60,7 +60,8 @@ public class Reward : MonoBehaviour
                 _text.text = text + " ³É";
                 break;
             case RewardType.unit:
-                _unitRate = _unitPool.RandomUnitRate();
+                _unitRate = 0;
+                //_unitRate = _unitPool.RandomUnitRate();
                 _unitData = unit;
                 _icon.sprite = unit.icon;
                 _text.text = unit.UnitName;

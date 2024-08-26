@@ -34,8 +34,10 @@ public class SkillManager : MonoBehaviour
             {
                 if (!_poolListUse[i].gameObject.activeInHierarchy) return;
                 SkillObj skill = _poolListUse[i];
+                skill._timingTimer += Time.deltaTime;
                 skill._timer += Time.deltaTime;
-                skill._intervalTimer += Time.deltaTime;
+                if (skill._timingTimer > skill._timing)
+                    skill._intervalTimer += Time.deltaTime;
 
                 if (skill._timer > skill._timerForLim)
                 {
