@@ -10,24 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4468ad70faa0df5489771b93656f02d9, type: 3}
-  m_Name: S004_SquadHeal
+  m_Name: B009_
   m_EditorClassIdentifier: 
   SkillID: 0
-  SkillName: "\uD300 \uD68C\uBCF5"
+  SkillName: "\uB9F7\uC9D1"
   skillType: 3
-  targetType: 7
-  Damage: 5
-  Recovery: 0
+  targetType: 1
+  Damage: 0
+  Recovery: 200
   Speed: 0
   Defense: 0
   Critical: 0
-  Shield: 0
+  Shield: 1000
   xRange: 0
   yRange: 0
-  Duration: 2
+  Duration: 5
   DamageCount: 1
   DamageInterval: 0
-  SkillPos: {x: 0, y: 0}
+  StunCheck: 0
+  StunTime: 0
+  ColliderPos: {x: 0, y: 0, z: 0}
   Timing: 0
-  SkillDesc: "\uBAA8\uB4E0 \uC544\uAD70\uC744 \uD68C\uBCF5 \uD569\uB2C8\uB2E4."
-  icon: {fileID: 21300000, guid: f976422d151c609448d054db018f159b, type: 3}
+  SkillDesc: "\uC18C\uB7C9\uC758 \uCCB4\uB825\uC744 \uD68C\uBCF5\uD558\uACE0 \uB300\uB7C9\uC758
+    \uBCF4\uD638\uB9C9\uC744 \uD68D\uB4DD\uD569\uB2C8\uB2E4."
+  icon: {fileID: 21300000, guid: e725b48e1c972244da54228d1c72e8a2, type: 3}

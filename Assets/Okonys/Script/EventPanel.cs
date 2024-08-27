@@ -214,10 +214,13 @@ public class EventPanel : MonoBehaviour
 
     public void EventGetSomething(int index)
     {
-        _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
-        _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
+        if (_currentEvent._goldValue.Length != 0)
+            _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
 
-        if(_currentEvent._someUnit?[index] != null)
+        if (_currentEvent._hpValue.Length != 0)
+            _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
+
+        if(_currentEvent._someUnit.Length != 0)
         {
             if (!_inventoryManager.InventoryAdd(_eventUnit[index])) return;
         }
@@ -240,10 +243,14 @@ public class EventPanel : MonoBehaviour
 
     public void EventLoseSomething(int index)
     {
-        _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
-        _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
+        if(_currentEvent._goldValue.Length != 0)
+            _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
 
-        _inventoryManager.UnitRemove(_eventUnit[index]);
+        if(_currentEvent._hpValue.Length != 0)
+            _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
+
+        if(_eventUnit[index]._unitData != null)
+            _inventoryManager.UnitRemove(_eventUnit[index]);
 
 
         EventContinue();
@@ -264,8 +271,11 @@ public class EventPanel : MonoBehaviour
 
     public void EventGetLose(int index)
     {
-        _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
-        _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
+        if (_currentEvent._goldValue.Length != 0)
+            _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
+
+        if (_currentEvent._hpValue.Length != 0)
+            _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
 
 
         if (_currentEvent._someUnit[index]?.GetUnitData()?.UnitName == "RandomGet")
@@ -284,11 +294,12 @@ public class EventPanel : MonoBehaviour
     {
         if (_currentEvent.EventChance())
         {
-            //EventGetLose();
+            EventGetSomething(0);
             EventContinue();
         }
         else
         {
+            EventLoseSomething(0);
             EventContinue();
         }
     }

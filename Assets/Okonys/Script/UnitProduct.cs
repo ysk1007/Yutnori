@@ -113,7 +113,6 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         _synergyIcon.sprite = _unitShop._synergySprites[i];
         _synergyBg.color = _unitShop._synergyColor[i];
-        _productBg.color = _unitShop._cardColor[i];
     }
 
     // 타입에 대한 이미지와 색깔 세팅
@@ -129,5 +128,6 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         _productPrice = i + 1;
         _productPriceTag.text = (i + 1).ToString();
         _unitRate.sprite = _unitShop._rateImage[i];
+        _productBg.color = _unitShop._cardColor[i];
     }
 }

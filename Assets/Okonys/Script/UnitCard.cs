@@ -95,7 +95,6 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         _synergyIcon.sprite = _unitShop._synergySprites[i];
         _synergyBg.color = _unitShop._synergyColor[i];
-        _productBg.color = _unitShop._cardColor[i];
     }
 
     // 타입에 대한 이미지와 색깔 세팅
@@ -110,8 +109,9 @@ public class UnitCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         _productPrice = i+1;
         _productPriceTag.text = (i+1).ToString();
-        _unitRate.sprite = _unitShop._rateImage[i];
         if (!_unitShop) _unitShop = SoonsoonData.Instance.UnitShop;
+        _unitRate.sprite = _unitShop._rateImage[i];
+        _productBg.color = _unitShop._cardColor[i];
         if (!_inventoryManager) _inventoryManager = SoonsoonData.Instance.Inventory_Manager;
         _productRate.sprite = 
             (_unitIndex < _inventoryManager._userSquad.Length) ? 

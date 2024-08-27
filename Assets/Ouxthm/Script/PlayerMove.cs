@@ -148,16 +148,16 @@ public class PlayerMove : MonoBehaviour
                 case 0:
                     return;
                 case 1:
-                    _bossNum = Random.Range(0, 2);
+                    //_bossNum = Random.Range(0, 2);
+                    _bossNum = 0;
                     break;
                 case 2:
-                    _bossNum = Random.Range(2, 4);
+                    //_bossNum = Random.Range(2, 4);
+                    _bossNum = 1;
                     break;
                 case 3:
-                    _bossNum = Random.Range(4, 6);
-                    break;
-                case 4:
-                    _bossNum = 6;
+                    //_bossNum = Random.Range(4, 6);
+                    _bossNum = 2;
                     break;
             }
 

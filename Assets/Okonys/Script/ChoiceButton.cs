@@ -87,6 +87,8 @@ public class ChoiceButton : MonoBehaviour
                 break;
             case ButtonTexts.ButtonType.GetLoseChance:
                 _button.onClick.AddListener(() => _eventPanel.EventGetLoseChance());
+                _positiveText.text = texts[1];
+                _negativeText.text = texts[2];
                 break;
         }
     }
