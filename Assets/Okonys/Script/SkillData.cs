@@ -34,6 +34,7 @@ public class SkillData : ScriptableObject
     public string SkillName;
     public SkillType skillType;
     public TargetType targetType = TargetType.None;
+    public int _effectID;
 
     [Header(" # Buff Info")]
     public float Damage; // ÇÇÇØ·®

@@ -9,11 +9,21 @@ public class EffectObj : MonoBehaviour
     public enum EffectType
     {
         Hit  = 0,
-        CriticalHit = 1,
-        Heal = 2,
-        Buff = 3,
-        Debuff = 4,
-        Explosion = 5,
+        Heal = 1,
+        Buff = 2,
+        Debuff = 3,
+        StonesHit = 4,
+        FireBallHit = 5,
+        Explosion_ice = 6,
+        ElectroHit = 7,
+        Explosion_Arcane = 8,
+        SnowHit = 9,
+        RedHit = 10,
+        Explosion_Dark = 11,
+        WaterHit = 12,
+        PurpleHit =13,
+        ElectroHit2 = 14,
+        Explosion_Fire_blue = 15,
     }
 
     public EffectType _effectType = EffectType.Hit;

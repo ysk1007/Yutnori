@@ -21,6 +21,7 @@ public class SkillObj : MonoBehaviour
     public List<GameObject> _skillList = new List<GameObject>();
 
     public int _skillID;
+    public int _effectID;
     public float _damage;
     public float _recovery;
     public float _speed;
@@ -120,6 +121,7 @@ public class SkillObj : MonoBehaviour
         _critical = skillData.Critical;
         _shield = skillData.Shield;
         _skillID = skillData.SkillID - 1;
+        _effectID = skillData._effectID;
         _skillType = type;
         _owner = owner;
         _target.Clear();
@@ -269,8 +271,7 @@ public class SkillObj : MonoBehaviour
                 _owner.SetAttack(_damage, collider.gameObject.GetComponent<Unit>());
                 if (_stunCheck)
                     collider.gameObject.GetComponent<Unit>().SetStun(_stunTime);
-                int val = _skillID + 5;
-                EffectType num = (EffectType)val;
+                EffectType num = (EffectType)_effectID;
                 SoonsoonData.Instance.Effect_Manager.SetEffect(num, null, _target[0].transform.position, false, 1.5f);
             }
         }
