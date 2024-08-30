@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d10859fedcba7774f8303ba9eea3d7e4, type: 3}
+  m_Name: HealerSynergy
+  m_EditorClassIdentifier: 
+  synergyName: "\uC9C0\uC6D0\uAC00"
+  synergyType: 4
+  type: 1
+  RequiredNumber: 020000000300000004000000
+  MaxHp: []
+  Damage: []
+  Recovery:
+  - 300
+  - 600
+  - 900
+  Speed: []
+  Defense: []
+  Critical: []
+  Shield: []
+  CoolTime: []
+  Duration: []
+  Interval:
+  - 16
+  - 12
+  - 8
+  SynergyDesc: "\uC77C\uC815 \uC2DC\uAC04\uB9C8\uB2E4 \uBAA8\uB4E0 \uC544\uAD70 \uC720\uB2DB\uC758
+    \uCCB4\uB825\uC774 \uD68C\uBCF5 \uB429\uB2C8\uB2E4."
+  BuffDesc: "({0}) {1}\uCD08\uB9C8\uB2E4 {2}HP \uD68C\uBCF5"
+  icon: {fileID: 21300000, guid: 74cd0f394db52824cb406a80bd74a8a6, type: 3}

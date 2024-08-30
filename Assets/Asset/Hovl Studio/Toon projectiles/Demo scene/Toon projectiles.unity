@@ -348,7 +348,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 633557799}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.1, z: 2}
+  m_LocalPosition: {x: 0, y: -1.017, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -363,12 +363,22 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 633557799}
-  m_Text: Please read Readme.txt
+  m_Text: 'Use left mouse button to single shoot!
+
+    Use and hold the right mouse
+    button for quick shooting!
+
+    Change fire rate on the sphere object.
+
+    Use
+    the keyboard buttons A/<- and D/-> to change projectiles!
+
+    Please read Readme.txt'
   m_OffsetZ: 0
-  m_CharacterSize: 0.01
+  m_CharacterSize: 0.005
   m_LineSpacing: 1
   m_Anchor: 4
-  m_Alignment: 1
+  m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 100
   m_FontStyle: 0
@@ -376,7 +386,7 @@ TextMesh:
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4294932224
 --- !u!23 &633557802
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1027,8 +1037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0015164b45b01e24499396ed322983f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolSize: 20
-  poolReturnTimer: 3
+  fireRate: 0.1
   FirePoint: {fileID: 582269413}
   Cam: {fileID: 1334825924}
   MaxLength: 40
@@ -1048,22 +1057,6 @@ MonoBehaviour:
   - {fileID: 1533846767962012, guid: bc2714e5c329c764dbedba866cc02850, type: 3}
   - {fileID: 1428542714614976, guid: fa6b2eb4089fc9d4ab0d795b14de9925, type: 3}
   - {fileID: 1835938022181820, guid: dfabab2850cde8d418eb1485cd8342f6, type: 3}
-  Flashes:
-  - {fileID: 1762171864188014, guid: 4ab48a9a03327fb4ca76018592f4626d, type: 3}
-  - {fileID: 1554156215293492, guid: b15ff8497c1816242b4531a624ad5784, type: 3}
-  - {fileID: 1992516277711322, guid: d07a2dac65a5080458290ccf1869336e, type: 3}
-  - {fileID: 1570551569412210, guid: 21380ddb0b252984da608f69594b18ec, type: 3}
-  - {fileID: 1546629397207042, guid: 0c493020e111d7e4fac7535fde124408, type: 3}
-  - {fileID: 1344824185198126, guid: 4ab34b8edd399b3499e3bfb5dff80b4d, type: 3}
-  - {fileID: 1023540632372170, guid: 12c5a36b60a39734f80150bc3e23e850, type: 3}
-  - {fileID: 1750399910768106, guid: 11e40931ec6ea2645b692966183791ae, type: 3}
-  - {fileID: 1469211736650368, guid: b08f505eff218204fb92fac4cda2cfca, type: 3}
-  - {fileID: 1195979354075316, guid: 0c1d21299412c1b4685f7282c52222a4, type: 3}
-  - {fileID: 1434253245967370, guid: 6b80d5fba4e83cb4584421b219575610, type: 3}
-  - {fileID: 1883419434696116, guid: 0b0d69410ca2f1045b821e4b992ce9a2, type: 3}
-  - {fileID: 1546629397207042, guid: 0054ac7e7008b144eae4abce4d57bfed, type: 3}
-  - {fileID: 1757226974508410, guid: 244f87a37ba29b741848d41f7591bc93, type: 3}
-  - {fileID: 1303664784583148, guid: 21c2c2f37bb45894e8c5ac0cb9e2cb90, type: 3}
   camAnim: {fileID: 1334825923}
 --- !u!23 &1517486352
 MeshRenderer:
