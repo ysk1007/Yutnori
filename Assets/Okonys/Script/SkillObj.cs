@@ -59,6 +59,11 @@ public class SkillObj : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        AudioManager.instance.PlayVfx(_skillID - 1);
+    }
+
     // Update is called once per frame
     void Update()
     {

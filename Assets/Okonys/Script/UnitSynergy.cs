@@ -80,13 +80,13 @@ public class UnitSynergy : MonoBehaviour
                 GhostSynergy();
                 break;
             case SynergyData.SynergyType.Great:
-                GhostSynergy();
+                //GhostSynergy();
                 break;
             case SynergyData.SynergyType.Devil:
                 GhostSynergy();
                 break;
             case SynergyData.SynergyType.God:
-                GhostSynergy();
+                //GhostSynergy();
                 break;
         }
     }

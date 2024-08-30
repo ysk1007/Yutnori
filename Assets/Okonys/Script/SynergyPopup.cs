@@ -155,10 +155,10 @@ public class SynergyPopup : MonoBehaviour
                 switch (index)
                 {
                     case 1:
-                        Desc += _synergyData.Duration[index] + " 초 동안 복수 합니다.";
+                        Desc += " " + _synergyData.Duration[index] + "초 동안 복수 합니다.";
                         break;
                     case 2:
-                        Desc += _synergyData.Duration[index] + " 초 동안 복수 합니다.";
+                        Desc += " " + _synergyData.Duration[index] + "초 동안 복수 합니다.";
                         break;
                 }
 
@@ -179,6 +179,7 @@ public class SynergyPopup : MonoBehaviour
                 break;
 
             case SynergyData.SynergyType.God:
+                Desc = "";
                 break;
         }
         return Desc;

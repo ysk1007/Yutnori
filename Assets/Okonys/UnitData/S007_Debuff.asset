@@ -16,11 +16,12 @@ MonoBehaviour:
   SkillName: "\uB514\uBC84\uD504"
   skillType: 4
   targetType: 8
-  Damage: 0.5
+  _effectID: 0
+  Damage: 0.2
   Recovery: 0
-  Speed: 0.5
+  Speed: 0.2
   Defense: 0
-  Critical: 0.5
+  Critical: 0.2
   Shield: 0
   xRange: 0
   yRange: 0
@@ -29,7 +30,7 @@ MonoBehaviour:
   DamageInterval: 0
   StunCheck: 0
   StunTime: 0
-  SkillPos: {x: 0, y: 0}
+  ColliderPos: {x: 0, y: 0, z: 0}
   Timing: 0
   SkillDesc: "\uBAA8\uB4E0 \uC801\uC5D0\uAC8C \uC57D\uD654\uB97C \uBD80\uC5EC \uD569\uB2C8\uB2E4."
   icon: {fileID: 21300000, guid: 73b0867bb4f3540489115a5121e88bc9, type: 3}

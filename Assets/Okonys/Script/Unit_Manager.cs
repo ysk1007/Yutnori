@@ -348,10 +348,16 @@ public class Unit_Manager : MonoBehaviour
         BattleEndSetting(true);
 
         // 보스전 보상
-        if (_playerMove.bossMeet)
+        if (UserInfoManager.Instance.userData.bossMeet)
         {
             _playerMove.BossDead();
             _userInfoManager.userData.totalKillBoss++;
+            if(UserInfoManager.Instance.userData.GameLevel >= 5)
+            {
+                GameOutPopup.Instance.SetGameWin();
+                SoonsoonData.Instance.Canvas_Manager.GameEnd();
+                return;
+            }
             _battleReward.NormalBattleReward();
             return;
         }
@@ -462,6 +468,7 @@ public class Unit_Manager : MonoBehaviour
             return;
         }
 
+        SoonsoonData.Instance.Canvas_Manager.HideBattleStartBtn();
         _gamePause = false;
         for (int i = 0; i < _unitSynergy.Count; i++)
         {

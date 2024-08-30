@@ -244,10 +244,10 @@ public class EventPanel : MonoBehaviour
     public void EventLoseSomething(int index)
     {
         if(_currentEvent._goldValue.Length != 0)
-            _userInfoManager.userData.SetUserGold(_currentEvent._goldValue[index]);
+            _userInfoManager.userData.SetUserGold(-1 * _currentEvent._goldValue[index]);
 
         if(_currentEvent._hpValue.Length != 0)
-            _userInfoManager.userData.SetUserHp(_currentEvent._hpValue[index]);
+            _userInfoManager.userData.SetUserHp(-1 * _currentEvent._hpValue[index]);
 
         if(_eventUnit[index]._unitData != null)
             _inventoryManager.UnitRemove(_eventUnit[index]);

@@ -148,7 +148,17 @@ public class CanvasManager : MonoBehaviour
         _battleStartBtn.OnePopup();
     }
 
+    public void HideBattleStartBtn()
+    {
+        _battleStartBtn.ZeroPopup();
+    }
+
     public void GameEnd()
+    {
+        Invoke("GameEndSetting",1f);
+    }
+
+    public void GameEndSetting()
     {
         _gameOutAnimator.SetTrigger("Show");
         _gameOutPopupAnimator.SetTrigger("Show");

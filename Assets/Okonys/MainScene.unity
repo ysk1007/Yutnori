@@ -927,6 +927,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CheckSynergyUpdate
@@ -1726,6 +1738,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CheckSynergyUpdate
@@ -2278,6 +2302,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CheckSynergyUpdate
@@ -2561,6 +2597,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CheckTypeUpdate
@@ -2839,6 +2887,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: SetSynergy
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3508,6 +3568,12 @@ MonoBehaviour:
   sfxClips: []
   sfxVolume: 0.5
   channels: 16
+  vfxClips:
+  - {fileID: 8300000, guid: dde18f67281439a42b8603adc0169908, type: 3}
+  vfxChannels: 16
+  missileClips: []
+  effectClips: []
+  effectChannels: 0
 --- !u!4 &793822941
 Transform:
   m_ObjectHideFlags: 0
@@ -3870,6 +3936,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CheckTypeUpdate
@@ -4035,20 +4113,32 @@ MonoBehaviour:
       ShopUnits: 
       UserArtifacts: 
       TurnCounter: 0
+      isCounted: 0
       GameLevel: 0
       isPlateData: 0
       PlatesData: 
       CurrentPlateNum: 0
       CurrentRoadNum: 0
+      LastYutMove: 0
+      AlreadyFinished: 0
       isBossData: 0
       bossNum: 0
       bossCurrentPlateNum: 0
       bossCurrentRoadNum: 0
+      totalKillEnemy: 0
+      totalKillBoss: 0
+      totalGetGold: 0
+      totalMapFinish: 0
     optionData:
       _masterVolume: 0
       _bgmVolume: 0
       _sfxVolume: 0
       _voiceType: 0
+    achievementData:
+      _gameClearCount: 0
+      _infiniteModeBestScore: 0
+      _firstRun: 0
+      _firstBattle: 0
   userData:
     isUserData: 0
     UserName: 
@@ -4067,20 +4157,32 @@ MonoBehaviour:
     ShopUnits: 
     UserArtifacts: 
     TurnCounter: 0
+    isCounted: 0
     GameLevel: 0
     isPlateData: 0
     PlatesData: 
     CurrentPlateNum: 0
     CurrentRoadNum: 0
+    LastYutMove: 0
+    AlreadyFinished: 0
     isBossData: 0
     bossNum: 0
     bossCurrentPlateNum: 0
     bossCurrentRoadNum: 0
+    totalKillEnemy: 0
+    totalKillBoss: 0
+    totalGetGold: 0
+    totalMapFinish: 0
   optionData:
     _masterVolume: 0
     _bgmVolume: 0
     _sfxVolume: 0
     _voiceType: 0
+  achievementData:
+    _gameClearCount: 0
+    _infiniteModeBestScore: 0
+    _firstRun: 0
+    _firstBattle: 0
   _canvasManager: {fileID: 0}
 --- !u!4 &951270224
 Transform:
@@ -4490,6 +4592,7 @@ MonoBehaviour:
   - {fileID: 2529561111064341166, guid: c36306593dc52114a9c8cad43555a3ef, type: 3}
   - {fileID: 2529561111064341166, guid: 31326ae462ce06142b7290079d423e80, type: 3}
   _objectPrefabs: []
+  _bossPrefabs: []
   _unitDatas:
   - {fileID: 11400000, guid: df2f9bb04e996c944906f4f9d2d01b25, type: 2}
   - {fileID: 11400000, guid: ca8bca5a448890f44923a5eeed6a8194, type: 2}
@@ -5291,6 +5394,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CheckSynergyUpdate
@@ -5391,6 +5506,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: OptionPopup, Assembly-CSharp
         m_MethodName: OptionOne
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6117,6 +6244,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CheckSynergyUpdate
@@ -6217,6 +6356,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: GameExit
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6502,6 +6653,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1415325347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6652,6 +6815,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9934,10 +10109,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1923926673}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -9949,6 +10124,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1817788818}
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CheckTypeUpdate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1817788818}
+        m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
+        m_MethodName: CheckSynergyUpdate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10595,6 +10782,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: CharacterSelect, Assembly-CSharp
         m_MethodName: CharacterSelectComplite
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 793822940}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: PlayVfx
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

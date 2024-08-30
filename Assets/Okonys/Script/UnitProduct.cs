@@ -125,8 +125,8 @@ public class UnitProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // 상품등급에 대한 이미지, 가격 세팅
     void ProductSetting(int i)
     {
-        _productPrice = i + 1;
-        _productPriceTag.text = (i + 1).ToString();
+        _productPrice = (i+1) * 5;
+        _productPriceTag.text = ((i + 1) * 5).ToString();
         _unitRate.sprite = _unitShop._rateImage[i];
         _productBg.color = _unitShop._cardColor[i];
     }

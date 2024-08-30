@@ -20,9 +20,11 @@ public class ItemProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     Vector3 _selectSize = new Vector3(1.2f, 1.2f, 1.2f);
     Vector3 _nullSize = Vector3.zero;
 
+    ArtifactPopup _popup;
+
     void Start()
     {
-                
+        _popup = SoonsoonData.Instance.ArtifactPopup;
     }
 
     // Update is called once per frame
@@ -49,6 +51,8 @@ public class ItemProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         _itemShop._selectItemIndex = _productIndex;
         transform.localScale = _selectSize;
+        _popup._itemData = _itemData;
+        _popup.init();
     }
 
     // 마우스가 오브젝트에서 벗어났을 때 호출되는 함수
@@ -58,5 +62,6 @@ public class ItemProduct : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         _itemShop._selectItemIndex = -1;
         transform.localScale = _originalSize;
+        _popup._itemData = null;
     }
 }

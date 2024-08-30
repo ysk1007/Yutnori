@@ -130,7 +130,7 @@ public class EnemyPool : MonoBehaviour
 
     public void SetGameLevel()
     {
-        _gameLevel = _userInfoManager.userData.TurnCounter / 15;
+        _gameLevel = _userInfoManager.userData.TurnCounter / 9;
         _userInfoManager.userData.GameLevel = _gameLevel;
     }
 

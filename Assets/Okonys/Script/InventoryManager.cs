@@ -71,6 +71,8 @@ public class InventoryManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        MaxPopulation = 4 + (UserInfoManager.Instance.userData.GameLevel);
+
         if (!SoonsoonData.Instance.Unit_Manager._gamePause) return;
 
         _cursor.SetActive(_isMoving);

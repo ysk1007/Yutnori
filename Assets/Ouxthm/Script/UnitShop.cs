@@ -14,6 +14,7 @@ public class UnitShop : MonoBehaviour
     public bool _isOpenShop = false;
     public int upgradeLv;
     public int _rerollPrice = 1;
+    public TextMeshProUGUI _rerollText;
     public float[] oneTier;
     public float[] twoTier;
     public float[] threeTier;
@@ -48,11 +49,11 @@ public class UnitShop : MonoBehaviour
 
         upgradeLv = 0;
         _currentProbability = new float[5];
-        oneTier = new float[] { 1, 1, 0.65f, 0.5f, 0.37f, 0.245f, 0.2f, 0.15f, 0.1f };
-        twoTier = new float[] { 0, 0, 0.3f, 0.35f, 0.35f, 0.35f, 0.3f, 0.25f, 0.15f };
-        threeTier = new float[] { 0, 0, 0.05f, 0.15f, 0.25f, 0.3f, 0.33f, 0.33f, 0.33f };
-        fourTier = new float[] { 0, 0, 0, 0.03f, 0.03f, 0.1f, 0.15f, 0.2f, 0.3f };
-        fiveTier = new float[] { 0, 0, 0, 0, 0, 0.05f, 0.02f, 0.05f, 0.1f };
+        oneTier = new float[] { 1, 1, 0.65f, 0.5f, 0.37f, 0.245f, 0.2f, 0.15f, 0.1f, 0f };
+        twoTier = new float[] { 0, 0, 0.3f, 0.35f, 0.35f, 0.35f, 0.3f, 0.25f, 0.15f, 0.1f};
+        threeTier = new float[] { 0, 0, 0.05f, 0.15f, 0.25f, 0.3f, 0.33f, 0.33f, 0.33f, 0.35f };
+        fourTier = new float[] { 0, 0, 0, 0.03f, 0.03f, 0.1f, 0.15f, 0.2f, 0.3f, 0.33f, 0.40f};
+        fiveTier = new float[] { 0, 0, 0, 0, 0, 0.05f, 0.02f, 0.05f, 0.1f, 0.15f };
 
         _unitProducts = new UnitProduct[_untiProductArray.childCount];
         for (int i = 0; i < _untiProductArray.childCount; i++)
@@ -82,7 +83,10 @@ public class UnitShop : MonoBehaviour
 
     private void Update()
     {
-
+        _rerollPrice = 2 * (1 + UserInfoManager.Instance.userData.GameLevel);
+        _rerollText.text = _rerollPrice.ToString();
+        upgradeLv = UserInfoManager.Instance.userData.TurnCounter / 5;
+        UpdateProbability();
     }
 
     public void ShopProductsLoad()
@@ -174,6 +178,7 @@ public class UnitShop : MonoBehaviour
         _unitProducts[_selectProductIndex].transform.localScale = _sellSize;
         _selectProductIndex = -1;
 
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Buy);
         CheckProduct();
         _userInfo.UserDataSave();
     }
@@ -182,6 +187,38 @@ public class UnitShop : MonoBehaviour
     {
         if (_selectInventoryIndex < 0) return;
         if (!_isOpenShop) return;
+
+        int _userUnitCount = 0;
+
+        // 스쿼드와 인벤토리에서 유닛을 찾음
+        for (int i = 0; i < _inventoryManager._userSquad.Length; i++)
+        {
+            if (_inventoryManager._userSquad[i]._unitData != null)
+            {
+                _userUnitCount++;
+                if (_userUnitCount >= 2) break;
+            }
+        }
+
+        // 유닛 개수가 2보다 적으면 인벤토리에서 추가 유닛을 찾음
+        if (_userUnitCount < 2)
+        {
+            for (int i = 0; i < _inventoryManager._userInventory.Length; i++)
+            {
+                if (_inventoryManager._userInventory[i]._unitData != null)
+                {
+                    _userUnitCount++;
+                    if (_userUnitCount >= 2) break;
+                }
+            }
+        }
+
+        // 유닛이 하나만 있을 경우 디버그 로그 출력
+        if (_userUnitCount < 2)
+        {
+            SoonsoonData.Instance.LogPopup.ShowLog("최소 하나의 유닛을 보유하고 있어야 합니다.");
+            return;
+        }
 
         if (_selectInventoryIndex < _inventoryManager._userSquad.Length)
         {
@@ -195,6 +232,8 @@ public class UnitShop : MonoBehaviour
         }
 
         _selectProductIndex = -1;
+        unitCard._unitData = null;
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Sell);
     }
 
     public void LevelUP()
@@ -214,6 +253,7 @@ public class UnitShop : MonoBehaviour
         }
         _userInfo.userData.SetUserGold(-_rerollPrice);
         newProduct();
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Restock);
     }
 
     public void CheckProduct() // 제품이 모두 품절인지 체크하는 메소드

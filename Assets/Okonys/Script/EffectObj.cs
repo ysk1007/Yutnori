@@ -38,6 +38,11 @@ public class EffectObj : MonoBehaviour
 
     public Unit _owner;
 
+    private void OnEnable()
+    {
+        AudioManager.instance.PlayEffect((int)_effectType);
+    }
+
     public void SetEffectObj(EffectType type, Unit owner, Vector3 pos, bool homing, float timer)
     {
         _effectType = type;

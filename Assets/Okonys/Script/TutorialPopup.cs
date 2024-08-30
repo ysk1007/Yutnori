@@ -74,16 +74,20 @@ public class TutorialPopup : MonoBehaviour
         _tutorialType = TutorialType.firstRun;
         _currentDialogueIndex = 0;
         _typeWriter.ShowText(_firstTutorialTexts[_currentDialogueIndex]);
+        _userInfoManager.achievementData.SetFirstRun(true);
+        _userInfoManager.AchievementDataSave();
     }
 
     public void RunBattleTutorial()
     {
         if (!_isFirstBattle) return;
-        _popup.OnePopup();
+        /*_popup.OnePopup();
         _chatAnimator.SetTrigger("Show");
         _tutorialType = TutorialType.firstBattle;
         _currentDialogueIndex = 0;
         _typeWriter.ShowText(_firstBattleTexts[_currentDialogueIndex]);
+        _userInfoManager.achievementData.SetFirstBattle(true);
+        _userInfoManager.AchievementDataSave();*/
 
     }
 

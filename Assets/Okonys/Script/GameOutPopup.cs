@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class GameOutPopup : MonoBehaviour
 {
+    public static GameOutPopup Instance;
     [SerializeField] private TextMeshProUGUI[] _achievementValue;
     [SerializeField] private TextMeshProUGUI _gameSetText;
     [SerializeField] private GameObject _gameWinParticle;
@@ -20,6 +21,7 @@ public class GameOutPopup : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
         _popupBackground = this.GetComponent<Image>();
     }
 

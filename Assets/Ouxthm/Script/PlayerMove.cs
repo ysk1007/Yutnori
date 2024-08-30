@@ -151,11 +151,11 @@ public class PlayerMove : MonoBehaviour
                     //_bossNum = Random.Range(0, 2);
                     _bossNum = 0;
                     break;
-                case 2:
+                case 3:
                     //_bossNum = Random.Range(2, 4);
                     _bossNum = 1;
                     break;
-                case 3:
+                case 5:
                     //_bossNum = Random.Range(4, 6);
                     _bossNum = 2;
                     break;
@@ -337,6 +337,7 @@ public class PlayerMove : MonoBehaviour
             if (BossPlayerMeet())
             {
                 bossMeet = true;
+                UserInfoManager.Instance.userData.bossMeet = true;
                 break;
             }
 
