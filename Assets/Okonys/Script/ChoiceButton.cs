@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,159 +5,145 @@ using UnityEngine.UI;
 
 public class ChoiceButton : MonoBehaviour
 {
-    public int _buttonIndex;
+    public int _buttonIndex; // 버튼 인덱스
 
-    [SerializeField] private Button _button;
-    [SerializeField] private TextMeshProUGUI _behaviorText;
-    [SerializeField] private TextMeshProUGUI _positiveText;
-    [SerializeField] private TextMeshProUGUI _negativeText;
+    [SerializeField] private Button _button; // 버튼 컴포넌트
+    [SerializeField] private TextMeshProUGUI _behaviorText; // 행동 텍스트
+    [SerializeField] private TextMeshProUGUI _positiveText; // 긍정적 텍스트
+    [SerializeField] private TextMeshProUGUI _negativeText; // 부정적 텍스트
 
-    EventPanel _eventPanel;
-    UserInfoManager _userInfoManager;
+    private EventPanel _eventPanel; // 이벤트 패널
+    private UserInfoManager _userInfoManager; // 사용자 정보 매니저
 
     private void Awake()
     {
-        _button = GetComponent<Button>();
+        _button = GetComponent<Button>(); // 버튼 컴포넌트 초기화
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        // 이벤트 패널 및 사용자 정보 매니저 초기화
         _eventPanel = SoonsoonData.Instance.Event_Panel;
         _userInfoManager = UserInfoManager.Instance;
     }
 
-    // Update is called once per frame
-    void Update()
+    // 버튼을 초기화하고 텍스트를 설정합니다.
+    public void Init(ButtonTexts buttonTexts)
     {
-        
-    }
+        _button.onClick.RemoveAllListeners(); // 기존의 모든 클릭 리스너 제거
+        List<string> texts = buttonTexts.GetButtonTexts(); // 버튼 텍스트 가져오기
 
-    public void init(ButtonTexts buttonTexts)
-    {
-        _button.onClick.RemoveAllListeners();
-        List<string> texts = buttonTexts.GetButtonTexts();
+        _behaviorText.text = texts[0]; // 행동 텍스트 설정
 
-        _behaviorText.text = texts[0];
-
+        // 버튼 타입에 따라 적절한 클릭 리스너 및 텍스트 설정
         switch (buttonTexts.GetButtonType())
         {
             case ButtonTexts.ButtonType.EventContinue:
-                _button.onClick.AddListener(() => _eventPanel.EventContinue());
-                _positiveText.text = texts[1];
-                _negativeText.text = texts[2];
+                SetButtonAction(() => _eventPanel.EventContinue(), texts[1], texts[2]);
                 break;
             case ButtonTexts.ButtonType.EventClose:
-                _button.onClick.AddListener(() => _eventPanel.EventClose());
-                _positiveText.text = texts[1];
-                _negativeText.text = texts[2];
+                SetButtonAction(() => _eventPanel.EventClose(), texts[1], texts[2]);
                 break;
             case ButtonTexts.ButtonType.Battle:
-                _button.onClick.AddListener(() => _eventPanel.EventBattle());
-                _positiveText.text = texts[1];
-                _negativeText.text = texts[2];
+                SetButtonAction(() => _eventPanel.EventBattle(), texts[1], texts[2]);
                 break;
             case ButtonTexts.ButtonType.BattleRun:
-                _button.onClick.AddListener(() => _eventPanel.EventBattleRun());
-                _positiveText.text = texts[1];
-                _negativeText.text = texts[2];
+                SetButtonAction(() => _eventPanel.EventBattleRun(), texts[1], texts[2]);
                 break;
             case ButtonTexts.ButtonType.GetSomething:
-                _button.onClick.AddListener(() => _eventPanel.EventGetSomething(_buttonIndex));
-                _positiveText.text = GetSomeType();
-                _negativeText.text = texts[2];
+                SetButtonAction(() => _eventPanel.EventGetSomething(_buttonIndex), GetSomeType(), texts[2]);
                 break;
             case ButtonTexts.ButtonType.LoseSomething:
-                _button.onClick.AddListener(() => _eventPanel.EventLoseSomething(_buttonIndex));
-                _positiveText.text = texts[1];
-                _negativeText.text = LoseSomeType();
+                SetButtonAction(() => _eventPanel.EventLoseSomething(_buttonIndex), texts[1], LoseSomeType());
                 break;
             case ButtonTexts.ButtonType.GetLose:
-                _button.onClick.AddListener(() => _eventPanel.EventGetLose(_buttonIndex));
-                _positiveText.text = GetSomeType();
-                _negativeText.text = LoseSomeType();
+                SetButtonAction(() => _eventPanel.EventGetLose(_buttonIndex), GetSomeType(), LoseSomeType());
                 break;
             case ButtonTexts.ButtonType.GetChance:
-                _button.onClick.AddListener(() => _eventPanel.EventGetChance());
+                SetButtonAction(() => _eventPanel.EventGetChance(), string.Empty, string.Empty);
                 break;
             case ButtonTexts.ButtonType.LoseChance:
-                _button.onClick.AddListener(() => _eventPanel.EventLoseChance());
+                SetButtonAction(() => _eventPanel.EventLoseChance(), string.Empty, string.Empty);
                 break;
             case ButtonTexts.ButtonType.GetLoseChance:
-                _button.onClick.AddListener(() => _eventPanel.EventGetLoseChance());
-                _positiveText.text = texts[1];
-                _negativeText.text = texts[2];
+                SetButtonAction(() => _eventPanel.EventGetLoseChance(), texts[1], texts[2]);
                 break;
         }
     }
 
+    // 버튼 클릭 동작과 텍스트를 설정합니다.
+    private void SetButtonAction(UnityEngine.Events.UnityAction action, string positiveText, string negativeText)
+    {
+        _button.onClick.AddListener(action);
+        _positiveText.text = positiveText;
+        _negativeText.text = negativeText;
+    }
+
+    // 얻는 항목의 텍스트를 생성합니다.
     public string GetSomeType()
     {
         EventData eventData = _eventPanel.GetEventData();
         if (eventData._goldValue[_buttonIndex] > 0)
         {
-            return string.Format("{0}냥을 얻습니다.", eventData._goldValue[_buttonIndex]);
+            return $"{eventData._goldValue[_buttonIndex]}냥을 얻습니다.";
         }
         else if (eventData._hpValue[_buttonIndex] > 0)
         {
-            return string.Format("체력을 {0} 얻습니다.", eventData._hpValue[_buttonIndex]);
+            return $"체력을 {eventData._hpValue[_buttonIndex]} 얻습니다.";
         }
         else if (eventData._someUnit?[_buttonIndex] != null)
         {
-            return string.Format("[{0}]을(를) 얻습니다.", _eventPanel.GetEventUnit(_buttonIndex).GetUnitData().UnitName);
+            return $"[{_eventPanel.GetEventUnit(_buttonIndex).GetUnitData().UnitName}]을(를) 얻습니다.";
         }
         else if (eventData._someItem?[_buttonIndex] != null)
         {
-            return string.Format("[{0}]을(를) 얻습니다.", eventData._someItem[_buttonIndex]._itemName);
+            return $"[{eventData._someItem[_buttonIndex]._itemName}]을(를) 얻습니다.";
         }
         else
         {
-            return string.Format("");
+            return string.Empty;
         }
     }
 
+    // 잃는 항목의 텍스트를 생성합니다.
     public string LoseSomeType()
     {
         EventData eventData = _eventPanel.GetEventData();
         if (eventData._goldValue[_buttonIndex] < 0)
         {
-            if(_userInfoManager.userData.GetUserGold() >= eventData._goldValue[_buttonIndex] * -1)
+            if (_userInfoManager.userData.GetUserGold() >= -eventData._goldValue[_buttonIndex])
             {
-                return string.Format("{0}냥을 잃습니다.", eventData._goldValue[_buttonIndex] * -1);
+                return $"{-eventData._goldValue[_buttonIndex]}냥을 잃습니다.";
             }
             else
             {
-                _button.onClick.RemoveAllListeners();
-                _button.onClick.AddListener(() => _eventPanel.EventFail());
-                _positiveText.text = "";
-                return string.Format("(돈이 부족하다..) 체력 -25");
+                SetButtonAction(() => _eventPanel.EventFail(), string.Empty, "(돈이 부족하다..) 체력 -25");
+                return string.Empty;
             }
         }
         else if (eventData._hpValue[_buttonIndex] < 0)
         {
-            return string.Format("체력을 {0} 잃습니다.", eventData._hpValue[_buttonIndex]*-1);
+            return $"체력을 {-eventData._hpValue[_buttonIndex]} 잃습니다.";
         }
         else if (eventData._someUnit?[_buttonIndex] != null)
         {
             if (_eventPanel.GetEventUnit(_buttonIndex)?.GetUnitData() != null)
             {
-                return string.Format("[{0}]을(를) 잃습니다.", _eventPanel.GetEventUnit(_buttonIndex).GetUnitData().UnitName);
+                return $"[{_eventPanel.GetEventUnit(_buttonIndex).GetUnitData().UnitName}]을(를) 잃습니다.";
             }
             else
             {
-                _button.onClick.RemoveAllListeners();
-                _button.onClick.AddListener(() => _eventPanel.EventFail());
-                _positiveText.text = "";
-                return string.Format("(동료가 없다..) 체력 -25");
+                SetButtonAction(() => _eventPanel.EventFail(), string.Empty, "(동료가 없다..) 체력 -25");
+                return string.Empty;
             }
         }
         else if (eventData._someItem?[_buttonIndex] != null)
         {
-            return string.Format("[{0}]을(를) 잃습니다.", eventData._someItem[_buttonIndex]._itemName);
+            return $"[{eventData._someItem[_buttonIndex]._itemName}]을(를) 잃습니다.";
         }
         else
         {
-            return string.Format("");
+            return string.Empty;
         }
     }
 }

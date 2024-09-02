@@ -101,9 +101,6 @@ public class SkillObj : MonoBehaviour
                 _yPos = 0;
                 _yPosSave = _yPos;
 
-                /*// µÚÁý±â
-                if (_owner.transform.position.x > _target[0].transform.position.x) this.transform.localScale = new Vector3(-1, 1, 1);*/
-
                 break;
             case SkillType.LongRange:
                 _homing = true;
@@ -164,7 +161,6 @@ public class SkillObj : MonoBehaviour
         else
             _endPos = _startPos;
 
-        //this.transform.localScale = new Vector3(1, 1, 1);
         SoonsoonData.Instance.Skill_Manager._poolListUse.Add(this);
         SetInit();
 
@@ -241,29 +237,6 @@ public class SkillObj : MonoBehaviour
         }
 
     }
-
-/*    void DoProcess()
-    {
-        if ( > 0)
-        {
-            Collider2D[] hit = Physics2D.OverlapCircleAll(transform.position, 1f);
-            if (hit.Length > 0)
-            {
-                foreach (var obj in hit)
-                {
-                    if (obj.CompareTag(_Tag))
-                    {
-                        _owner.SetAttack(obj.GetComponent<Unit>());
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (TargetCheck()) _owner.SetAttack();
-        }
-        SkillDone();
-    }*/
 
     void DoProcess()
     {

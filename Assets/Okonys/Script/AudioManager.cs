@@ -3,216 +3,167 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager instance;
+    public static AudioManager instance;  // 싱글톤 인스턴스
 
-    public AudioMixerGroup audioMixerGroup;
-    public AudioMixerGroup audioMixerBGM;
-    public AudioMixerGroup audioMixerSFX;
+    public AudioMixerGroup audioMixerGroup;  // 오디오 믹서 그룹
+    public AudioMixerGroup audioMixerBGM;  // 배경음 믹서 그룹
+    public AudioMixerGroup audioMixerSFX;  // 효과음 믹서 그룹
 
-    [Header("#배경음악")]
-    public AudioClip bgmClip;
-    public float bgmVolume;
-    AudioSource bgmPlayer;
-    AudioHighPassFilter bgmEffect;
+    [Header("# 배경음악")]
+    public AudioClip bgmClip;  // 배경음 클립
+    public float bgmVolume;  // 배경음 볼륨
+    private AudioSource bgmPlayer;  // 배경음 플레이어
+    private AudioHighPassFilter bgmEffect;  // 배경음 필터 효과
 
-    [Header("#효과음")]
-    public AudioClip[] sfxClips;
-    public float sfxVolume;
-    public int channels;
-    AudioSource[] sfxPlayers;
-    int channelIndex;
+    [Header("# 효과음")]
+    public AudioClip[] sfxClips;  // 효과음 클립 배열
+    public float sfxVolume;  // 효과음 볼륨
+    public int channels;  // 사용할 채널 수
+    private AudioSource[] sfxPlayers;  // 효과음 플레이어 배열
+    private int channelIndex;  // 현재 효과음을 재생할 채널 인덱스
 
     [Header("# 스킬 효과음")]
-    public AudioClip[] vfxClips;
-    public int vfxChannels;
-    AudioSource[] vfxPlayers;
-    int vfxChannelIndex;
+    public AudioClip[] vfxClips;  // 스킬 효과음 클립 배열
+    public int vfxChannels;  // 스킬 효과음 채널 수
+    private AudioSource[] vfxPlayers;  // 스킬 효과음 플레이어 배열
+    private int vfxChannelIndex;  // 현재 스킬 효과음을 재생할 채널 인덱스
 
     [Header("# 미사일 효과음")]
-    public AudioClip[] missileClips;
+    public AudioClip[] missileClips;  // 미사일 효과음 클립 배열
 
     [Header("# 피격 효과음")]
-    public AudioClip[] effectClips;
-    public int effectChannels;
-    AudioSource[] effectPlayers;
-    int effectChannelIndex;
+    public AudioClip[] effectClips;  // 피격 효과음 클립 배열
+    public int effectChannels;  // 피격 효과음 채널 수
+    private AudioSource[] effectPlayers;  // 피격 효과음 플레이어 배열
+    private int effectChannelIndex;  // 현재 피격 효과음을 재생할 채널 인덱스
 
-    UserInfoManager _userInfoManager;
+    private UserInfoManager _userInfoManager;  // 유저 정보 매니저
 
-    public enum Sfx { YutSounds, 
-        Do = 5,Gae = 7,Geol = 9,Yut = 11,Mo = 13,
-
+    public enum Sfx
+    {
+        YutSounds,
+        Do = 5, Gae = 7, Geol = 9, Yut = 11, Mo = 13,
         Select = 15, Buy = 16, Sell = 17, Restock = 18
     }
 
     private void Awake()
     {
-        instance = this;
-        Init();
+        instance = this;  // 싱글톤 인스턴스 설정
+        Init();  // 초기화 함수 호출
     }
 
     private void Start()
     {
-        _userInfoManager = UserInfoManager.Instance;
-        PlayBgm(true);
+        _userInfoManager = UserInfoManager.Instance;  // 유저 정보 매니저 초기화
+        PlayBgm(true);  // 배경음 재생 시작
     }
 
     void Init()
     {
         // 배경음 플레이어 초기화
-        GameObject bgmObject = new GameObject("BgmPlayer");
-        bgmObject.transform.parent = transform;
-        bgmPlayer = bgmObject.AddComponent<AudioSource>();
-        bgmPlayer.playOnAwake = false;
-        bgmPlayer.loop = true;
-        bgmPlayer.volume = bgmVolume;
-        bgmPlayer.clip = bgmClip;
-        bgmPlayer.outputAudioMixerGroup = audioMixerBGM;
+        bgmPlayer = CreateAudioSource("BgmPlayer", transform, bgmVolume, audioMixerBGM, true, bgmClip);
         bgmEffect = Camera.main.GetComponent<AudioHighPassFilter>();
 
         // 효과음 플레이어 초기화
-        GameObject sfxObject = new GameObject("SfxPlayer");
-        sfxObject.transform.parent = transform;
-        sfxPlayers = new AudioSource[channels];
-
-        for (int i = 0; i < sfxPlayers.Length; i++)
-        {
-            sfxPlayers[i] = sfxObject.AddComponent<AudioSource>();
-            sfxPlayers[i].playOnAwake = false;
-            sfxPlayers[i].bypassListenerEffects = true;
-            sfxPlayers[i].volume = sfxVolume;
-            sfxPlayers[i].outputAudioMixerGroup = audioMixerSFX;
-        }
+        sfxPlayers = CreateAudioSourceArray("SfxPlayer", transform, channels, sfxVolume, audioMixerSFX);
 
         // 스킬 효과음 플레이어 초기화
-        GameObject vfxObject = new GameObject("VfxPlayer");
-        vfxObject.transform.parent = transform;
-        vfxPlayers = new AudioSource[vfxChannels];
+        vfxPlayers = CreateAudioSourceArray("VfxPlayer", transform, vfxChannels, sfxVolume, audioMixerSFX);
 
-        for (int i = 0; i < vfxPlayers.Length; i++)
-        {
-            vfxPlayers[i] = vfxObject.AddComponent<AudioSource>();
-            vfxPlayers[i].playOnAwake = false;
-            vfxPlayers[i].bypassListenerEffects = true;
-            vfxPlayers[i].volume = sfxVolume;
-            vfxPlayers[i].outputAudioMixerGroup = audioMixerSFX;
-        }
-
-        // 피격음 플레이어 초기화
-        GameObject effectObject = new GameObject("EffectPlayer");
-        effectObject.transform.parent = transform;
-        effectPlayers = new AudioSource[effectChannels];
-
-        for (int i = 0; i < effectPlayers.Length; i++)
-        {
-            effectPlayers[i] = effectObject.AddComponent<AudioSource>();
-            effectPlayers[i].playOnAwake = false;
-            effectPlayers[i].bypassListenerEffects = true;
-            effectPlayers[i].volume = sfxVolume;
-            effectPlayers[i].outputAudioMixerGroup = audioMixerSFX;
-        }
+        // 피격 효과음 플레이어 초기화
+        effectPlayers = CreateAudioSourceArray("EffectPlayer", transform, effectChannels, sfxVolume, audioMixerSFX);
     }
 
+    // 배경음 재생 함수
     public void PlayBgm(bool isPlay)
     {
         if (isPlay)
-        {
             bgmPlayer.Play();
-        }
         else
-        {
             bgmPlayer.Stop();
-        }
     }
 
+    // 배경음 필터 효과 적용 함수
     public void EffectBgm(bool isPlay)
     {
         bgmEffect.enabled = isPlay;
     }
 
+    // 효과음 재생 함수
     public void PlaySfx(Sfx sfx)
     {
-        //쉬고있는 효과음 플레이어를 찾기
-        for (int i = 0; i < sfxPlayers.Length; i++)
-        {
-            int loopIndex;
-
-            if (sfx == Sfx.YutSounds) loopIndex = Random.Range(0, 5);
-            else
-            {
-                loopIndex = (i + channelIndex) % sfxPlayers.Length;
-            }
-
-            if (sfxPlayers[loopIndex].isPlaying) //이미 효과음을 재생중이라면
-                continue;
-
-            //다중 효과음 있을 경우
-            int ranIndex = 0;
-            if (sfx == Sfx.Do || sfx == Sfx.Gae || sfx == Sfx.Geol || sfx == Sfx.Yut || sfx == Sfx.Mo)
-            {
-                ranIndex = Random.Range(0, 2);
-            }
-
-            channelIndex = loopIndex; //마지막 채널 인덱스 갱신
-
-            // 도개걸윷모 음성 효과일 때 남여 음성효과 구분
-            if (sfx == Sfx.Do || sfx == Sfx.Gae || sfx == Sfx.Geol || sfx == Sfx.Yut || sfx == Sfx.Mo)
-                sfxPlayers[loopIndex].clip = sfxClips[(int)sfx + _userInfoManager.optionData.GetVoiceType()];
-
-            else 
-                sfxPlayers[loopIndex].clip = sfxClips[(int)sfx + ranIndex];
-
-            sfxPlayers[loopIndex].Play();
-            break;
-        }
+        PlayClip(sfxPlayers, sfxClips, (int)sfx, ref channelIndex, sfx == Sfx.YutSounds,
+            sfx == Sfx.Do || sfx == Sfx.Gae || sfx == Sfx.Geol || sfx == Sfx.Yut || sfx == Sfx.Mo);
     }
 
+    // 스킬 효과음 재생 함수
     public void PlayVfx(int index)
     {
-        //쉬고있는 효과음 플레이어를 찾기
-        for (int i = 0; i < vfxPlayers.Length; i++)
-        {
-            int loopIndex;
-
-            if (index == 0) loopIndex = Random.Range(0, 5);
-            else
-            {
-                loopIndex = (i + vfxChannelIndex) % vfxPlayers.Length;
-            }
-
-            if (vfxPlayers[loopIndex].isPlaying) //이미 효과음을 재생중이라면
-                continue;
-
-            //다중 효과음 있을 경우
-            vfxChannelIndex = loopIndex; //마지막 채널 인덱스 갱신
-            vfxPlayers[loopIndex].clip = vfxClips[(int)index];
-
-            vfxPlayers[loopIndex].Play();
-            break;
-        }
+        PlayClip(vfxPlayers, vfxClips, index, ref vfxChannelIndex, index == 0);
     }
 
+    // 피격 효과음 재생 함수
     public void PlayEffect(int index)
     {
-        //쉬고있는 효과음 플레이어를 찾기
-        for (int i = 0; i < effectPlayers.Length; i++)
+        PlayClip(effectPlayers, effectClips, index, ref effectChannelIndex, index == 0);
+    }
+
+    // 오디오 소스 배열을 생성하는 헬퍼 함수
+    private AudioSource[] CreateAudioSourceArray(string name, Transform parent, int count, float volume, AudioMixerGroup mixerGroup)
+    {
+        GameObject obj = new GameObject(name);
+        obj.transform.parent = parent;
+
+        AudioSource[] sources = new AudioSource[count];
+        for (int i = 0; i < count; i++)
         {
-            int loopIndex;
+            sources[i] = obj.AddComponent<AudioSource>();
+            sources[i].playOnAwake = false;
+            sources[i].bypassListenerEffects = true;
+            sources[i].volume = volume;
+            sources[i].outputAudioMixerGroup = mixerGroup;
+        }
+        return sources;
+    }
 
-            if (index == 0) loopIndex = Random.Range(0, 5);
-            else
-            {
-                loopIndex = (i + effectChannelIndex) % effectPlayers.Length;
-            }
+    // 단일 오디오 소스를 생성하는 헬퍼 함수
+    private AudioSource CreateAudioSource(string name, Transform parent, float volume, AudioMixerGroup mixerGroup, bool loop, AudioClip clip)
+    {
+        GameObject obj = new GameObject(name);
+        obj.transform.parent = parent;
 
-            if (effectPlayers[loopIndex].isPlaying) //이미 효과음을 재생중이라면
+        AudioSource source = obj.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        source.volume = volume;
+        source.loop = loop;
+        source.clip = clip;
+        source.outputAudioMixerGroup = mixerGroup;
+
+        return source;
+    }
+
+    // 재생 가능한 오디오 클립을 찾고 재생하는 헬퍼 함수
+    private void PlayClip(AudioSource[] players, AudioClip[] clips, int index, ref int channelIndex, bool randomize, bool isGendered = false)
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            int loopIndex = randomize ? Random.Range(0, 5) : (i + channelIndex) % players.Length;
+
+            if (players[loopIndex].isPlaying)
                 continue;
 
-            //다중 효과음 있을 경우
-            effectChannelIndex = loopIndex; //마지막 채널 인덱스 갱신
-            effectPlayers[loopIndex].clip = effectClips[(int)index];
+            channelIndex = loopIndex;  // 채널 인덱스 갱신
 
-            effectPlayers[loopIndex].Play();
+            if (isGendered)
+            {
+                players[loopIndex].clip = clips[index + _userInfoManager.optionData.GetVoiceType()];
+            }
+            else
+            {
+                players[loopIndex].clip = clips[index];
+            }
+
+            players[loopIndex].Play();
             break;
         }
     }

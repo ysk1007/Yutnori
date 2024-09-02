@@ -1,14 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static MissileObj;
-using static UnityEngine.GraphicsBuffer;
 
 public class EffectObj : MonoBehaviour
 {
     public enum EffectType
     {
-        Hit  = 0,
+        Hit = 0,
         Heal = 1,
         Buff = 2,
         Debuff = 3,
@@ -21,25 +18,24 @@ public class EffectObj : MonoBehaviour
         RedHit = 10,
         Explosion_Dark = 11,
         WaterHit = 12,
-        PurpleHit =13,
+        PurpleHit = 13,
         ElectroHit2 = 14,
         Explosion_Fire_blue = 15,
     }
 
-    public EffectType _effectType = EffectType.Hit;
+    [SerializeField] private EffectType _effectType = EffectType.Hit;
+    [SerializeField] private List<GameObject> _effectList = new List<GameObject>();
 
-    public List<GameObject> _effectList = new List<GameObject>();
-
-    public bool _homing;
+    [SerializeField] private bool _homing;
     public float _timer;
     public float _timerForLim;
 
-    GameObject _nowEffectObj;
-
-    public Unit _owner;
+    private GameObject _nowEffectObj;
+    private Unit _owner;
 
     private void OnEnable()
     {
+        // 효과가 활성화될 때 오디오 효과를 재생합니다.
         AudioManager.instance.PlayEffect((int)_effectType);
     }
 
@@ -51,40 +47,48 @@ public class EffectObj : MonoBehaviour
         _timer = 0;
         _timerForLim = timer;
 
-        // 이펙트가 주인을 따라다닐지 말지
-        if (owner != null) 
-        {
-            transform.position = owner.transform.position;
-        }
-        else
-        {
-            transform.position = pos;
-        }
+        // 효과의 위치를 주인 또는 지정된 위치로 설정합니다.
+        transform.position = owner != null ? owner.transform.position : pos;
 
+        // 현재 효과 오브젝트를 사용 중인 목록에 추가합니다.
         SoonsoonData.Instance.Effect_Manager._poolListUse.Add(this);
         SetInit();
     }
 
-    public void SetInit()
+    private void SetInit()
     {
-        int tnum = (int)_effectType;
-        _nowEffectObj = transform.GetChild(tnum).gameObject;
-        _nowEffectObj.SetActive(true);
-        gameObject.SetActive(true);
+        int effectIndex = (int)_effectType;
+
+        // 이펙트 타입에 해당하는 자식 오브젝트를 활성화합니다.
+        if (effectIndex < transform.childCount)
+        {
+            _nowEffectObj = transform.GetChild(effectIndex).gameObject;
+            _nowEffectObj.SetActive(true);
+            gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Effect type index out of range!");
+        }
     }
 
     public void EffectMove()
     {
-        if (_owner == null) return;
-
-        if (_homing)
+        if (_owner != null && _homing)
+        {
+            // 주인 오브젝트를 따라 이동합니다.
             transform.position = _owner.transform.position;
+        }
     }
 
     public void EffectDone()
     {
+        // 사용 중인 효과 목록에서 제거하고, 비활성화합니다.
         SoonsoonData.Instance.Effect_Manager._poolListUse.Remove(this);
-        _nowEffectObj.SetActive(false);
+        if (_nowEffectObj != null)
+        {
+            _nowEffectObj.SetActive(false);
+        }
         gameObject.SetActive(false);
     }
 }
